@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.analyze import router
+from routers.chat import router as chat_router
 
 app = FastAPI(
     title       = "Bodh API",
@@ -19,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(router, prefix="/api")
+app.include_router(chat_router, prefix="/api")
 
 @app.get("/health")
 def health():

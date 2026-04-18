@@ -8,6 +8,7 @@ import SummaryCard from "@/components/SummaryCard";
 import TopPriorityCards from "@/components/TopPriorityCards";
 import FullReport from "@/components/FullReport";
 import DoctorQuestions from "@/components/DoctorQuestions";
+import ReportChat from "@/components/ReportChat";
 import JargonSheet from "@/components/JargonSheet";
 import { useApp } from "@/context/AppContext";
 import type { AnalysisResult } from "@/lib/types";
@@ -137,6 +138,8 @@ export default function ResultsPage() {
 
       {/* Jargon sheet */}
       {jargon && <JargonSheet word={jargon} lang={lang} onClose={() => setJargon(null)} />}
+
+      <ReportChat result={result} lang={lang} elderly={elderly} />
     </div>
   );
 }
