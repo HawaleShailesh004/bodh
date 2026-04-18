@@ -1,99 +1,368 @@
-# Bodh — Project Implementation
+# Bodh — Project Implementation Handbook
 
-Single reference for architecture, APIs, frontend routes, and operational notes (updated for the routed Next.js app and current backend orchestration).
+End-to-end reference: product intent, repository layout, backend pipeline, frontend architecture, APIs, storage, UI design, deployment, and operational notes. **Last updated to match the codebase on disk** (Next.js app, FastAPI services, Groq/Azure/OpenAI integrations, print/chat flows, and visualization math).
 
-## 1) Goal
+---
 
-Bodh ingests Indian lab reports (PDF or photo), normalizes biomarkers, applies deterministic severity, and returns multilingual explanations plus a short report summary and doctor-style questions.
+## Table of contents
 
-Pipeline: **Extract → Verify → Score → Explain → Report summary** → `AnalysisResult`.
+1. [Executive summary](#1-executive-summary)  
+2. [Repository layout](#2-repository-layout)  
+3. [High-level architecture](#3-high-level-architecture)  
+4. [Backend](#4-backend)  
+5. [Data assets & caching](#5-data-assets--caching)  
+6. [Frontend](#6-frontend)  
+7. [Client state & browser storage](#7-client-state--browser-storage)  
+8. [HTTP API reference](#8-http-api-reference)  
+9. [UI & design system](#9-ui--design-system)  
+10. [Gauge & RangeBar visualization](#10-gauge--rangebar-visualization)  
+11. [Security & privacy](#11-security--privacy)  
+12. [Deployment](#12-deployment)  
+13. [Local development](#13-local-development)  
+14. [Testing & utilities](#14-testing--utilities)  
+15. [Roadmap & technical debt](#15-roadmap--technical-debt)
 
-## 2) Stack
+---
 
-| Layer | Tech |
-|--------|------|
-| API | FastAPI, Pydantic v2 |
-| OCR / PDF | PyMuPDF (text PDF), Azure Document Intelligence (scanned) |
-| LLM | Groq Llama (extraction + report summary), GPT-4o + Groq (per-marker explanations) |
-| Web | Next.js 16 (App Router), React 19, TypeScript, Tailwind v4, Framer Motion |
+## 1) Executive summary
 
-## 3) Backend routes (`routers/analyze.py`)
+**Bodh** is a patient-facing web app plus REST API that ingests **Indian lab reports** (PDF or image), extracts structured biomarkers, **verifies** them against lab and **ICMR** reference logic, assigns **deterministic severity**, generates **multilingual explanations** (English / Hindi / Marathi), and returns a single **`AnalysisResult`** JSON including **report summaries**, **doctor-visit question lists**, **Bodh chat starter questions**, specialist routing, and safety metadata.
 
-- **`POST /api/analyze`** — multipart `file`, form `age`, `gender`. Validates MIME and size (20 MB cap). Runs extract → verify → score → **`explain_all(scored)`** → **`generate_report_summary(...)`** with pipeline timing → builds **`AnalysisResult`**. Uses **`_from_report_meta`** so summary and question lists are always strings/lists.
-- **`POST /api/analyze/manual`** — JSON biomarker rows; same pipeline without file upload.
+**Non-goals:** Bodh does not replace a clinician; UI and prompts repeatedly steer users to professional care.
 
-Patient context: **`extract(...)`** returns **`(biomarkers, {age, gender})`**. Router prefers detected header values when valid, else form defaults.
+**Core pipeline:** Extract → Verify → Score → Explain → **Report summary (Groq JSON)** → API response.
 
-## 4) Schemas (`models/schemas.py`)
+---
 
-- Pipeline types: **`ExtractedBiomarker`** → **`VerifiedBiomarker`** → **`ScoredBiomarker`** → **`ExplainedBiomarker`**.
-- **`AnalysisResult`**: includes **`report_summary_{en,hi,mr}`** (default `""`) and **`doctor_questions_{en,hi,mr}`** (default empty lists via **`Field(default_factory=list)`**).
-- **`PatientContext`**: age 1–119, gender `male` / `female` / `child`.
+## 2) Repository layout
 
-## 5) Extraction (`services/extractor.py`)
-
-- Text PDF → PyMuPDF; scans / images → Azure DI (optional cache under **`backend/.cache/azure_di/`**).
-- **`strip_pii`** before Groq structured extraction.
-- **`extract_patient_context`**: OCR-friendly age/gender from the first portion of raw text (English + Hindi labels, Age/Sex lines, yrs., compact `41 / F` style in a narrow window).
-
-## 6) Verification & severity
-
-- **`verifier.py`**: normalization, ICMR-aware ranges, unit harmonization, manual-review flags.
-- **`severity.py`**: deterministic severity, specialist recommendation, emergency copy.
-
-## 7) Explanation (`services/explainer.py`)
-
-- **`explain_one` / `explain_all`**: dual-model explanations per marker; reconciliation; ICMR diet tip override when present.
-- **`generate_report_summary`**: one Groq JSON call for EN/HI/MR summaries and three doctor questions each; invoked from the **router** after all markers are explained.
-
-## 8) Frontend routes
-
-| Path | Role |
-|------|------|
-| **`/`** | Landing; CTA navigates to **`/analyze`**. |
-| **`/analyze`** | Age/gender, file drop or camera, link to **`/manual`**; uses **`useAnalyze`** (compresses large images client-side before upload). |
-| **`/results`** | Reads **`AnalysisResult`** from context / **`sessionStorage`**; summary, priorities, full report, doctor questions. |
-| **`/manual`** | Typed biomarkers → **`POST /api/analyze/manual`**. |
-
-## 9) Frontend structure
-
-- **`app/providers.tsx`**: wraps **`AppProvider`** (language, age, gender, elderly, result persistence in **`sessionStorage`**).
-- **`context/AppContext.tsx`**: global UI state.
-- **`hooks/useAnalyze.ts`**: multipart upload with **`maybeCompressImageForUpload`** for heavy **`image/*`** files.
-- **`lib/types.ts`**, **`lib/helpers.ts`** (`normalizeAnalysisResult`), **`lib/constants.ts`**, **`lib/compressImage.ts`**.
-- **`components/`**: **`AppShell`**, **`Navbar`**, **`SiteFooter`**, **`LandingPage`**, **`AnalyzeUpload`**, **`AnalyzeScannerLoader`**, results widgets (**`PersonalMessage`**, **`SummaryCard`**, **`TopPriorityCards`**, **`FullReport`**, **`DoctorQuestions`**, **`JargonSheet`**, **`BioCard`**, **`RangeBar`**, **`Gauge`**, **`ScoreRing`**, **`LangToggle`**, **`Logo`**).
-- **`app/layout.tsx`**: **`suppressHydrationWarning`** on **`<html>`** / **`<body>`** to tolerate browser extension attribute injection. Icons point at **`/public/brand/`**.
-
-## 10) End-to-end upload
-
-1. User picks file; large photos are re-encoded in-browser (JPEG, bounded dimensions) before **`FormData`**.
-2. Backend extracts text, detects demographics when possible, strips PII, Groq extracts markers.
-3. Verify → score → explain markers → **`generate_report_summary`**.
-4. JSON **`AnalysisResult`** stored in context + **`bodh_result`** session key; **`/results`** renders.
-
-## 11) Security & reliability
-
-- PII stripped before extraction LLM; severity is rule-based, not LLM-decided.
-- Dual-model explanation reconciliation; fallbacks on model failure.
-- Manual review flags surfaced on markers.
-
-## 12) Environment
-
-Backend **`.env`**: `GROQ_API_KEY`, `OPENAI_API_KEY`, `AZURE_DI_ENDPOINT`, `AZURE_DI_KEY`.  
-Frontend: **`NEXT_PUBLIC_API_URL`** (optional; defaults to local backend).
-
-## 13) Run
-
-```bash
-# Backend (from backend/)
-uvicorn main:app --reload --port 8000
-
-# Frontend (from frontend/)
-npm install && npm run dev
+```
+bodh/
+├── PROJECT_IMPLEMENTATION.md    ← This handbook
+├── backend/
+│   ├── main.py                  FastAPI app, CORS, routers, /health
+│   ├── Procfile                 Railway: uvicorn on $PORT
+│   ├── requirements.txt         Python dependencies for deploy
+│   ├── models/
+│   │   └── schemas.py           Pydantic enums & pipeline + API models
+│   ├── routers/
+│   │   ├── analyze.py           POST /analyze, POST /analyze/manual
+│   │   └── chat.py              POST /chat (Groq, report-grounded)
+│   ├── services/
+│   │   ├── extractor.py         PDF/image text, PII strip, Groq JSON extraction, patient context
+│   │   ├── verifier.py          Normalize names/units, ICMR/lab ranges, manual-review flags
+│   │   ├── severity.py          Deterministic severity, specialist, emergency strings
+│   │   └── explainer.py         Per-marker dual LLM explain; generate_report_summary (+ chat chips)
+│   ├── data/
+│   │   ├── icmr_ranges.json     ICMR reference data (verifier)
+│   │   └── clinical_abbreviations_reference.json  Abbreviation / synonym reference (verifier & severity)
+│   ├── scripts/
+│   │   └── check_icmr_ranges.py Utility script for range data QA
+│   ├── test_mock.py             Ad-hoc backend tests
+│   └── .gitignore               venv, __pycache__, .env
+└── frontend/
+    ├── package.json
+    ├── next.config.ts           Rewrites /api → NEXT_PUBLIC_API_URL
+    ├── tsconfig.json
+    ├── .env.example             NEXT_PUBLIC_API_URL sample
+    ├── app/
+    │   ├── layout.tsx           Root layout, fonts, suppressHydrationWarning, metadata icons
+    │   ├── globals.css          Tailwind v4 entry
+    │   ├── providers.tsx        AppProvider + AppShell wrapper
+    │   ├── page.tsx             Home → LandingPage + navigate /analyze
+    │   ├── analyze/page.tsx     Upload + manual link
+    │   ├── manual/page.tsx      Typed biomarkers → API
+    │   ├── results/page.tsx     Full report UI, share, print snapshot, ReportChat
+    │   └── print/page.tsx       Print-optimized view; session + localStorage fallback
+    ├── components/              See §6.3
+    ├── context/AppContext.tsx   Global UI + result persistence
+    ├── hooks/useAnalyze.ts      Multipart analyze + image compression
+    └── lib/                     types, constants, helpers, compressImage
 ```
 
-## 14) Follow-ups
+---
 
-- Deduplicate any legacy duplicate blocks in **`extractor.py`** when safe.
-- Add automated tests for verifier, severity, and explainer contracts.
-- Structured logging and request IDs for production.
+## 3) High-level architecture
+
+```mermaid
+flowchart LR
+  subgraph client [Next.js browser]
+    A[Landing / Analyze / Manual]
+    B[useAnalyze + compressImage]
+    C[Results + Print + ReportChat]
+  end
+  subgraph api [FastAPI on Railway etc.]
+    D["/api/analyze"]
+    E["/api/analyze/manual"]
+    F["/api/chat"]
+    G[extractor]
+    H[verifier]
+    I[severity]
+    J[explainer]
+  end
+  subgraph ai [External AI]
+    K[Groq Llama]
+    L[OpenAI GPT-4o]
+    M[Azure Document Intelligence]
+  end
+  A --> B
+  B --> D
+  A --> E
+  C --> F
+  D --> G
+  G --> M
+  G --> K
+  D --> H --> I --> J
+  J --> K
+  J --> L
+  J --> K
+```
+
+- **Browser** talks to **`NEXT_PUBLIC_API_URL`** (absolute) for JSON APIs. **`next.config.ts`** rewrites **`/api/*`** to the same base for optional same-origin use in dev.
+- **File bytes** never hit the frontend LLM; extraction and summarization run **server-side**.
+
+---
+
+## 4) Backend
+
+### 4.1 `main.py`
+
+- Instantiates **`FastAPI`** with title/description/version.
+- **`CORSMiddleware`**: `allow_origins=["*"]` for development and simple cross-origin deploys (tighten per environment in production if required).
+- Mounts **`routers.analyze.router`** and **`routers.chat.router`** under prefix **`/api`**.
+- **`GET /health`**: `{"status":"ok","service":"bodh-api"}` for probes.
+
+### 4.2 `models/schemas.py`
+
+| Model | Purpose |
+|--------|---------|
+| **`SeverityLevel`** | `NORMAL`, `WATCH`, `ACT_NOW`, `EMERGENCY`, `UNKNOWN` |
+| **`RangeSource`** | `lab`, `icmr`, `unavailable` |
+| **`ExtractionSource`** | `pymupdf`, `azure_di`, `manual` |
+| **`ExtractedBiomarker`** | Raw extraction output |
+| **`VerifiedBiomarker`** | Adds active range, `range_source`, validity, `needs_manual_review` |
+| **`ScoredBiomarker`** | Adds `severity`, `deviation_score` |
+| **`ExplainedBiomarker`** | Adds EN/HI/MR explanations + optional diet tips |
+| **`AnalysisResult`** | API response: counters, flags, summaries, **`doctor_questions_*`**, **`chat_questions_*`**, timing, `ai_diverged`, etc. String/list fields use defaults **`""`** / **`Field(default_factory=list)`**. |
+| **`PatientContext`** | Validated `age` (1–119), `gender` (`male` / `female` / `child`) |
+
+### 4.3 `routers/analyze.py`
+
+- **`_from_report_meta`**: Coerces Groq JSON keys into typed Python values for summaries, doctor questions, and chat starter lists (always `str` / `list[str]`).
+- **`POST /analyze`**: Validates MIME (`pdf`, `jpeg`, `jpg`, `png`, `webp`), size ≤ **20 MB**, min size; builds **`PatientContext`** from form then **overrides** from **`extract_patient_context`** when extraction returns demographics.
+- Flow: **`extract`** → **`verify_all`** → **`score_all`** → **`overall_severity`**, emergency message, **`recommend_specialist`** → **`explain_all(scored)`** → **`generate_report_summary(...)`** (with wall-clock `processing_time_ms` argument) → **`AnalysisResult`** with final **`processing_time_ms`** including summary call.
+- **`POST /analyze/manual`**: Same pipeline from JSON **`ManualBiomarker`** rows with **`ExtractionSource.MANUAL`** and confidence `1.0`.
+
+### 4.4 `routers/chat.py`
+
+- **`POST /api/chat`**: Body **`ChatRequest`**: `message`, `history` (last roles capped in handler), **`report`** as **dict** (mirrors `AnalysisResult`-shaped JSON from client).
+- Builds a **grounded system prompt** from **`_build_context(report)`** (patient line, specialist line, per-marker lines with explanations).
+- **Groq** `llama-3.3-70b-versatile`, short answers, JSON-safe text response **`{ "reply": "..." }`**.
+- Guardrails: empty message, length cap, missing **`GROQ_API_KEY`**.
+
+### 4.5 `services/extractor.py` (conceptual; file is large)
+
+- **Text PDFs**: PyMuPDF text extraction.
+- **Scanned PDFs / images**: **Azure Document Intelligence** `prebuilt-layout` (optional SHA-based cache under **`backend/.cache/azure_di/`**).
+- **`strip_pii`**: Regex-based removal of likely PII / header noise before LLM extraction.
+- **`extract_patient_context`**: Header-window heuristics for **age** and **gender** (EN + HI patterns, Age/Sex lines, `41 / F` style).
+- **`_call_groq` / structured JSON**: Biomarker rows → **`ExtractedBiomarker`** list.
+- Returns **`tuple[list[ExtractedBiomarker], dict]`** with **`{"age", "gender"}`**.
+
+### 4.6 `services/verifier.py`
+
+- Loads **`icmr_ranges.json`** and **`clinical_abbreviations_reference.json`**.
+- Name normalization, LOINC/alias matching, unit harmonization (e.g. WBC/platelet scales), **three-tier** active range selection (lab → ICMR → unavailable), physiological bounds, **`needs_manual_review`** rules.
+
+### 4.7 `services/severity.py`
+
+- Deterministic mapping from scored markers to **`SeverityLevel`**, deviation scores, **specialist** + **urgency** heuristics, **emergency_message** templates.
+- Uses clinical reference data where applicable (shared JSON path pattern with verifier).
+
+### 4.8 `services/explainer.py`
+
+- **`explain_one`**: Parallel **Groq** + **OpenAI** structured JSON explanations; reconciliation; **ICMR diet tip** overrides AI tips when present; timeouts and fallbacks.
+- **`explain_all`**: `asyncio.gather` over markers; returns **`(list[ExplainedBiomarker], bool)`** (`ai_diverged`).
+- **`generate_report_summary`**: Single **Groq** JSON object with **`summary_*`**, **`questions_*`** (doctor visit), **`chat_questions_*`** (in-app Bodh chat chips), with deterministic **fallback** object if the model fails validation.
+
+---
+
+## 5) Data assets & caching
+
+| Asset | Role |
+|--------|------|
+| **`backend/data/icmr_ranges.json`** | Population reference ranges consumed by **`verifier`**. |
+| **`backend/data/clinical_abbreviations_reference.json`** | Abbreviation / naming reference for **`verifier`** and **`severity`**. |
+| **`backend/.cache/azure_di/`** (gitignored) | Optional content-addressed cache of Azure DI OCR output keyed by file hash + content type. |
+
+---
+
+## 6) Frontend
+
+### 6.1 App Router pages
+
+| Route | File | Behavior |
+|--------|------|------------|
+| **`/`** | `app/page.tsx` | **`LandingPage`**; CTA **`router.push('/analyze')`**. |
+| **`/analyze`** | `app/analyze/page.tsx` | **`AnalyzeUpload`** + link to **`/manual`**; loading uses **`AnalyzeScannerLoader`**. |
+| **`/manual`** | `app/manual/page.tsx` | Rows of biomarkers → **`POST /api/analyze/manual`**; **`Navbar`** back to analyze. |
+| **`/results`** | `app/results/page.tsx` | Requires **`result`** in context or restores **`sessionStorage`** `bodh_result`; reading progress bar; zones for message, summary, priorities, full report, doctor questions, **desktop Share+Print** row; **mobile** sticky bar (**`md:hidden`**); **`ReportChat`**; WhatsApp share builds plain-text message. |
+| **`/print`** | `app/print/page.tsx` | Reads **`bodh_result_print`** in **`localStorage`** (set from results before **`target="_blank"`**) then **`sessionStorage`** `bodh_result`; **`normalizeAnalysisResult`**; auto-**`window.print()`**; screen-only toolbar with **Lucide** icons. |
+
+### 6.2 Global wiring
+
+- **`app/layout.tsx`**: Imports **`globals.css`**; **`suppressHydrationWarning`** on **`<html>`** and **`<body>`** (browser extensions injecting attributes); **`metadata.icons`** → **`/public/brand/`** SVGs.
+- **`app/providers.tsx`**: **`AppProvider`** → **`AppShell`** → **`children`**.
+- **`AppShell`**: **`usePathname`**; passes **`Navbar`** `backHref` / `backLabel` on analyze vs results; wraps **`SiteFooter`**.
+- **`Navbar`**: Logo link, optional **`<ChevronLeft>`** + back link, **A+** elderly toggle, EN/HI/MR pills.
+
+### 6.3 Components (alphabetical reference)
+
+| Component | Responsibility |
+|------------|------------------|
+| **`AnalyzeScannerLoader`** | Framer-motion staged “scanning” UI while **`useAnalyze`** runs. |
+| **`AnalyzeUpload`** | Drop zone, camera capture, age/gender controls, Lucide icons (folder/sparkles/alert), errors. |
+| **`AppShell`** | Layout chrome around pages. |
+| **`BioCard`** | Collapsible marker row: **`RangeBar`**, expanded **`Gauge`** for abnormal, explanations, jargon links. |
+| **`DoctorQuestions`** | **`result`**, **`lang`**, **`elderly`**; uses **`doctorQuestionsForLang`** from **`helpers`**. |
+| **`FullReport`** | Severity sections of **`BioCard`** + **`JargonSheet`** host. |
+| **`Gauge`** | Semicircular needle: **180°** sweep; bounds **`[low-ext, high+ext]`** with **`ext = high-low`** maps **0–100%**; arc thirds align with normal band. |
+| **`JargonSheet`** | Modal definition sheet for tapped jargon terms. |
+| **`LandingPage`** | Marketing sections, motion, **`Stethoscope`** / **`ChevronUp`** icons (no emoji in copy). |
+| **`LangToggle`** | Small reusable language control (where used). |
+| **`Logo`** | Brand mark asset wrapper. |
+| **`PersonalMessage`** | Hero message + **`ScoreRing`** from severity + score. |
+| **`RangeBar`** | Linear bar: green middle **33.33%–66.66%** width; dot position uses same **`ext`** math as gauge; **Framer Motion** spring. |
+| **`ReportChat`** | Floating chat; **`POST /api/chat`**; history cap; suggested chips from **`chatQuestionsForLang`**; report payload built from **`result`**. |
+| **`ScoreRing`** | Circular score visualization. |
+| **`SiteFooter`** | Footer links/copy. |
+| **`SummaryCard`** | Summary text (AI fields preferred), TTS, copy, WhatsApp share (plain text). |
+| **`TopPriorityCards`** | Top abnormal markers; expandable **`Gauge`** + explanation. |
+
+### 6.4 `lib/` modules
+
+| File | Contents |
+|------|-----------|
+| **`types.ts`** | **`Lang`**, **`Severity`**, **`Biomarker`**, **`AnalysisResult`** (includes **`chat_questions_*`**). |
+| **`constants.ts`** | **`API_BASE`**, **`SEV`** (colors, labels HI/MR, page tints, badges, personal messages), **`BODH_PRINT_SNAPSHOT_KEY`**. |
+| **`helpers.ts`** | **`cleanName`**, **`fmtVal`**, **`sevLabel`**, **`explanationFor`**, **`normalizeAnalysisResult`**, **`doctorQuestionsForLang`**, **`chatQuestionsForLang`**, **`calcScore`**. |
+| **`compressImage.ts`** | **`maybeCompressImageForUpload`**: downscale + JPEG for large **`image/*`** before upload. |
+
+### 6.5 `hooks/useAnalyze.ts`
+
+- Builds **`FormData`** with compressed file, age, gender; **`fetch(`${API_BASE}/api/analyze`)`**; **`normalizeAnalysisResult`**; **`setResult`**; navigates **`/results`**.
+
+---
+
+## 7) Client state & browser storage
+
+| Key | Storage | Writer | Reader |
+|-----|---------|--------|--------|
+| **`bodh_result`** | `sessionStorage` | **`AppContext.handleSetResult`** | **`results` page** restore; **`print`** same-tab fallback |
+| **`bodh_result_print`** | `localStorage` | **`results` page** `stagePrintSnapshot` on Print link click | **`/print`** first (new tab has empty `sessionStorage`) |
+| **`BODH_PRINT_SNAPSHOT_KEY`** | constant in **`constants.ts`** | value = **`"bodh_result_print"`** | |
+
+---
+
+## 8) HTTP API reference
+
+| Method | Path | Description |
+|--------|------|---------------|
+| **GET** | **`/health`** | Liveness JSON. |
+| **POST** | **`/api/analyze`** | `multipart/form-data`: **`file`**, **`age`**, **`gender`** → **`AnalysisResult`**. |
+| **POST** | **`/api/analyze/manual`** | JSON body with **`biomarkers[]`**, **`age`**, **`gender`**. |
+| **POST** | **`/api/chat`** | JSON **`{ message, history[], report }`** → **`{ reply }`**. |
+
+---
+
+## 9) UI & design system
+
+- **Primary brand green** `#0D6B5E` (buttons, accents, print toolbar).
+- **Severity palette** centralized in **`SEV`** (`constants.ts`): emerald / amber / rose / violet for NORMAL / WATCH / ACT_NOW / EMERGENCY; page background tints **`pageTint`** per severity on results.
+- **Typography**: Georgia for headings / brand; system stack for UI body (**`globals.css`** + Tailwind).
+- **Motion**: **Framer Motion** on landing, upload, loaders, **`RangeBar`** marker.
+- **Icons**: **Lucide React** (no emoji in production UI strings for share/labels where replaced).
+- **Accessibility**: `aria-hidden` on decorative icons; `suppressHydrationWarning` for extension-induced attribute mismatches.
+
+---
+
+## 10) Gauge & RangeBar visualization
+
+Both use the **same numeric model**:
+
+- Let **`lo`**, **`hi`** be active reference bounds.
+- **`ext = hi - lo`** (or **`1`** if degenerate).
+- **`minBound = lo - ext`**, **`maxBound = hi + ext`** so the **clinical normal band** occupies the **middle third** of the linear scale (**33.33%–66.66%**).
+- **`pct = clamp((value - minBound) / (maxBound - minBound) * 100)`** (Gauge **0–100**; RangeBar dot additionally clamped **2–98** for padding).
+
+**Gauge:** Needle angle **`-90 + (pct/100)*180`** degrees (semicircle only). Colored arc segments in SVG match the third boundaries.
+
+**RangeBar:** Green **`div`** at **`left: 33.33%; width: 33.33%`**; marker **`left: pct%`**.
+
+---
+
+## 11) Security & privacy
+
+- **PII stripping** before extraction LLM; patient demographics heuristics run on raw text pre-strip where applicable.
+- **Severity & routing** are **rule-based**, not LLM-decided.
+- **Chat** is **report-grounded**; system prompt refuses off-report medical advice.
+- **CORS** permissive by default—restrict in hardened deployments.
+- **Secrets**: never commit **`.env`**; use platform env vars in production.
+
+---
+
+## 12) Deployment
+
+### 12.1 Backend (e.g. Railway)
+
+- Set service **root** to **`backend/`** (or run command from repo root with `cd backend`).
+- **`requirements.txt`**: pinned dependency ranges for FastAPI, uvicorn, pydantic, multipart, dotenv, pymupdf, Azure DI client, groq, openai, httpx.
+- **`Procfile`**: **`web: uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}`**.
+- Environment: **`GROQ_API_KEY`**, **`OPENAI_API_KEY`**, **`AZURE_DI_ENDPOINT`**, **`AZURE_DI_KEY`**.
+
+### 12.2 Frontend (e.g. Vercel)
+
+- Project root **`frontend/`** (or monorepo subpath).
+- **`NEXT_PUBLIC_API_URL`**: public HTTPS URL of the API **without** trailing slash.
+- **`next.config.ts`**: rewrites **`/api/:path*`** → **`${NEXT_PUBLIC_API_URL}/api/:path*`** (defaults to localhost for local dev).
+
+### 12.3 `frontend/.env.example`
+
+Documents **`NEXT_PUBLIC_API_URL`** for copy-paste onboarding.
+
+---
+
+## 13) Local development
+
+```bash
+# Terminal 1 — API (from backend/)
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+
+# Terminal 2 — Web (from frontend/)
+npm install
+npm run dev
+```
+
+Ensure **`frontend/.env`** or shell exports **`NEXT_PUBLIC_API_URL=http://localhost:8000`** when testing against local API.
+
+---
+
+## 14) Testing & utilities
+
+- **`backend/test_mock.py`**: Lightweight manual / mock checks (not a full CI suite).
+- **`backend/scripts/check_icmr_ranges.py`**: Maintenance script for **`icmr_ranges`** data validation.
+
+---
+
+## 15) Roadmap & technical debt
+
+- **`extractor.py`** historically contained duplicated blocks; consolidate to a single canonical implementation when safe.
+- **Automated tests** for verifier edge cases, severity transitions, explainer JSON contracts, and API integration.
+- **Structured logging** + request correlation IDs for production.
+- **CORS allowlist** instead of `*` when front domain is fixed.
+- **Chat** payload could include explicit **`age`/`gender`** from client context for better grounding (currently may use defaults in **`ReportChat`** payload builder—align with **`useApp`** when improving).
+
+---
+
+*This document is the single source of truth for engineers onboarding to Bodh. Update it whenever you change pipeline contracts, env vars, or route structure.*
