@@ -1381,6 +1381,7 @@ _VALID_UNIT_PATTERN = re.compile(
     r"^(g/dl|g/l|mg/dl|mg/l|mmol/l|µmol/l|umol/l|"
     r"iu/l|u/l|miu/l|uiu/ml|ng/ml|pg/ml|pg|fl|"
     r"%|/µl|/ul|/cumm|/hpf|/lpf|lakhs/cumm|"
+    r"mil/cumm|mill/cumm|thou/cumm|cells/cumm|cell/cumm|cumm\.?|"
     r"million/cu\.mm|thou/µl|thou/ul|k/µl|k/ul|meq/l|mmhg|"
     r"units|unit|cells/µl|cells/ul|10\^3/µl|10\^3/ul|10\^6/µl|10\^6/ul)$",
     re.IGNORECASE,
@@ -1395,6 +1396,7 @@ def _clean_unit(unit: str) -> str:
     u0 = re.sub(r"\s+(?:H|L|HH|LL)\s*$", "", unit.strip(), flags=re.I).strip()
     cleaned = u0.lower().replace("µ", "u").replace("³", "3").replace("⁹", "9")
     cleaned = re.sub(r"^[^a-z%]+|[^a-z%µ³0-9.^/]+$", "", cleaned)
+    cleaned = cleaned.replace(" ", "")
     if _VALID_UNIT_PATTERN.match(cleaned):
         return u0
     return ""
@@ -1634,6 +1636,7 @@ RULES:
 5. For reference range: extract exactly as printed. If printed as "13.0-17.0" keep it. If printed as "< 200" keep it.
 6. Flag: extract only if explicitly printed — H, L, HH, LL, HIGH, LOW, ABNORMAL, C, CRIT.
 7. Return ONLY valid JSON. No explanation. No markdown. No preamble.
+8. Extract every numeric result row on the report — do not truncate or summarize; include panels with 15+ tests.
 
 OUTPUT SCHEMA (array of objects):
 [
@@ -1682,7 +1685,7 @@ def _call_groq(clean_text: str) -> list[dict]:
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         temperature=0.0,
-        max_tokens=2048,
+        max_tokens=8192,
         messages=[
             {"role": "system", "content": _EXTRACTION_SYSTEM},
             {"role": "user", "content": _EXTRACTION_USER.format(text=clean_text)},
