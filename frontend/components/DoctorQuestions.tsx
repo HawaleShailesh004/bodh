@@ -8,36 +8,47 @@ const TITLES: Record<Lang, string> = {
   mr: "डॉक्टरांना विचारण्याचे 3 प्रश्न",
 };
 
-interface DoctorQuestionsProps {
+interface Props {
   result: AnalysisResult;
   lang: Lang;
   elderly?: boolean;
 }
 
-export default function DoctorQuestions({ result, lang, elderly = false }: DoctorQuestionsProps) {
-  const questionsList = doctorQuestionsForLang(result, lang);
+export default function DoctorQuestions({ result, lang, elderly = false }: Props) {
+  const questions = doctorQuestionsForLang(result, lang);
+  if (!questions.length) return null;
 
   return (
-    <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5 shadow-sm">
+    <div
+      className="rounded-2xl p-5"
+      style={{
+        background: "#EFF6FF",
+        border: "1.5px solid #BFDBFE",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+      }}
+    >
+      {/* Header */}
       <div className={`mb-4 flex items-center gap-2.5 font-semibold text-blue-900 ${elderly ? "text-base" : "text-sm"}`}>
         <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-100">
           <MessageSquare size={14} className="text-blue-700" />
         </div>
         {TITLES[lang]}
       </div>
-      <div className="space-y-3">
-        {questionsList.map((q, i) => (
-          <div key={i} className="flex gap-3">
+
+      {/* Questions */}
+      <div className="space-y-3.5">
+        {questions.map((q, i) => (
+          <div key={i} className="flex gap-3 items-start">
+            {/* Number circle */}
             <span
-              className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 font-bold text-blue-800"
-              style={{ fontSize: 10 }}
+              className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 font-bold text-blue-800 leading-none"
+              style={{ fontSize: 11 }}
             >
               {i + 1}
             </span>
-            <p className={`leading-relaxed text-blue-800 ${elderly ? "text-sm" : "text-xs"}`}>
-              {'\u201c'}
-              {q}
-              {'\u201d'}
+            {/* Question — quoted, italic */}
+            <p className={`leading-relaxed text-blue-800 italic ${elderly ? "text-sm" : "text-xs"}`}>
+              &ldquo;{q}&rdquo;
             </p>
           </div>
         ))}
