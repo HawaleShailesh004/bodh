@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import type { Lang } from "@/lib/types";
 
@@ -65,8 +66,9 @@ export default function Navbar({ lang, setLang, backHref, backLabel }: NavbarPro
           {backHref && backLabel && (
             <Link
               href={backHref}
-              className="hidden rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-50 sm:block"
+              className="hidden items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-500 hover:bg-slate-50 sm:inline-flex"
             >
+              <ChevronLeft size={14} className="shrink-0 opacity-70" aria-hidden />
               {backLabel}
             </Link>
           )}

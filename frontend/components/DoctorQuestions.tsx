@@ -1,23 +1,6 @@
 import { MessageSquare } from "lucide-react";
 import type { AnalysisResult, Lang } from "@/lib/types";
-
-const FALLBACK_QUESTIONS: Record<Lang, string[]> = {
-  en: [
-    "What is the most important abnormality in my report and what could be causing it?",
-    "When should I retest, and which values should I monitor closely?",
-    "Should I see a specialist, and what lifestyle changes should I make now?",
-  ],
-  hi: [
-    "मेरी रिपोर्ट की सबसे महत्वपूर्ण असामान्यता क्या है और इसका कारण क्या हो सकता है?",
-    "मुझे अगली जाँच कब करवानी चाहिए और किन मानों पर ध्यान देना है?",
-    "क्या मुझे किसी विशेषज्ञ को दिखाना चाहिए और अभी क्या बदलना चाहिए?",
-  ],
-  mr: [
-    "माझ्या अहवालातील सर्वात महत्त्वाची असामान्यता कोणती आणि त्याचे कारण काय असू शकते?",
-    "पुन्हा चाचणी कधी करावी आणि कोणत्या मूल्यांवर लक्ष ठेवावे?",
-    "मला तज्ञ डॉक्टरांना भेटण्याची गरज आहे का आणि आत्ता काय बदलावे?",
-  ],
-};
+import { doctorQuestionsForLang } from "@/lib/helpers";
 
 const TITLES: Record<Lang, string> = {
   en: "3 Questions to Ask Your Doctor",
@@ -32,14 +15,7 @@ interface DoctorQuestionsProps {
 }
 
 export default function DoctorQuestions({ result, lang, elderly = false }: DoctorQuestionsProps) {
-  const raw =
-    lang === "hi"
-      ? result.doctor_questions_hi
-      : lang === "mr"
-        ? result.doctor_questions_mr
-        : result.doctor_questions_en;
-  const apiQs = raw.filter((q) => q?.trim()).slice(0, 3);
-  const questionsList = apiQs.length === 3 ? apiQs : FALLBACK_QUESTIONS[lang];
+  const questionsList = doctorQuestionsForLang(result, lang);
 
   return (
     <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5 shadow-sm">

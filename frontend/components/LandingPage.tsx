@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import { ChevronUp, Stethoscope } from "lucide-react";
 import type { Lang } from "@/lib/types";
 import { t } from "@/lib/constants";
 
@@ -316,7 +317,7 @@ export default function LandingPage({ lang, onStart }: LandingPageProps) {
     {
       n: "02",
       en: "AI analyzes it safely", hi: "AI सुरक्षित विश्लेषण करता है", mr: "AI सुरक्षितपणे विश्लेषण करतो",
-      sub: { en: "PII stripped → ICMR ranges applied → severity classified deterministically", hi: "PII हटाया → ICMR मानक → गंभीरता वर्गीकृत", mr: "PII काढला → ICMR मानक → गंभीरता वर्गीकृत" },
+      sub: { en: "PII stripped -> ICMR ranges applied -> severity classified deterministically", hi: "PII हटाया -> ICMR मानक -> गंभीरता वर्गीकृत", mr: "PII काढला -> ICMR मानक -> गंभीरता वर्गीकृत" },
       detail: { en: "Rules decide severity — AI only writes the plain-language explanation", hi: "नियम गंभीरता तय करते हैं — AI केवल स्पष्टीकरण लिखता है", mr: "नियम तीव्रता ठरवतात — AI फक्त स्पष्टीकरण लिहितो" },
     },
     {
@@ -405,7 +406,10 @@ export default function LandingPage({ lang, onStart }: LandingPageProps) {
               <motion.div animate={{ y: [-5, 5, -5] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}>
                 <ProductMock />
               </motion.div>
-              <p style={{ textAlign: "center", fontSize: 11, color: "#A1A1AA", marginTop: 10 }}>↑ tap the first card to see an explanation · auto-cycles severities</p>
+              <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, textAlign: "center", fontSize: 11, color: "#A1A1AA", marginTop: 10 }}>
+                <ChevronUp size={12} strokeWidth={2} aria-hidden />
+                <span>Tap the first card to see an explanation · auto-cycles severities</span>
+              </p>
             </motion.div>
           </div>
         </div>
@@ -666,8 +670,11 @@ export default function LandingPage({ lang, onStart }: LandingPageProps) {
             <span style={{ color: "#A1A1AA", fontSize: 11 }}>बोध · awareness</span>
           </div>
           {/* FIX 10: 12px font, better contrast */}
-          <p style={{ fontSize: 12, color: "#71717A", maxWidth: 500, textAlign: "center", lineHeight: 1.6 }}>
-            ⚕️ Bodh is an AI-powered health literacy tool for educational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified physician.
+          <p style={{ fontSize: 12, color: "#71717A", maxWidth: 500, textAlign: "center", lineHeight: 1.6, display: "flex", alignItems: "flex-start", justifyContent: "center", gap: 8 }}>
+            <Stethoscope size={14} strokeWidth={2} style={{ flexShrink: 0, marginTop: 2, color: "#71717A" }} aria-hidden />
+            <span>
+              Bodh is an AI-powered health literacy tool for educational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified physician.
+            </span>
           </p>
         </div>
       </footer>

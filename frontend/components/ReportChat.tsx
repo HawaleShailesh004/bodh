@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { MessageSquare, Send, X, Minimize2, Bot, User, Loader2 } from "lucide-react";
 import type { AnalysisResult, Lang } from "@/lib/types";
+import { calcScore, chatQuestionsForLang, sevLabel } from "@/lib/helpers";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -12,29 +13,51 @@ interface Message {
   ts: number;
 }
 
-const SUGGESTED: Record<Lang, string[]> = {
-  en: [
-    "Why is my haemoglobin low?",
-    "What does my health score mean?",
-    "Why do I need a hematologist?",
-    "What should I eat to improve my report?",
-    "Which value is most urgent?",
-  ],
-  hi: [
-    "मेरा हीमोग्लोबिन कम क्यों है?",
-    "मेरे हेल्थ स्कोर का मतलब क्या है?",
-    "मुझे हेमेटोलॉजिस्ट की ज़रूरत क्यों है?",
-    "रिपोर्ट सुधारने के लिए क्या खाऊं?",
-    "सबसे ज़रूरी मान कौन सा है?",
-  ],
-  mr: [
-    "माझा हिमोग्लोबिन कमी का आहे?",
-    "माझ्या आरोग्य स्कोरचा अर्थ काय?",
-    "मला हेमॅटोलॉजिस्टची गरज का आहे?",
-    "अहवाल सुधारण्यासाठी काय खावे?",
-    "सर्वात महत्त्वाचे मूल्य कोणते?",
-  ],
-};
+function buildChatGreeting(result: AnalysisResult, lang: Lang): string {
+  const n = result.total_biomarkers ?? result.biomarkers.length;
+  const score = calcScore(result.biomarkers);
+  const sev = sevLabel(result.overall_severity, lang);
+  const spec = result.specialist_recommendation?.trim();
+  const urg = result.urgency_timeline?.trim();
+  const specEn =
+    spec && spec.length > 0
+      ? urg && urg.length > 0
+        ? ` Follow-up on your report: ${spec} (${urg}).`
+        : ` Follow-up on your report: ${spec}.`
+      : "";
+  const specHi =
+    spec && spec.length > 0
+      ? urg && urg.length > 0
+        ? ` रिपोर्टनुसार पुढची देखभाल: ${spec} (${urg})।`
+        : ` रिपोर्टनुसार पुढची देखभाल: ${spec}।`
+      : "";
+  const specMr =
+    spec && spec.length > 0
+      ? urg && urg.length > 0
+        ? ` अहवालानुसार पुढील तपासणी: ${spec} (${urg}).`
+        : ` अहवालानुसार पुढील तपासणी: ${spec}.`
+      : "";
+
+  if (lang === "hi") {
+    return (
+      `नमस्ते! मैं केवल आपकी इस Bodh रिपोर्ट का उपयोग करता हूं — ${n} मान, समग्र स्थिति ${sev}, हेल्थ स्कोर ${score}/100।` +
+      specHi +
+      ` नीचे तीन सुझाए गए सवाल हैं जो आप मुझे (Bodh) इस रिपोर्ट के बारे में पूछ सकते हैं; किसी पर टैप करें या अपना सवाल लिखें।`
+    );
+  }
+  if (lang === "mr") {
+    return (
+      `नमस्कार! मी फक्त तुमच्या या Bodh अहवालावर आधारित उत्तरे देतो — ${n} मूल्ये, एकूण ${sev}, आरोग्य स्कोर ${score}/100.` +
+      specMr +
+      ` खालील तीन सूचित प्रश्न तुम्ही मला (Bodh) या अहवालाबद्दल विचारू शकता; टॅप करा किंवा स्वतः लिहा.`
+    );
+  }
+  return (
+    `Hi! I only use your Bodh report — ${n} values analyzed, overall ${sev}, health score ${score}/100.` +
+    specEn +
+    ` The three buttons below are quick questions you can ask me (Bodh) about this report; tap one or type your own.`
+  );
+}
 
 const PLACEHOLDERS: Record<Lang, string> = {
   en: "Ask about your report...",
@@ -46,12 +69,6 @@ const TITLES: Record<Lang, string> = {
   en: "Ask Bodh",
   hi: "Bodh से पूछें",
   mr: "Bodh ला विचारा",
-};
-
-const GREETINGS: Record<Lang, string> = {
-  en: "Hi! I can answer questions about your report. Ask me anything — why a value is abnormal, what a term means, or what to tell your doctor.",
-  hi: "नमस्ते! मैं आपकी रिपोर्ट के बारे में सवालों का जवाब दे सकता हूं। कुछ भी पूछें — कोई मान असामान्य क्यों है, किसी शब्द का अर्थ क्या है।",
-  mr: "नमस्ते! मी तुमच्या अहवालाबद्दलच्या प्रश्नांची उत्तरे देऊ शकतो. काहीही विचारा — एखादे मूल्य असामान्य का आहे, एखाद्या शब्दाचा अर्थ काय आहे.",
 };
 
 interface ReportChatProps {
@@ -69,20 +86,22 @@ export default function ReportChat({ result, lang, elderly = false }: ReportChat
   const bottomRef               = useRef<HTMLDivElement>(null);
   const inputRef                = useRef<HTMLInputElement>(null);
 
-  // Greeting message on first open
+  // Report-specific greeting — refresh when only the welcome bubble exists (e.g. language change)
   useEffect(() => {
-    if (open && messages.length === 0) {
-      setMessages([{
-        role: "assistant",
-        content: GREETINGS[lang],
-        ts: Date.now(),
-      }]);
-    }
-    if (open) {
-      setUnread(0);
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
-  }, [open, lang]);
+    if (!open) return;
+    const greeting = buildChatGreeting(result, lang);
+    setMessages((prev) => {
+      if (prev.length === 0) {
+        return [{ role: "assistant", content: greeting, ts: Date.now() }];
+      }
+      if (prev.length === 1 && prev[0].role === "assistant") {
+        return [{ role: "assistant", content: greeting, ts: Date.now() }];
+      }
+      return prev;
+    });
+    setUnread(0);
+    setTimeout(() => inputRef.current?.focus(), 100);
+  }, [open, lang, result]);
 
   // Scroll to bottom on new message
   useEffect(() => {
@@ -159,9 +178,6 @@ export default function ReportChat({ result, lang, elderly = false }: ReportChat
   const handleKey = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); }
   };
-
-  // Show only suggestions that are relevant (filter by actual abnormal biomarkers)
-  const suggestions = SUGGESTED[lang].slice(0, 3);
 
   return (
     <>
@@ -253,7 +269,7 @@ export default function ReportChat({ result, lang, elderly = false }: ReportChat
             {/* Suggested questions — only show at start */}
             {messages.length === 1 && !loading && (
               <div className="space-y-1.5">
-                {suggestions.map((s, i) => (
+                {chatQuestionsForLang(result, lang).map((s, i) => (
                   <button key={i} onClick={() => send(s)}
                     className={`w-full text-left rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-600 transition-colors hover:border-[#0D6B5E] hover:text-[#0D6B5E] ${elderly ? "text-sm" : "text-xs"}`}>
                     {s}

@@ -14,9 +14,9 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const isResults = pathname === "/results" || pathname.startsWith("/results/");
 
   const navProps = isResults
-    ? { backHref: "/analyze" as const, backLabel: "← New Report" as const }
+    ? { backHref: "/analyze" as const, backLabel: "New report" as const }
     : isAnalyze
-      ? { backHref: "/" as const, backLabel: "← Home" as const }
+      ? { backHref: "/" as const, backLabel: "Home" as const }
       : {};
 
   return (

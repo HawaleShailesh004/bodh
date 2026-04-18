@@ -42,4 +42,8 @@ export interface AnalysisResult {
   doctor_questions_en: string[];
   doctor_questions_hi: string[];
   doctor_questions_mr: string[];
+  /** AI-generated tap-to-ask prompts for Bodh chat (not the doctor-visit list) */
+  chat_questions_en: string[];
+  chat_questions_hi: string[];
+  chat_questions_mr: string[];
 }

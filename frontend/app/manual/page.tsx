@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, FlaskConical, AlertCircle } from "lucide-react";
+import { Plus, Trash2, FlaskConical, AlertCircle, Stethoscope } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { useApp } from "@/context/AppContext";
 import type { AnalysisResult } from "@/lib/types";
@@ -130,7 +130,7 @@ export default function ManualEntryPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar lang={lang} setLang={setLang} backHref="/analyze" backLabel="← Upload instead" />
+      <Navbar lang={lang} setLang={setLang} backHref="/analyze" backLabel="Upload instead" />
 
       <main className="mx-auto w-full max-w-3xl px-4 py-8">
         {/* Header */}
@@ -268,8 +268,11 @@ export default function ManualEntryPage() {
           {loading ? l("analyzing") : l("analyze")}
         </button>
 
-        <p className={`mt-3 text-center text-slate-400 ${elderly ? "text-sm" : "text-xs"}`}>
-          ⚕️ {lang === "hi" ? "यह AI विश्लेषण है, चिकित्सकीय सलाह नहीं।" : lang === "mr" ? "हे AI विश्लेषण आहे, वैद्यकीय सल्ला नाही." : "This is AI analysis, not medical advice. Always consult a doctor."}
+        <p className={`mt-3 flex items-center justify-center gap-2 text-center text-slate-400 ${elderly ? "text-sm" : "text-xs"}`}>
+          <Stethoscope size={14} className="shrink-0 text-slate-400" strokeWidth={2} aria-hidden />
+          <span>
+            {lang === "hi" ? "यह AI विश्लेषण है, चिकित्सकीय सलाह नहीं।" : lang === "mr" ? "हे AI विश्लेषण आहे, वैद्यकीय सल्ला नाही." : "This is AI analysis, not medical advice. Always consult a doctor."}
+          </span>
         </p>
       </main>
     </div>

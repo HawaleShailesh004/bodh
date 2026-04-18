@@ -50,6 +50,18 @@ export const SEV: Record<Severity, {
   },
 };
 
+/** Reference band on RangeBar + center arc on Gauge — matches severity (Watch = amber, not always green). */
+export const SEV_RANGE_VIS: Record<
+  Severity,
+  { bar: string; label: string; gaugeCenter: string }
+> = {
+  NORMAL: { bar: "bg-emerald-300", label: "text-emerald-600", gaugeCenter: "#6EE7B7" },
+  WATCH: { bar: "bg-amber-300", label: "text-amber-700", gaugeCenter: "#FBBF24" },
+  ACT_NOW: { bar: "bg-rose-300", label: "text-rose-700", gaugeCenter: "#FB7185" },
+  EMERGENCY: { bar: "bg-violet-300", label: "text-violet-700", gaugeCenter: "#C4B5FD" },
+  UNKNOWN: { bar: "bg-slate-300", label: "text-slate-600", gaugeCenter: "#CBD5E1" },
+};
+
 export const JARGON: Record<string, { en: string; hi: string }> = {
   hemoglobin:  { en: "Protein in red blood cells that carries oxygen throughout your body.", hi: "लाल रक्त कोशिकाओं में प्रोटीन जो ऑक्सीजन ले जाता है।" },
   hematocrit:  { en: "Percentage of your blood made up of red blood cells.", hi: "रक्त में लाल रक्त कोशिकाओं का प्रतिशत।" },
@@ -145,3 +157,6 @@ export const PERSONAL_MESSAGES: Record<string, { msg: Record<string,string>; fac
     },
   },
 };
+
+/** `sessionStorage` is per-tab; new-tab `/print` reads this snapshot (written before opening print). */
+export const BODH_PRINT_SNAPSHOT_KEY = "bodh_result_print";

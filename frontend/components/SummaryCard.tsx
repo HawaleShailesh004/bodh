@@ -42,7 +42,7 @@ export default function SummaryCard({ result, lang, elderly = false }: SummaryCa
   };
 
   const handleShare = () => {
-    const text = `📋 Bodh Health Summary\n\n${summary}\n\n⚕️ Always consult a doctor.`;
+    const text = `Bodh Health Summary\n\n${summary}\n\nAlways consult a doctor.`;
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
   };
 

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { AlertTriangle, FolderOpen, Sparkles } from "lucide-react";
 import type { Lang } from "@/lib/types";
 
 const Icons = {
@@ -421,7 +422,7 @@ export default function AnalyzeUpload({
                         animate={{ scale: 1, opacity: 1 }}
                         className="py-2"
                       >
-                        <div className="mx-auto mb-3 text-4xl">📂</div>
+                        <FolderOpen className="mx-auto mb-3 h-10 w-10 text-[#0D6B5E]" strokeWidth={1.75} aria-hidden />
                         <div className="text-lg font-bold text-[#0D6B5E]">{tx("dragActive", lang)}</div>
                       </motion.div>
                     ) : (
@@ -466,10 +467,12 @@ export default function AnalyzeUpload({
                   {selectedFile ? (
                     <>
                       <motion.span
-                        animate={{ scale: [1, 1.2, 1] }}
+                        className="inline-flex"
+                        animate={{ scale: [1, 1.15, 1] }}
                         transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 2 }}
+                        aria-hidden
                       >
-                        ✨
+                        <Sparkles className="h-5 w-5 text-white/95" strokeWidth={2} />
                       </motion.span>
                       {tx("analyzeCtaFile", lang)}
                     </>
@@ -533,14 +536,15 @@ export default function AnalyzeUpload({
                   initial={{ opacity: 0, y: 6, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -6 }}
-                  className="mt-6 rounded-2xl border px-4 py-3 text-sm"
+                  className="mt-6 flex items-start gap-2.5 rounded-2xl border px-4 py-3 text-sm"
                   style={{
                     background: "#FEF2F2",
                     borderColor: "#FECACA",
                     color: "#991B1B",
                   }}
                 >
-                  ⚠ {error}
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
+                  <span>{error}</span>
                 </motion.div>
               )}
             </AnimatePresence>
