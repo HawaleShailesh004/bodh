@@ -459,43 +459,73 @@ export default function LandingPage({ lang, onStart }: LandingPageProps) {
       </section>
 
       {/* ── PRIVACY PIPELINE ────────────────────────────── */}
-      <section style={{ padding: "100px 24px", background: "white", borderTop: "1px solid #E4E4E7" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <motion.div {...fadeUp} style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", color: "#0D6B5E", textTransform: "uppercase", marginBottom: 10 }}>
-              {lang === "hi" ? "गोपनीयता पहले" : lang === "mr" ? "गोपनीयता प्रथम" : "Privacy Architecture"}
-            </div>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 700, color: "#09090B", lineHeight: 1.2 }}>
-              {lang === "hi" ? "आपका व्यक्तिगत डेटा AI को कभी नहीं दिखता" : lang === "mr" ? "तुमचा वैयक्तिक डेटा AI ला कधीच दिसत नाही" : "Your personal data never reaches the AI."}
-            </h2>
-          </motion.div>
+      <section className="border-t border-zinc-200 bg-white px-6 py-16 md:py-24">
+  <div className="mx-auto max-w-4xl">
+    {/* Header */}
+    <motion.div {...fadeUp} className="mb-14 text-center md:mb-16">
+      <div className="mb-2 text-xs font-bold uppercase tracking-widest text-[#0D6B5E]">
+        {lang === "hi" ? "गोपनीयता पहले" : lang === "mr" ? "गोपनीयता प्रथम" : "Privacy Architecture"}
+      </div>
+      <h2 className="font-serif text-3xl font-bold leading-tight text-zinc-900 md:text-4xl">
+        {lang === "hi" ? "आपका व्यक्तिगत डेटा AI को कभी नहीं दिखता" : lang === "mr" ? "तुमचा वैयक्तिक डेटा AI ला कधीच दिसत नाही" : "Your personal data never reaches the AI."}
+      </h2>
+    </motion.div>
 
-          {/* FIX 2: mobile-safe pipeline — column on small screens via CSS class */}
-          <div className="privacy-pipeline">
-            {privacySteps.map((step, i) => (
-              <motion.div key={i} {...fadeUp} transition={{ delay: i * 0.1, duration: 0.55 }} className="privacy-step">
-                {i < privacySteps.length - 1 && <div className="privacy-connector" />}
-                <div style={{ width: 56, height: 56, borderRadius: "50%", background: i === 1 ? "#FEF2F2" : "#ECFDF5", border: `1.5px solid ${i === 1 ? "#FECACA" : "#A7F3D0"}`, display: "flex", alignItems: "center", justifyContent: "center", color: i === 1 ? "#E11D48" : "#0D6B5E", marginBottom: 16, position: "relative", zIndex: 1, boxShadow: "0 0 0 6px white" }}>
-                  {step.icon}
-                </div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#09090B", marginBottom: 6 }}>
-                  {lang === "mr" ? step.mr : lang === "hi" ? step.hi : step.en}
-                </div>
-                <div style={{ fontSize: 12, color: "#71717A", lineHeight: 1.5, maxWidth: 140 }}>{t(step.desc, lang)}</div>
-              </motion.div>
-            ))}
+    {/* Responsive Pipeline */}
+    <div className="relative flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-4">
+      {/* The Connecting Line:
+        - Mobile: Absolute left, vertical line behind the icons.
+        - Desktop (md): Absolute top, horizontal line behind the icons.
+      */}
+      <div className="absolute bottom-4 left-[27px] top-4 z-0 w-[2px] bg-zinc-200 md:bottom-auto md:left-4 md:right-4 md:top-7 md:h-[2px] md:w-auto" />
+
+      {privacySteps.map((step, i) => (
+        <motion.div 
+          key={i} 
+          {...fadeUp} 
+          transition={{ delay: i * 0.1, duration: 0.55 }} 
+          className="relative z-10 flex w-full items-start gap-4 text-left md:flex-col md:items-center md:text-center"
+        >
+          {/* Icon Circle */}
+          <div 
+            className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 ring-4 ring-white ${
+              i === 1 
+                ? "border-red-200 bg-red-50 text-red-600" 
+                : "border-emerald-200 bg-emerald-50 text-[#0D6B5E]"
+            }`}
+          >
+            {step.icon}
           </div>
+          
+          {/* Text Content */}
+          <div>
+            <div className="mb-1 text-sm font-bold text-zinc-900">
+              {lang === "mr" ? step.mr : lang === "hi" ? step.hi : step.en}
+            </div>
+            <div className="text-xs leading-relaxed text-zinc-500 md:max-w-[140px]">
+              {t(step.desc, lang)}
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
 
-          <motion.div {...fadeUp} transition={{ delay: 0.4 }} style={{ marginTop: 48, background: "#F4F4F5", borderRadius: 16, padding: "16px 24px", display: "flex", alignItems: "center", gap: 12 }}>
-            <Icon.Lock />
-            <p style={{ fontSize: 13, color: "#52525B", lineHeight: 1.6 }}>
-              {lang === "hi" ? 'AI को केवल यह मिलता है: {"age": 35, "gender": "M", "biomarkers": [...]} — कोई नाम, कोई फोन नंबर नहीं।' :
-                lang === "mr" ? 'AI ला फक्त हे मिळते: {"age": 35, "gender": "M", "biomarkers": [...]} — कोणतेही नाव, फोन नाही.' :
-                'The AI only ever receives: {"age": 35, "gender": "M", "biomarkers": [...]} — no name, no phone, no address. Ever.'}
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    {/* JSON Data Lock Box */}
+    <motion.div 
+      {...fadeUp} 
+      transition={{ delay: 0.4 }} 
+      className="mt-12 flex items-center gap-3 rounded-2xl bg-zinc-100 p-4 md:mt-16 md:p-6"
+    >
+      {/* Note: Ensure Icon.Lock is imported and sized correctly */}
+      <Icon.Lock className="shrink-0 text-zinc-500" size={20} />
+      <p className="text-xs leading-relaxed text-zinc-600 md:text-sm">
+        {lang === "hi" ? 'AI को केवल यह मिलता है: {"age": 35, "gender": "M", "biomarkers": [...]} — कोई नाम, कोई फोन नंबर नहीं।' :
+         lang === "mr" ? 'AI ला फक्त हे मिळते: {"age": 35, "gender": "M", "biomarkers": [...]} — कोणतेही नाव, फोन नाही.' :
+         'The AI only ever receives: {"age": 35, "gender": "M", "biomarkers": [...]} — no name, no phone, no address. Ever.'}
+      </p>
+    </motion.div>
+  </div>
+</section>
 
       {/* ── LANGUAGE SHOWCASE ───────────────────────────── */}
       <section style={{ padding: "100px 24px", background: "#FAFAFA" }}>
