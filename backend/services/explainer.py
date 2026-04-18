@@ -3,6 +3,7 @@
 import asyncio
 import json
 import os
+import time
 
 from groq import Groq
 from openai import AsyncOpenAI
@@ -25,6 +26,40 @@ openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Timeout (seconds) per model call.
 MODEL_TIMEOUT = 15.0
+SUMMARY_TIMEOUT = 30.0
+
+_REPORT_SUMMARY_SYSTEM = """You are a medical report summarizer for Indian patients.
+Generate a conversational summary and specific doctor questions based on the blood test results.
+
+RULES:
+- Summary: 4-6 sentences, simple Class-8 level language, warm tone
+- Mention specific abnormal biomarker NAMES and VALUES — not just "some values are high"
+- Be honest about severity but not alarming
+- Questions: 3 questions that are SPECIFIC to the patient's actual abnormal values
+- Questions should be things a patient would actually ask — not generic
+- Return ONLY valid JSON, no markdown, no explanation
+- All three languages must be genuinely translated (not transliterated)"""
+
+_REPORT_SUMMARY_USER = """Patient: {age} years, {gender}
+Overall severity: {severity}
+Processing time: {time_ms}ms
+
+ABNORMAL values:
+{abnormal}
+
+NORMAL values: {normal_names}
+
+Specialist recommendation: {specialist}
+
+Generate in this exact JSON schema:
+{{
+  "summary_en": "4-6 sentence summary in English",
+  "summary_hi": "4-6 sentence summary in Hindi (Devanagari script)",
+  "summary_mr": "4-6 sentence summary in Marathi (Devanagari script)",
+  "questions_en": ["specific Q1", "specific Q2", "specific Q3"],
+  "questions_hi": ["प्रश्न 1", "प्रश्न 2", "प्रश्न 3"],
+  "questions_mr": ["प्रश्न 1", "प्रश्न 2", "प्रश्न 3"]
+}}"""
 
 SYSTEM_PROMPT = """You are a health literacy assistant helping Indian patients understand their lab reports.
 
@@ -275,6 +310,108 @@ def _validate_output(out: dict) -> bool:
     return all(isinstance(out.get(k), str) and len(out.get(k, "")) > 5 for k in required)
 
 
+async def generate_report_summary(
+    biomarkers: list[ExplainedBiomarker],
+    overall_severity: SeverityLevel,
+    age: int,
+    gender: str,
+    specialist: str | None,
+    processing_time_ms: int,
+) -> dict:
+    """
+    One Groq call after all individual explanations are done.
+    Generates a conversational 4-6 sentence report summary + 3 specific doctor questions (EN, HI, MR).
+    """
+    abnormal = [b for b in biomarkers if b.severity not in (SeverityLevel.NORMAL, SeverityLevel.UNKNOWN)]
+    normal = [b for b in biomarkers if b.severity == SeverityLevel.NORMAL]
+
+    sev = overall_severity.value
+
+    abnormal_lines = "\n".join(
+        f"- {b.raw_name}: {b.value} {b.unit} "
+        f"(normal range: {b.active_ref_low}–{b.active_ref_high}, severity: {b.severity.value})"
+        for b in abnormal
+    ) or "None"
+
+    normal_names = ", ".join(b.raw_name for b in normal[:8])
+    if len(normal) > 8:
+        normal_names += f" +{len(normal) - 8} more"
+
+    user_prompt = _REPORT_SUMMARY_USER.format(
+        age=age,
+        gender=gender,
+        severity=sev,
+        time_ms=processing_time_ms,
+        abnormal=abnormal_lines,
+        normal_names=normal_names or "None",
+        specialist=specialist or "General Physician",
+    )
+
+    fallback = {
+        "summary_en": (
+            f"Your report has {len(biomarkers)} values analyzed. {len(abnormal)} values need attention. "
+            "Please consult your doctor for proper guidance."
+        ),
+        "summary_hi": (
+            f"आपकी रिपोर्ट में {len(biomarkers)} मानों का विश्लेषण किया गया। {len(abnormal)} मानों पर ध्यान देने की आवश्यकता है।"
+        ),
+        "summary_mr": (
+            f"तुमच्या अहवालात {len(biomarkers)} मूल्यांचे विश्लेषण केले गेले. {len(abnormal)} मूल्यांकडे लक्ष देणे आवश्यक आहे."
+        ),
+        "questions_en": [
+            "What is the most important finding in my report and what could be causing it?",
+            "When should I retest and which values should I monitor closely?",
+            "What lifestyle changes or medications do you recommend based on my results?",
+        ],
+        "questions_hi": [
+            "मेरी रिपोर्ट में सबसे महत्वपूर्ण निष्कर्ष क्या है?",
+            "मुझे अगली जाँच कब करवानी चाहिए?",
+            "इन परिणामों के आधार पर आप क्या सुझाव देते हैं?",
+        ],
+        "questions_mr": [
+            "माझ्या अहवालातील सर्वात महत्त्वाचा निष्कर्ष कोणता आहे?",
+            "पुन्हा चाचणी कधी करावी?",
+            "या परिणामांच्या आधारे तुम्ही काय सुचवता?",
+        ],
+    }
+
+    def _call_groq() -> dict:
+        response = groq_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            temperature=0.3,
+            max_tokens=1200,
+            response_format={"type": "json_object"},
+            messages=[
+                {"role": "system", "content": _REPORT_SUMMARY_SYSTEM},
+                {"role": "user", "content": user_prompt},
+            ],
+        )
+        raw = (response.choices[0].message.content or "").strip()
+        return json.loads(raw)
+
+    try:
+        result = await asyncio.wait_for(asyncio.to_thread(_call_groq), timeout=SUMMARY_TIMEOUT)
+        required = [
+            "summary_en",
+            "summary_hi",
+            "summary_mr",
+            "questions_en",
+            "questions_hi",
+            "questions_mr",
+        ]
+        if not all(k in result for k in required):
+            return fallback
+        for key in ("questions_en", "questions_hi", "questions_mr"):
+            if not isinstance(result[key], list) or len(result[key]) < 3:
+                result[key] = fallback[key]
+            else:
+                result[key] = result[key][:3]
+        return result
+    except Exception as e:
+        print(f"  [summary] generation failed: {e}")
+        return fallback
+
+
 async def explain_one(bio: ScoredBiomarker) -> tuple[ExplainedBiomarker, bool]:
     """
     Explain one biomarker using parallel model calls.
@@ -321,7 +458,7 @@ async def explain_one(bio: ScoredBiomarker) -> tuple[ExplainedBiomarker, bool]:
 async def explain_all(biomarkers: list[ScoredBiomarker]) -> tuple[list[ExplainedBiomarker], bool]:
     """
     Explain all biomarkers concurrently.
-    Returns (explained_list, any_diverged).
+    Call ``generate_report_summary`` in the router after this returns.
     """
     results = await asyncio.gather(*[explain_one(b) for b in biomarkers], return_exceptions=True)
 
