@@ -80,6 +80,10 @@ class AnalysisResult(BaseModel):
     doctor_questions_en: List[str] = Field(default_factory=list)
     doctor_questions_hi: List[str] = Field(default_factory=list)
     doctor_questions_mr: List[str] = Field(default_factory=list)
+    # AI-generated tap-to-ask prompts for in-app chat (separate from doctor_visit questions)
+    chat_questions_en: List[str] = Field(default_factory=list)
+    chat_questions_hi: List[str] = Field(default_factory=list)
+    chat_questions_mr: List[str] = Field(default_factory=list)
 
 
 class PatientContext(BaseModel):

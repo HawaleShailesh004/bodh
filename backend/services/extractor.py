@@ -1381,8 +1381,8 @@ _VALID_UNIT_PATTERN = re.compile(
     r"^(g/dl|g/l|mg/dl|mg/l|mmol/l|µmol/l|umol/l|"
     r"iu/l|u/l|miu/l|uiu/ml|ng/ml|pg/ml|pg|fl|"
     r"%|/µl|/ul|/cumm|/hpf|/lpf|lakhs/cumm|"
-    r"million/cu\.mm|thou/µl|k/µl|meq/l|mmhg|"
-    r"units|unit|cells/µl|10\^3/µl|10\^6/µl)$",
+    r"million/cu\.mm|thou/µl|thou/ul|k/µl|k/ul|meq/l|mmhg|"
+    r"units|unit|cells/µl|cells/ul|10\^3/µl|10\^3/ul|10\^6/µl|10\^6/ul)$",
     re.IGNORECASE,
 )
 
@@ -1391,10 +1391,12 @@ def _clean_unit(unit: str) -> str:
     """Return unit if valid, else empty string."""
     if not unit:
         return ""
-    cleaned = unit.strip().lower()
-    cleaned = re.sub(r"^[^a-z%]+|[^a-z%µ³0-9.^]+$", "", cleaned)
+    # OCR often merges the H/L flag column into the unit ("K/UL L", "g/dL H").
+    u0 = re.sub(r"\s+(?:H|L|HH|LL)\s*$", "", unit.strip(), flags=re.I).strip()
+    cleaned = u0.lower().replace("µ", "u").replace("³", "3").replace("⁹", "9")
+    cleaned = re.sub(r"^[^a-z%]+|[^a-z%µ³0-9.^/]+$", "", cleaned)
     if _VALID_UNIT_PATTERN.match(cleaned):
-        return unit.strip()
+        return u0
     return ""
 
 
@@ -1655,6 +1657,22 @@ REPORT TEXT:
 {text}"""
 
 
+_EXTRACT_LOG_PREVIEW = int(os.getenv("BODH_EXTRACT_LOG_PREVIEW", "12000"))
+
+
+def _log_extract_preview(title: str, body: str) -> None:
+    """Log report text or model output for debugging (length-capped)."""
+    n = len(body)
+    cap = _EXTRACT_LOG_PREVIEW
+    if n <= cap:
+        print(f"[extractor] {title} ({n} chars):\n{body}")
+    else:
+        print(
+            f"[extractor] {title} ({n} chars, showing first {cap}):\n{body[:cap]}\n"
+            f"[extractor] ... truncated (set BODH_EXTRACT_LOG_PREVIEW to raise limit)"
+        )
+
+
 def _call_groq(clean_text: str) -> list[dict]:
     """
     Send PII-stripped text to Groq Llama for structured extraction.
@@ -1673,6 +1691,7 @@ def _call_groq(clean_text: str) -> list[dict]:
     )
 
     raw = response.choices[0].message.content.strip()
+    _log_extract_preview("Groq extraction model raw response (JSON string)", raw)
     parsed = json.loads(raw)
 
     if isinstance(parsed, list):
@@ -2757,16 +2776,35 @@ async def extract(file_bytes: bytes, content_type: str) -> tuple[list[ExtractedB
     if not raw_text.strip():
         return [], {"age": 35, "gender": "male"}
 
+    print(
+        f"[extractor] PDF/OCR text pipeline: content_type={content_type!r} "
+        f"extraction_source={source!s} raw_text_len={len(raw_text)}"
+    )
+    _log_extract_preview("raw text from PDF or Azure layout OCR (before PII strip)", raw_text)
+
     patient_ctx = extract_patient_context(raw_text)
+    print(f"[extractor] patient context parsed from report header: {patient_ctx!r}")
+
     clean_text = strip_pii(raw_text)
     if not clean_text.strip():
         return [], patient_ctx
 
+    _log_extract_preview("text sent to extraction model (after PII strip)", clean_text)
+
     try:
         items = _call_groq(clean_text)
+        try:
+            items_preview = json.dumps(items, ensure_ascii=False, default=str)
+        except TypeError:
+            items_preview = str(items)
+        _log_extract_preview(
+            f"Groq extraction parsed items (count={len(items)})",
+            items_preview,
+        )
         biomarkers = _items_to_biomarkers(items, source)
     except Exception as e:
         print(f"[extractor] Groq failed: {e}")
         return [], patient_ctx
 
+    print(f"[extractor] final biomarker rows after mapping: {len(biomarkers)}")
     return biomarkers, patient_ctx

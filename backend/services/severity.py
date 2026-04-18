@@ -6,7 +6,7 @@ from pathlib import Path
 from models.schemas import ScoredBiomarker, SeverityLevel, VerifiedBiomarker
 
 # Load ICMR DB once.
-_DB_PATH = Path(__file__).parent.parent / "data" / "icmr_ranges.json"
+_DB_PATH = Path(__file__).parent.parent / "data" / "clinical_abbreviations_reference.json"
 with open(_DB_PATH, encoding="utf-8") as f:
     _RAW = json.load(f)
 ICMR_DB = {k: v for k, v in _RAW.items() if not k.startswith("_")}

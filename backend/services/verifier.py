@@ -1,16 +1,98 @@
-import json, re
+import json, os, re
+from collections import defaultdict
 from pathlib import Path
 from models.schemas import (
     ExtractedBiomarker, VerifiedBiomarker,
     RangeSource
 )
 
-_DB_PATH = Path(__file__).parent.parent / "data" / "icmr_ranges.json"
+_DB_PATH = Path(__file__).parent.parent / "data" / "clinical_abbreviations_reference.json"
 with open(_DB_PATH, encoding="utf-8") as f:
     _RAW = json.load(f)
 ICMR_DB = {k: v for k, v in _RAW.items() if not k.startswith("_")}
 
-# Build alias map
+
+def _validate_icmr_db() -> None:
+    """
+    Startup checks after loading the ICMR DB JSON: schema hints + alias collisions.
+    Set ICMR_STRICT=1 to raise on collisions (CI); default is warn-only.
+    """
+    strict = os.getenv("ICMR_STRICT", "").strip() in ("1", "true", "yes")
+
+    required_keys = ("aliases", "ranges", "default_range")
+    pick_range_keys = frozenset(
+        {"male_adult", "female_adult", "child_6_14", "child"},
+    )
+
+    for key, entry in ICMR_DB.items():
+        missing = [f for f in required_keys if f not in entry]
+        if missing:
+            print(f"  [icmr] WARNING: {key!r} missing top-level keys: {missing}")
+
+        aliases = entry.get("aliases")
+        if not aliases or not isinstance(aliases, list):
+            print(f"  [icmr] WARNING: {key!r} has no usable aliases list")
+
+        dr = entry.get("default_range")
+        if isinstance(dr, dict):
+            if "low" not in dr or "high" not in dr:
+                print(
+                    f"  [icmr] WARNING: {key!r} default_range must have numeric "
+                    f"'low' and 'high' (got keys: {list(dr.keys())})"
+                )
+        elif dr is not None:
+            print(f"  [icmr] WARNING: {key!r} default_range should be a dict with low/high")
+
+        ranges = entry.get("ranges") or {}
+        has_pick = isinstance(ranges, dict) and any(
+            k in ranges for k in pick_range_keys
+        )
+        dr_ok = isinstance(dr, dict) and "low" in dr and "high" in dr
+        if isinstance(ranges, dict) and ranges and not has_pick and not dr_ok:
+            print(
+                f"  [icmr] WARNING: {key!r} has no male_adult/female_adult/child ranges "
+                f"and no valid default_range — _pick_range() will return None"
+            )
+
+        if "physiological_min" not in entry or "physiological_max" not in entry:
+            print(
+                f"  [icmr] WARNING: {key!r} missing physiological_min / physiological_max "
+                f"(physiology check skipped for this test)"
+            )
+        elif entry["physiological_min"] is None or entry["physiological_max"] is None:
+            print(
+                f"  [icmr] WARNING: {key!r} physiological_min/max are null "
+                f"(physiology check skipped)"
+            )
+
+    alias_hits: dict[str, list[str]] = defaultdict(list)
+    for key, entry in ICMR_DB.items():
+        for alias in entry.get("aliases", []) or []:
+            if not isinstance(alias, str) or not alias.strip():
+                continue
+            a = alias.lower().strip()
+            alias_hits[a].append(key)
+
+    collisions: dict[str, list[str]] = {}
+    for alias, keys in alias_hits.items():
+        uniq = list(dict.fromkeys(keys))
+        if len(uniq) > 1:
+            collisions[alias] = uniq
+
+    if collisions:
+        msg = f"[icmr] ALIAS COLLISIONS ({len(collisions)} aliases map to multiple keys):"
+        if strict:
+            raise ValueError(f"{msg} {collisions!r}")
+        print(f"  {msg}")
+        for al, keys in sorted(collisions.items(), key=lambda x: x[0])[:25]:
+            print(f"    {al!r} -> {keys}")
+        if len(collisions) > 25:
+            print(f"    ... and {len(collisions) - 25} more")
+
+
+_validate_icmr_db()
+
+# Build alias map (last alias occurrence wins — collisions should be fixed in JSON)
 ALIAS_MAP: dict[str, str] = {}
 for key, entry in ICMR_DB.items():
     for alias in entry.get("aliases", []):
@@ -20,6 +102,8 @@ PHYSIO_BOUNDS: dict[str, tuple[float, float]] = {
     k: (v["physiological_min"], v["physiological_max"])
     for k, v in ICMR_DB.items()
     if "physiological_min" in v
+    and v.get("physiological_min") is not None
+    and v.get("physiological_max") is not None
 }
 
 
@@ -119,9 +203,12 @@ def verify(bio: ExtractedBiomarker, age: int = 35, gender: str = "male") -> Veri
     lab_ref_low = bio.lab_ref_low * unit_factor if bio.lab_ref_low is not None else None
     lab_ref_high = bio.lab_ref_high * unit_factor if bio.lab_ref_high is not None else None
 
-    # Fix display unit
+    # Fix display unit (ICMR uses /µL for counts after scaling from K/µL or Lakhs)
     u = bio.unit.lower().strip()
     if unit_factor in (1_000, 100_000) and ("k/u" in u or "lakh" in u or "thou" in u):
+        display_unit = "/µL"
+    elif norm_name in ("PLATELETS", "WBC") and unit_factor in (1_000, 100_000):
+        # Extraction sometimes drops to placeholder "units" even when value was scaled
         display_unit = "/µL"
     else:
         display_unit = bio.unit

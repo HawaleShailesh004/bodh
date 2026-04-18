@@ -11,8 +11,10 @@ from services.explainer import explain_all, generate_report_summary
 router = APIRouter()
 
 
-def _from_report_meta(report_meta: dict) -> tuple[str, str, str, list[str], list[str], list[str]]:
-    """Coerce Groq JSON into AnalysisResult summary / question fields."""
+def _from_report_meta(
+    report_meta: dict,
+) -> tuple[str, str, str, list[str], list[str], list[str], list[str], list[str], list[str]]:
+    """Coerce Groq JSON into AnalysisResult summary / doctor questions / chat starter questions."""
 
     def _s(key: str) -> str:
         v = report_meta.get(key)
@@ -29,6 +31,9 @@ def _from_report_meta(report_meta: dict) -> tuple[str, str, str, list[str], list
         _ql("questions_en"),
         _ql("questions_hi"),
         _ql("questions_mr"),
+        _ql("chat_questions_en"),
+        _ql("chat_questions_hi"),
+        _ql("chat_questions_mr"),
     )
 
 
@@ -133,7 +138,7 @@ async def analyze_report(
     )
 
     stats = get_coverage_stats(verified)
-    rs_en, rs_hi, rs_mr, dq_en, dq_hi, dq_mr = _from_report_meta(report_meta)
+    rs_en, rs_hi, rs_mr, dq_en, dq_hi, dq_mr, cq_en, cq_hi, cq_mr = _from_report_meta(report_meta)
 
     return AnalysisResult(
         report_id              = str(uuid.uuid4()),
@@ -154,6 +159,9 @@ async def analyze_report(
         doctor_questions_en    = dq_en,
         doctor_questions_hi    = dq_hi,
         doctor_questions_mr    = dq_mr,
+        chat_questions_en      = cq_en,
+        chat_questions_hi      = cq_hi,
+        chat_questions_mr      = cq_mr,
     )
 
 
@@ -219,7 +227,7 @@ async def analyze_manual(req: ManualEntryRequest):
         processing_time_ms=int((time.time() - start_ms) * 1000),
     )
     stats = get_coverage_stats(verified)
-    rs_en, rs_hi, rs_mr, dq_en, dq_hi, dq_mr = _from_report_meta(report_meta)
+    rs_en, rs_hi, rs_mr, dq_en, dq_hi, dq_mr, cq_en, cq_hi, cq_mr = _from_report_meta(report_meta)
 
     return AnalysisResult(
         report_id              = str(uuid.uuid4()),
@@ -240,4 +248,7 @@ async def analyze_manual(req: ManualEntryRequest):
         doctor_questions_en    = dq_en,
         doctor_questions_hi    = dq_hi,
         doctor_questions_mr    = dq_mr,
+        chat_questions_en      = cq_en,
+        chat_questions_hi      = cq_hi,
+        chat_questions_mr      = cq_mr,
     )

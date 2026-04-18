@@ -28,17 +28,60 @@ openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 MODEL_TIMEOUT = 15.0
 SUMMARY_TIMEOUT = 30.0
 
-_REPORT_SUMMARY_SYSTEM = """You are a medical report summarizer for Indian patients.
-Generate a conversational summary and specific doctor questions based on the blood test results.
+_EXPLAIN_JSON_LOG_LIMIT = int(os.getenv("BODH_EXPLAIN_LOG_PREVIEW", "6000"))
 
-RULES:
-- Summary: 4-6 sentences, simple Class-8 level language, warm tone
-- Mention specific abnormal biomarker NAMES and VALUES — not just "some values are high"
+
+def _log_explain_raw(tag: str, text: str) -> None:
+    """Log exact model message text (length-capped)."""
+    if not text:
+        print(f"[explainer] {tag}: <empty>")
+        return
+    n = len(text)
+    cap = _EXPLAIN_JSON_LOG_LIMIT
+    if n <= cap:
+        print(f"[explainer] {tag} ({n} chars):\n{text}")
+    else:
+        print(f"[explainer] {tag} ({n} chars, preview {cap}):\n{text[:cap]}...")
+
+
+def _log_explain_json(tag: str, data: dict | None) -> None:
+    """Print parsed model JSON for debugging (length-capped)."""
+    if data is None:
+        print(f"[explainer] {tag}: <no model output>")
+        return
+    try:
+        s = json.dumps(data, ensure_ascii=False, default=str)
+    except TypeError:
+        s = str(data)
+    n = len(s)
+    cap = _EXPLAIN_JSON_LOG_LIMIT
+    if n <= cap:
+        print(f"[explainer] {tag} ({n} chars): {s}")
+    else:
+        print(f"[explainer] {tag} ({n} chars, preview {cap}): {s[:cap]}...")
+
+_REPORT_SUMMARY_SYSTEM = """You are a medical report summarizer for Indian patients.
+Generate in ONE JSON object:
+1) A conversational report summary
+2) THREE questions the patient should ask their DOCTOR at an appointment (clinical, specific to this report)
+3) THREE short questions the patient might tap to ask the BODH AI CHATBOT about this same report (NOT for the doctor visit)
+
+RULES — summary:
+- 4-6 sentences, Class-8 level, warm tone
+- Mention specific abnormal biomarker NAMES and VALUES where relevant
 - Be honest about severity but not alarming
-- Questions: 3 questions that are SPECIFIC to the patient's actual abnormal values
-- Questions should be things a patient would actually ask — not generic
-- Return ONLY valid JSON, no markdown, no explanation
-- All three languages must be genuinely translated (not transliterated)"""
+
+RULES — doctor questions (`questions_*`):
+- Exactly 3 strings per language; formal phrasing suitable to ask a physician
+- Specific to this patient's abnormal values and context
+
+RULES — Bodh chat starter questions (`chat_questions_*`):
+- Exactly 3 strings per language; phrased as if typing to an AI assistant named Bodh (e.g. "Why is my … on this report?", "What does … mean here?")
+- MUST be different wording from `questions_*` — these are for the app chatbot, not the clinic
+- No diagnosis or treatment instructions; curiosity and literacy only
+- Specific to this report's values when possible
+
+OUTPUT: valid JSON only, no markdown. All three languages genuinely translated (not transliterated)."""
 
 _REPORT_SUMMARY_USER = """Patient: {age} years, {gender}
 Overall severity: {severity}
@@ -56,9 +99,12 @@ Generate in this exact JSON schema:
   "summary_en": "4-6 sentence summary in English",
   "summary_hi": "4-6 sentence summary in Hindi (Devanagari script)",
   "summary_mr": "4-6 sentence summary in Marathi (Devanagari script)",
-  "questions_en": ["specific Q1", "specific Q2", "specific Q3"],
-  "questions_hi": ["प्रश्न 1", "प्रश्न 2", "प्रश्न 3"],
-  "questions_mr": ["प्रश्न 1", "प्रश्न 2", "प्रश्न 3"]
+  "questions_en": ["doctor visit Q1", "doctor visit Q2", "doctor visit Q3"],
+  "questions_hi": ["डॉक्टर से 1", "डॉक्टर से 2", "डॉक्टर से 3"],
+  "questions_mr": ["डॉक्टरांना 1", "डॉक्टरांना 2", "डॉक्टरांना 3"],
+  "chat_questions_en": ["Bodh chat Q1", "Bodh chat Q2", "Bodh chat Q3"],
+  "chat_questions_hi": ["Bodh चैट 1", "Bodh चैट 2", "Bodh चैट 3"],
+  "chat_questions_mr": ["Bodh चॅट 1", "Bodh चॅट 2", "Bodh चॅट 3"]
 }}"""
 
 SYSTEM_PROMPT = """You are a health literacy assistant helping Indian patients understand their lab reports.
@@ -128,7 +174,6 @@ Respond with ONLY this JSON structure:
 
 async def _call_claude(bio: ScoredBiomarker) -> dict | None:
     try:
-        print(f"    [groq-llama] calling for {bio.normalized_name}...")
         resp = await asyncio.wait_for(
             asyncio.to_thread(
                 lambda: groq_client.chat.completions.create(
@@ -144,8 +189,11 @@ async def _call_claude(bio: ScoredBiomarker) -> dict | None:
             ),
             timeout=MODEL_TIMEOUT,
         )
-        print("    [groq-llama] success")
         content = resp.choices[0].message.content or "{}"
+        _log_explain_raw(
+            f"groq-llama raw API body for {(bio.normalized_name or bio.raw_name)!r}",
+            content,
+        )
         return json.loads(content)
     except asyncio.TimeoutError:
         print(f"    [groq-llama] TIMEOUT after {MODEL_TIMEOUT}s")
@@ -160,7 +208,6 @@ async def _call_gpt4o(bio: ScoredBiomarker) -> dict | None:
         print("    [gpt4o] ERROR: Missing OPENAI_API_KEY")
         return None
     try:
-        print(f"    [gpt4o] calling for {bio.normalized_name}...")
         resp = await asyncio.wait_for(
             openai_client.chat.completions.create(
                 model="gpt-4o",
@@ -173,8 +220,11 @@ async def _call_gpt4o(bio: ScoredBiomarker) -> dict | None:
             ),
             timeout=MODEL_TIMEOUT,
         )
-        print("    [gpt4o] success")
         content = resp.choices[0].message.content or "{}"
+        _log_explain_raw(
+            f"gpt-4o raw API body for {(bio.normalized_name or bio.raw_name)!r}",
+            content,
+        )
         return json.loads(content)
     except asyncio.TimeoutError:
         print(f"    [gpt4o] TIMEOUT after {MODEL_TIMEOUT}s")
@@ -320,7 +370,7 @@ async def generate_report_summary(
 ) -> dict:
     """
     One Groq call after all individual explanations are done.
-    Generates a conversational 4-6 sentence report summary + 3 specific doctor questions (EN, HI, MR).
+    Generates report summary + 3 doctor-visit questions + 3 Bodh chat starter questions (EN, HI, MR).
     """
     abnormal = [b for b in biomarkers if b.severity not in (SeverityLevel.NORMAL, SeverityLevel.UNKNOWN)]
     normal = [b for b in biomarkers if b.severity == SeverityLevel.NORMAL]
@@ -373,13 +423,28 @@ async def generate_report_summary(
             "पुन्हा चाचणी कधी करावी?",
             "या परिणामांच्या आधारे तुम्ही काय सुचवता?",
         ],
+        "chat_questions_en": [
+            "Which value on my report should I understand first, in simple words?",
+            "Why might my flagged results look this way on this lab sheet?",
+            "Can you explain one term on my report that looks confusing?",
+        ],
+        "chat_questions_hi": [
+            "मेरी रिपोर्ट में सबसे पहले किस मान को सरल भाषा में समझना चाहिए?",
+            "मेरे रिपोर्ट पर चिह्नित परिणाम ऐसे क्यों दिख सकते हैं?",
+            "क्या आप मेरी रिपोर्ट का एक भ्रमित करने वाला शब्द समझा सकते हैं?",
+        ],
+        "chat_questions_mr": [
+            "माझ्या अहवालात प्रथम कोणते मूल्य सोप्या भाषेत समजून घ्यावे?",
+            "माझ्या अहवालातील चिन्हांकित निकाल असे का दिसू शकतात?",
+            "तुम्ही माझ्या अहवालातील एक गोंधळात टाकणारा शब्द स्पष्ट करू शकता का?",
+        ],
     }
 
     def _call_groq() -> dict:
         response = groq_client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             temperature=0.3,
-            max_tokens=1200,
+            max_tokens=1800,
             response_format={"type": "json_object"},
             messages=[
                 {"role": "system", "content": _REPORT_SUMMARY_SYSTEM},
@@ -387,6 +452,7 @@ async def generate_report_summary(
             ],
         )
         raw = (response.choices[0].message.content or "").strip()
+        _log_explain_raw("report summary Groq raw API body", raw)
         return json.loads(raw)
 
     try:
@@ -398,14 +464,25 @@ async def generate_report_summary(
             "questions_en",
             "questions_hi",
             "questions_mr",
+            "chat_questions_en",
+            "chat_questions_hi",
+            "chat_questions_mr",
         ]
         if not all(k in result for k in required):
             return fallback
-        for key in ("questions_en", "questions_hi", "questions_mr"):
+        for key in (
+            "questions_en",
+            "questions_hi",
+            "questions_mr",
+            "chat_questions_en",
+            "chat_questions_hi",
+            "chat_questions_mr",
+        ):
             if not isinstance(result[key], list) or len(result[key]) < 3:
                 result[key] = fallback[key]
             else:
                 result[key] = result[key][:3]
+        _log_explain_json("report summary parsed JSON (after validation)", result)
         return result
     except Exception as e:
         print(f"  [summary] generation failed: {e}")
@@ -440,6 +517,19 @@ async def explain_one(bio: ScoredBiomarker) -> tuple[ExplainedBiomarker, bool]:
     icmr_tip_en, icmr_tip_hi = _get_icmr_diet_tip(bio)
     final_tip_en = icmr_tip_en or best.get("diet_tip_en")
     final_tip_hi = icmr_tip_hi or best.get("diet_tip_hi")
+
+    label = bio.normalized_name or bio.raw_name
+    _log_explain_json(f"{label!r} groq-llama (explanation task)", claude_out if isinstance(claude_out, dict) else None)
+    _log_explain_json(f"{label!r} gpt-4o (explanation task)", gpt_out if isinstance(gpt_out, dict) else None)
+    _log_explain_json(
+        f"{label!r} reconciled explanation JSON (diet_* may be replaced by ICMR below)",
+        best,
+    )
+    if icmr_tip_en or icmr_tip_hi:
+        print(
+            f"[explainer] {label!r} final diet tips (ICMR override if present): "
+            f"en={final_tip_en!r} hi={final_tip_hi!r}"
+        )
 
     return (
         ExplainedBiomarker(
