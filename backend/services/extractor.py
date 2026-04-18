@@ -2563,29 +2563,101 @@ async def extract(
 
 
 def extract_patient_context(raw_text: str) -> dict:
-    """Extract age and gender from report header before PII strip."""
-    gender = "male"
-    age = 35
+    """
+    Extract age and gender from report text before PII strip.
+    Tuned for Indian lab OCR: EN + HI + MR labels, Age/Sex lines, Yrs.
+    """
+    default_age = 35
+    default_gender = "male"
 
-    header = (raw_text or "")[:500]
+    text = raw_text or ""
+    # Demographics usually appear in the first page; scan enough for noisy OCR.
+    head = text[:5000]
+    narrow = text[:1200]
 
-    if re.search(r"\b(female|f)\b", header, re.I):
-        gender = "female"
-    elif re.search(r"\b(male|m)\b", header, re.I):
-        gender = "male"
+    gender: str | None = None
+    age: int | None = None
 
-    match = re.search(
-        r"(?:age\s*[:/]?\s*|sex\s*/\s*age\s*[:/]?\s*[mf]+\s*/\s*)(\d{1,3})",
-        header,
-        re.I,
+    # --- Gender: explicit phrases (female before male avoids ambiguity) ---
+    female_hits = (
+        r"\bsex\s*[:./\s-]+\s*female\b",
+        r"\bsex\s*[:./\s-]+\s*f\b(?=\s|$|[,./])",
+        r"\bgender\s*[:./\s-]+\s*female\b",
+        r"\b(female|woman|women|girl)\b",
+        r"महिला|स्त्री|स्त्रि|इस्त्री",
     )
-    if not match:
-        match = re.search(r"\b(\d{1,3})\s*(?:yrs?|years?)\b", header, re.I)
+    male_hits = (
+        r"\bsex\s*[:./\s-]+\s*male\b",
+        r"\bsex\s*[:./\s-]+\s*m\b(?=\s|$|[,./])",
+        r"\bgender\s*[:./\s-]+\s*male\b",
+        r"\b(male|man|men|boy)\b",
+        r"पुरुष|नर",
+    )
+    for pat in female_hits:
+        if re.search(pat, head, re.I):
+            gender = "female"
+            break
+    if gender is None:
+        for pat in male_hits:
+            if re.search(pat, head, re.I):
+                gender = "male"
+                break
 
-    if match:
-        detected_age = int(match.group(1))
-        if 1 < detected_age < 120:
-            age = detected_age
+    if gender is None:
+        m = re.search(r"\bsex\s*[:./\s-]+\s*([mf])\b", narrow, re.I)
+        if m:
+            gender = "female" if m.group(1).lower() == "f" else "male"
+
+    # --- Age ---
+    age_patterns: list[tuple[str, int]] = [
+        (r"(?:^|\n)\s*(?:age|आयु|उम्र|वय)\s*[:./\s-]+\s*(\d{1,3})\b", 1),
+        (
+            r"\bage\s*/\s*sex\s*[:./\s-]+\s*(\d{1,3})\s*/\s*(?:male|female|[mf])\b",
+            1,
+        ),
+        (r"\bsex\s*/\s*age\s*[:./\s-]+\s*[mf]\s*/\s*(\d{1,3})\b", 1),
+        (
+            r"\bsex\s*/\s*age\s*[:./\s-]+\s*(?:male|female|[mf])\s*/\s*(\d{1,3})\b",
+            1,
+        ),
+        (r"\bage\s*[:./\s(-]+\s*(\d{1,3})(?:\s*(?:yrs?|years?|yr\.?))?(?:\s|$|\n|,|\))", 1),
+        (r"\bage\s*\([^)]{0,20}\)\s*[:./\s-]+\s*(\d{1,3})\b", 1),
+        (r"(?:age|आयु|उम्र)\s*[:./\s-]+\s*(\d{1,3})\s*(?:year|yr)\b", 1),
+        (r"\b(\d{1,3})\s*(?:yrs?\.?|years?\.?|y\.?\s*o\.?)\b", 1),
+    ]
+    for pat, group in age_patterns:
+        m = re.search(pat, head, re.I | re.M)
+        if m:
+            try:
+                val = int(m.group(group))
+            except (ValueError, IndexError):
+                continue
+            if 1 < val < 120:
+                age = val
+                break
+
+    # Compact "45 / M", "48 / Female", "M / 45" in header only (fewer table false positives)
+    if age is None:
+        m = re.search(r"\b(\d{1,3})\s*/\s*(female|male|[mf])\b", narrow, re.I)
+        if m:
+            val = int(m.group(1))
+            if 1 < val < 120:
+                age = val
+                g = m.group(2).lower()
+                gender = "female" if g in ("f", "female") else "male"
+        else:
+            m = re.search(r"\b(female|male|[mf])\s*/\s*(\d{1,3})\b", narrow, re.I)
+            if m:
+                val = int(m.group(2))
+                if 1 < val < 120:
+                    age = val
+                    g = m.group(1).lower()
+                    gender = "female" if g in ("f", "female") else "male"
+
+    if age is None:
+        age = default_age
+    if gender is None:
+        gender = default_gender
 
     return {"age": age, "gender": gender}
 
