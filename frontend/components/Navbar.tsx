@@ -83,7 +83,7 @@ export default function Navbar({ lang, setLang, backHref, backLabel }: NavbarPro
                   lang === l ? "bg-[#0D6B5E] text-white shadow-sm" : "text-slate-500 hover:text-slate-700"
                 }`}
               >
-                {l === "en" ? "EN" : l === "hi" ? "हि" : "म"}
+                {l === "en" ? "EN" : l === "hi" ? "हिंदी" : "मराठी"}
               </button>
             ))}
           </div>

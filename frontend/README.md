@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bodh frontend
 
-## Getting Started
+Next.js (**App Router**) UI for [Bodh](../README.md): upload Indian lab reports, view verified severity and multilingual explanations, print, and report-grounded chat.
 
-First, run the development server:
+## Docs
+
+| Document | Contents |
+| :--- | :--- |
+| [../README.md](../README.md) | Product summary, pipeline overview, repo map |
+| [../PROJECT_IMPLEMENTATION.md](../PROJECT_IMPLEMENTATION.md) | Full handbook: routes, APIs, storage, deployment |
+| [../architecture.md](../architecture.md) | System diagram and request lifecycle |
+| [../design.md](../design.md) | Severity tokens, typography, UX patterns |
+
+## Setup
+
+1. Copy env: use **`NEXT_PUBLIC_API_URL`** pointing at the FastAPI base (e.g. `http://localhost:8000` or `https://your-api.example.com`). Bare hostname is allowed; **`lib/apiBase.ts`** normalizes it for `fetch`, and **`next.config.ts`** normalizes rewrites for production builds.
+2. Install and run:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Flow: **`/`** → **`/analyze`** → **`/results`**; **`/manual`** for typed values; **`/print`** for a print layout (uses a `localStorage` snapshot when opened from results in a new tab).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **`npm run dev`** — development server  
+- **`npm run build`** — production build (run before deploy; catches invalid Next rewrites)  
+- **`npm run lint`** — ESLint  
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See root **`PROJECT_IMPLEMENTATION.md`** §12 for Vercel / Railway pairing with the backend.

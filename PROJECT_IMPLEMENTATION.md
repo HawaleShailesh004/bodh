@@ -77,7 +77,7 @@ bodh/
     ├── components/              See §6.3
     ├── context/AppContext.tsx   Global UI + result persistence
     ├── hooks/useAnalyze.ts      Multipart analyze + image compression
-    └── lib/                     types, constants, helpers, compressImage
+    └── lib/                     types, constants, apiBase, helpers, compressImage
 ```
 
 ---
@@ -162,12 +162,22 @@ flowchart LR
 
 ### 4.5 `services/extractor.py` (conceptual; file is large)
 
-- **Text PDFs**: PyMuPDF text extraction.
-- **Scanned PDFs / images**: **Azure Document Intelligence** `prebuilt-layout` (optional SHA-based cache under **`backend/.cache/azure_di/`**).
-- **`strip_pii`**: Regex-based removal of likely PII / header noise before LLM extraction.
-- **`extract_patient_context`**: Header-window heuristics for **age** and **gender** (EN + HI patterns, Age/Sex lines, `41 / F` style).
-- **`_call_groq` / structured JSON**: Biomarker rows → **`ExtractedBiomarker`** list.
-- Returns **`tuple[list[ExtractedBiomarker], dict]`** with **`{"age", "gender"}`**.
+The active **`extract()`** path (end of file) does **not** use the older PyMuPDF multi-strategy merge in the same module; it follows:
+
+1. **Raw text**
+   - **Text-layer PDF:** PyMuPDF page text joined with newlines.
+   - **Scanned PDF or weak text:** Azure Document Intelligence **`prebuilt-layout`**, table rows flattened to lines (optional SHA-based cache under **`backend/.cache/azure_di/`**).
+2. **`extract_patient_context(raw_text)`** — header-window regexes for **age** and **gender** (EN + HI + MR patterns, `Age/Sex`, `41 / F`, etc.).
+3. **`strip_pii(raw_text)`** — line-oriented filters **before** Groq:
+   - Drops lines matching metadata (e.g. collected/reported/**registered** on …) and common PII patterns (phone, email, PID, “Ref. By”, etc.).
+   - **Does not** drop whole leading sections of the report (earlier implementations skipped the first *N* lines and could remove **blood indices**).
+   - A generic **six-digit** pattern (intended for PIN-like codes) **does not** remove lines that match a **lab-result hint** (e.g. platelet counts like `150000`).
+4. **`_call_groq(clean_text)`** — JSON-only response; **`max_tokens`** is set high so large CBC panels are not truncated mid-JSON.
+5. **`_items_to_biomarkers(items, source)`** — maps Groq objects to **`ExtractedBiomarker`**; **`_clean_unit`** keeps a curated allowlist of units (Indian CBC spellings: `mill/cumm`, `cumm`, `g%`, `million/cu.mm`, `million/cumm`, etc.).
+
+**Returns:** **`tuple[list[ExtractedBiomarker], dict]`** with **`{"age", "gender"}`** for the analyze router to merge into **`PatientContext`**.
+
+**Operational note:** the module was built iteratively; Python binds the **last** definition of helpers such as **`strip_pii`**. After edits, restart **`uvicorn`** so the running process loads the latest code.
 
 ### 4.6 `services/verifier.py`
 
@@ -244,13 +254,14 @@ flowchart LR
 | File | Contents |
 |------|-----------|
 | **`types.ts`** | **`Lang`**, **`Severity`**, **`Biomarker`**, **`AnalysisResult`** (includes **`chat_questions_*`**). |
-| **`constants.ts`** | **`API_BASE`**, **`SEV`** (colors, labels HI/MR, page tints, badges, personal messages), **`BODH_PRINT_SNAPSHOT_KEY`**. |
+| **`apiBase.ts`** | **`getPublicApiBase()`** — normalizes **`NEXT_PUBLIC_API_URL`** (prepends **`https://`** when the env is host-only) for browser `fetch`. |
+| **`constants.ts`** | **`SEV`** (colors, labels HI/MR, page tints, badges, personal messages), **`BODH_PRINT_SNAPSHOT_KEY`**, jargon map, loader stages/tips. |
 | **`helpers.ts`** | **`cleanName`**, **`fmtVal`**, **`sevLabel`**, **`explanationFor`**, **`normalizeAnalysisResult`**, **`doctorQuestionsForLang`**, **`chatQuestionsForLang`**, **`calcScore`**. |
 | **`compressImage.ts`** | **`maybeCompressImageForUpload`**: downscale + JPEG for large **`image/*`** before upload. |
 
 ### 6.5 `hooks/useAnalyze.ts`
 
-- Builds **`FormData`** with compressed file, age, gender; **`fetch(`${API_BASE}/api/analyze`)`**; **`normalizeAnalysisResult`**; **`setResult`**; navigates **`/results`**.
+- Builds **`FormData`** with compressed file, age, gender; **`fetch(`${API_BASE}/api/analyze`)`** where **`API_BASE`** is exported from **`lib/constants.ts`** (it calls **`getPublicApiBase()`** from **`lib/apiBase.ts`**); **`normalizeAnalysisResult`**; **`setResult`**; navigates **`/results`**.
 
 ---
 
@@ -324,7 +335,7 @@ Both use the **same numeric model**:
 
 - Project root **`frontend/`** (or monorepo subpath).
 - **`NEXT_PUBLIC_API_URL`**: public HTTPS URL of the API **without** trailing slash.
-- **`next.config.ts`**: rewrites **`/api/:path*`** → **`${NEXT_PUBLIC_API_URL}/api/:path*`** (defaults to localhost for local dev).
+- **`next.config.ts`**: rewrites **`/api/:path*`** → **`${NEXT_PUBLIC_API_URL}/api/:path*`**. The rewrite target is **normalized** (bare host gets **`https://`**) so Vercel builds do not fail with “Invalid rewrite destination.”
 
 ### 12.3 `frontend/.env.example`
 
@@ -357,7 +368,7 @@ Ensure **`frontend/.env`** or shell exports **`NEXT_PUBLIC_API_URL=http://localh
 
 ## 15) Roadmap & technical debt
 
-- **`extractor.py`** historically contained duplicated blocks; consolidate to a single canonical implementation when safe.
+- **`extractor.py`** was iteratively developed; Python binds the **last** definition of each function at import time. Restart **`uvicorn`** after edits so the running process picks up changes.
 - **Automated tests** for verifier edge cases, severity transitions, explainer JSON contracts, and API integration.
 - **Structured logging** + request correlation IDs for production.
 - **CORS allowlist** instead of `*` when front domain is fixed.

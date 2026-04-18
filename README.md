@@ -1,183 +1,189 @@
-# Bodh: System Architecture & Engineering
+# Bodh — बोध
 
 > **Apni report, apni bhasha, apna faisla.**  
-> Bodh converts complex Indian medical lab reports into verified, plain-language health summaries with deterministic triage and multilingual explanations.
+> Your report. Your language. Your decision.
 
 ---
 
-## 1. Executive Summary
+My father got his CBC report last year. Twenty-two numbers on a printed sheet. He waited four days for a doctor's appointment — just to be told his haemoglobin was low and to eat more spinach. Four days of anxiety for a ten-second explanation.
 
-Bodh is a patient-facing web platform that processes unstructured medical lab reports (PDFs or photos) and turns them into actionable, easy-to-read insights.
+That is not a personal story. That is 1.4 billion people.
 
-**Core engineering philosophy: safety over speculation.**  
-Bodh does **not** use AI to diagnose or to compute severity. It uses deterministic rules and ICMR-backed reference data (`icmr_ranges.json`) to verify and score labs. AI is used for **structured extraction from OCR text**, **multilingual explanations** that must follow the pre-computed severity, and **report-grounded chat**—always after verification.
-
-**Not a medical device:** outputs are for health literacy only; users must consult a clinician for decisions.
-
-**Canonical architecture (diagrams, APIs, module map):** [architecture.md](./architecture.md).  
-**Design system and UX (typography, severity tokens, components):** [design.md](./design.md).  
-**Prototype scope and demo script:** [prototype.md](./prototype.md).
+**Bodh** is an AI-powered health literacy tool that takes any Indian lab report — PDF or photo — and explains every value in plain Hindi, Marathi, or English in under 20 seconds. Built for the patient who gets the report but never gets the explanation.
 
 ---
 
-## 2. High-level architecture
+## 🔗 Live
 
-Decoupled **Next.js** frontend and **FastAPI** backend so files and model calls stay off the patient’s device except in transit.
+**[bodh-pearl.vercel.app](https://bodh-pearl.vercel.app)**
 
-```mermaid
-graph TD
-    subgraph Client["Frontend: Next.js + React"]
-        UI[User interface]
-        Upload[Upload / camera]
-        Visuals[Gauges & RangeBars]
-        Chat[Report-grounded chat]
-    end
+---
 
-    subgraph Backend["Backend: FastAPI + Uvicorn"]
-        API_A["POST /api/analyze"]
-        API_M["POST /api/analyze/manual"]
-        API_C["POST /api/chat"]
+## What it does
 
-        subgraph Pipeline["Bodh engine"]
-            Extract[1. Extract text & rows]
-            Structure[2. Groq: biomarker JSON]
-            Verify[3. Verifier]
-            Score[4. Severity engine]
-            Explain[5. AI explainer + summary]
-        end
-    end
+Upload a blood test from SRL, Lal PathLabs, Metropolis, Thyrocare, or any Indian lab — Bodh extracts every value, verifies it against **ICMR Indian population guidelines**, assigns a severity level using a **deterministic rule engine** (not AI guessing), and returns:
 
-    subgraph External["External services & data"]
-        Azure[Azure Document Intelligence]
-        Groq[Groq: Llama 3.3 70B]
-        OpenAI[OpenAI: GPT-4o]
-        ICMR[(ICMR reference JSON)]
-    end
+- A plain-language summary of the full report in English, Hindi, and Marathi
+- Priority cards for the top 3 values that need attention most
+- Expanded explanation per biomarker with diet tips
+- 3 specific doctor questions generated from your actual abnormal values
+- A print-ready clinical table for your doctor visit
+- A report-grounded chatbot that answers questions only about your report
+- One-tap WhatsApp share
 
-    Upload -->|multipart| API_A
-    UI -->|optional manual JSON| API_M
-    UI <-->|JSON| API_C
+**Severity is never decided by AI.** A deterministic rule engine using ICMR reference data decides NORMAL / WATCH / ACT_NOW / EMERGENCY. AI only writes the plain-language explanation after severity is fixed.
 
-    API_A --> Extract
-    API_M --> Verify
+**Your name, phone number, and address are stripped before any AI model sees a single byte.**
 
-    Extract -->|text PDF| PyMuPDF[PyMuPDF text]
-    Extract -->|scan / image / bad PDF| Azure
-    PyMuPDF --> Structure
-    Azure --> Structure
-    Structure -->|PII-stripped text| Groq
+---
 
-    Verify <-->|alias + LOINC lookup| ICMR
-    Structure -->|raw biomarkers| Verify
-    Verify -->|verified rows| Score
-    Score -->|triage + specialist routing| Explain
+## The problem in numbers
 
-    Explain -->|per biomarker parallel| Groq
-    Explain -->|per biomarker parallel| OpenAI
-    Explain -->|report summary & questions| Groq
+| Stat | Source |
+|------|--------|
+| ₹1.54 Trillion — India diagnostic lab market FY2024, growing to ₹2.98T by FY2030 | Research & Markets, 2025 |
+| 95% of clinical decisions are influenced by diagnostics | Nat Health India / Expert Market Research |
+| 57% of Indian women and 67% of children under 5 are anaemic | NFHS-5, Govt. of India PIB |
+| 36% of women, 29% of men lack awareness of basic health indicators | NFHS-5 |
+| Low health literacy → 25% higher hospital readmission rates | Rustagi & Gautam, 2021 |
 
-    Explain -->|AnalysisResult JSON| UI
-    Visuals -.->|renders| Explain
-    API_C -->|system prompt + report dict| Groq
+There is no standalone, patient-facing tool that works with any Indian lab, explains results in Hindi or Marathi, and uses Indian population reference ranges. Bodh is first.
+
+---
+
+## Demo
+
+**Live URL:** [bodh-pearl.vercel.app](https://bodh-pearl.vercel.app)
+
+Use the sample report in `/demo/sample_CBC.pdf` or upload any real Indian lab report.
+
+Suggested demo flow:
+1. Upload a CBC report → watch the 5-stage scanner
+2. See the personal message + health score
+3. Read the AI summary → switch to Hindi → hit Listen
+4. Expand a priority card → see the gauge needle + diet tip
+5. Tap an underlined medical term → jargon sheet appears
+6. Open the chat → ask "हीमोग्लोबिन कम क्यों है?"
+7. Hit Print → clean doctor-ready table opens
+
+---
+
+## Tech stack
+
+| Layer | Stack |
+|-------|-------|
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind v4, Framer Motion, Lucide |
+| Backend | FastAPI, Uvicorn, Python, Pydantic |
+| OCR | Azure Document Intelligence (scanned PDFs + images) |
+| Extraction | Groq Llama 3.3-70b (structured biomarker JSON) |
+| Explanation | Groq Llama 3.3-70b + OpenAI GPT-4o (parallel, cross-validated) |
+| Summary + Questions | Groq Llama 3.3-70b (single JSON, all 3 languages) |
+| Chat | Groq Llama 3.3-70b (report-grounded, refuses off-report questions) |
+| Reference data | ICMR Indian population guidelines (60+ biomarkers, LOINC codes) |
+| Deployment | Vercel (frontend) + Railway (backend) |
+
+---
+
+## Privacy by design
+
+```
+[Your PDF / Photo]
+       ↓
+[PII Stripper]  ← name, phone, address removed HERE
+       ↓
+[AI sees only: {age, gender, biomarkers[]}]
+       ↓
+[Results displayed — deleted after session]
 ```
 
-**Manual path:** if OCR fails or the user prefers typing values, **`/api/analyze/manual`** skips extraction and starts at verification—same scoring and explanation pipeline.
+No patient database. No login. No data stored beyond your browser session. The AI never sees who you are — only what your blood values are.
 
 ---
 
-## 3. Processing pipeline (upload → `AnalysisResult`)
+## Run locally
 
-### Stage A — Extraction (“eyes”)
+**Backend**
 
-- **Text-based PDFs:** raw text via **PyMuPDF**.
-- **Scanned PDFs and images (JPEG/PNG/WebP):** layout OCR via **Azure Document Intelligence** (with a local disk cache under `backend/.cache/azure_di` during development).
-- **Structured rows:** cleaned text is passed to **Groq (Llama 3.3)** with a strict JSON schema so names, values, units, and printed lab reference ranges become `ExtractedBiomarker` rows.
-- **PII hygiene:** `strip_pii()` removes common identity/contact/header lines **before** any LLM call in this path.
+```bash
+cd backend
+pip install -r requirements.txt
 
-### Stage B — Verification (“brain”)
+# Create .env with:
+# GROQ_API_KEY=your_key
+# OPENAI_API_KEY=your_key
+# AZURE_DI_ENDPOINT=your_endpoint
+# AZURE_DI_KEY=your_key
 
-- **Normalization:** raw strings (e.g. “Hb”, “Hemoglobin”) map to canonical ICMR keys; **optional LOINC** codes come from the ICMR catalog when present.
-- **Active reference range (priority):**
-  1. **Lab-printed** low/high from the report when extraction captured them (**highest priority**).
-  2. Else **ICMR** age/gender bands from `backend/data/icmr_ranges.json`.
-- **Physiological sanity:** separate bounds per analyte catch impossible values (unit/OCR mistakes); invalid rows are flagged for manual review (`needs_manual_review`).
+uvicorn main:app --reload --port 8000
+```
 
-### Stage C — Scoring (“rules”)
+**Frontend**
 
-- **No LLM:** Python assigns **`NORMAL` · `WATCH` · `ACT_NOW` · `EMERGENCY`** plus **`UNKNOWN`** when no usable range exists.
-- **Routing:** deterministic specialist recommendation and urgency copy from the scored set.
+```bash
+cd frontend
+npm install
 
-### Stage D — Explanation (“voice”)
+# Create .env with:
+# NEXT_PUBLIC_API_URL=http://localhost:8000
 
-- **Per biomarker:** `asyncio.gather` runs **Groq Llama 3.3** and **OpenAI GPT-4o** in parallel on the **same** verified JSON; outputs are reconciled; `ai_diverged` flags meaningful disagreement.
-- **Report level:** `generate_report_summary` uses **Groq** (single JSON) for English / Hindi / Marathi summaries, three **doctor-visit** questions, and three **in-app chat** starter questions per language.
-- **Diet tips:** ICMR-grounded tips can override model tips for Indian-context specificity.
+npm run dev
+```
 
-### Stage E — Chat (`/api/chat`)
-
-- **Groq only** (`llama-3.3-70b-versatile`): the handler builds a system prompt from the **full `AnalysisResult` dict** (biomarkers, severity, specialist, emergency note). No OpenAI on this route today.
-
----
-
-## 4. Tech stack
-
-| Layer | Technology | Role |
-| :--- | :--- | :--- |
-| **Frontend** | **Next.js 16**, **React 19**, **TypeScript** | App Router, client components for interactive UI |
-| **Styling** | **Tailwind CSS v4** (`@tailwindcss/postcss`) | Layout and tokens |
-| **UI / motion** | **Framer Motion**, **Lucide React** | Animations and icons |
-| **Charts / layout** | **Recharts**, **Radix Tabs**, **html2canvas** | Optional charts, tabs, capture flows |
-| **Installable** | **`manifest.json`** (`display: standalone`) | Lightweight PWA-style install |
-| **Backend** | **FastAPI**, **Uvicorn** | Async API; routers under `/api` |
-| **OCR** | **Azure AI Document Intelligence** | Tables and messy Indian lab layouts |
-| **LLM** | **Groq** (Llama 3.3 70B), **OpenAI** (GPT-4o) | Extraction JSON, explanations, summary, chat |
+Health check: `GET http://localhost:8000/health`
 
 ---
 
-## 5. Key engineering features
+## Documentation
 
-### Mathematical gauges and range bars
-
-`Gauge` and `RangeBar` share one mapping: `ext = high - low` (or `1` if degenerate), visual domain `[low - ext, high + ext]`. The **normal band** is drawn in the **middle third** (~33.3%–66.7%) so “slightly off” vs “far off” is visually obvious; the gauge needle spans **180°**.
-
-### Privacy and retention
-
-- **No patient database** in the product path: analysis is request-scoped on the server.
-- **Browser:** primary result lives in **`sessionStorage`** (`bodh_result`) for in-app navigation; opening **`/print`** in a new tab uses a short-lived **`localStorage`** snapshot (`bodh_result_print` / `BODH_PRINT_SNAPSHOT_KEY`) because `sessionStorage` does not carry across tabs.
-
-### Report-grounded chat
-
-`ReportChat` sends the verified snapshot plus recent turns to **`/api/chat`**. System rules forbid diagnosis, prescriptions, and off-report speculation; replies mirror the user’s language (English / Hindi / Marathi).
-
-### Observability & safety flags
-
-- **`flagged_for_review`**, **`unknown_biomarkers`**, **`recognized_biomarkers`**: coverage transparency on every `AnalysisResult`.
-- Backend requires **`GROQ_API_KEY`** and **`OPENAI_API_KEY`** for the explainer module at import time; chat additionally needs Groq at runtime.
+| Doc | What's inside |
+|-----|---------------|
+| [architecture.md](./architecture.md) | System design, pipeline stages, data flow diagrams |
+| [PROJECT_IMPLEMENTATION.md](./PROJECT_IMPLEMENTATION.md) | Full file-by-file implementation handbook |
+| [design.md](./design.md) | Design system, severity palette, UX patterns |
+| [prototype.md](./prototype.md) | Demo script, API surface, prototype boundaries |
 
 ---
 
-## 6. Repository map (quick)
+## Repository layout
 
-| Path | Purpose |
-| :--- | :--- |
-| `backend/main.py` | App, CORS, `/health`, mounts `/api` routers |
-| `backend/routers/analyze.py` | `/api/analyze`, `/api/analyze/manual` orchestration |
-| `backend/routers/chat.py` | `/api/chat` |
-| `backend/services/extractor.py` | PDF/image pipeline, PII strip, Groq extraction |
-| `backend/services/verifier.py` | ICMR lookup, ranges, physiological checks |
-| `backend/services/severity.py` | Deterministic severity + specialist routing |
-| `backend/services/explainer.py` | Parallel Groq + GPT-4o; Groq report summary |
-| `backend/data/icmr_ranges.json` | Canonical ranges and aliases |
-| `backend/data/clinical_abbreviations_reference.json` | Supporting clinical abbreviation data |
-| `frontend/app/*` | Routes: home, analyze, results, manual, print |
-| `frontend/components/*` | UI including `ReportChat`, `Gauge`, `RangeBar` |
-| `PROJECT_IMPLEMENTATION.md` | Long-form implementation handbook |
+```
+bodh/
+├── backend/
+│   ├── main.py                  FastAPI app
+│   ├── routers/analyze.py       POST /api/analyze, /api/analyze/manual
+│   ├── routers/chat.py          POST /api/chat
+│   ├── services/extractor.py    OCR, PII strip, Groq extraction
+│   ├── services/verifier.py     ICMR ranges, normalization
+│   ├── services/severity.py     Deterministic severity engine
+│   ├── services/explainer.py    Dual-model explain + report summary
+│   ├── data/icmr_ranges.json    60+ biomarkers, ICMR guidelines
+│   └── Procfile                 Railway deployment
+└── frontend/
+    ├── app/                     Next.js App Router pages
+    ├── components/              UI components
+    ├── context/AppContext.tsx   Global state
+    ├── hooks/useAnalyze.ts      Upload + analysis flow
+    └── lib/                     Types, constants, helpers
+```
 
 ---
 
-## 7. Local development
+## Roadmap
 
-- **Backend:** from `backend/`, install deps, set env vars (`GROQ_API_KEY`, `OPENAI_API_KEY`, Azure keys if using OCR), run `uvicorn main:app --reload --port 8000`.
-- **Frontend:** from `frontend/`, set `NEXT_PUBLIC_API_URL` to the API base; `npm run dev`.
+| Feature | Why |
+|---------|-----|
+| Family health dashboard | Multi-member profiles, track values over time |
+| WhatsApp bot | Same pipeline — no app download needed |
+| Tamil, Telugu, Bengali | 4 more Indian languages |
+| Lab white-label API | B2B — labs embed Bodh's explanation engine, ₹2–5 per report |
+| Authenticated report history | Opt-in for returning users who want trend tracking |
 
-For full deployment notes and API tables, see **`PROJECT_IMPLEMENTATION.md`**.
+---
+
+## What Bodh is not
+
+Bodh is a health literacy tool. It explains what your values mean. It does not diagnose disease, prescribe medication, or replace a doctor. Every screen reminds users to consult a qualified physician before making medical decisions.
+
+---
+
+*Built for Quantum Arena 1.0 · Navsahyadri Institutes, Pune · April 2026*

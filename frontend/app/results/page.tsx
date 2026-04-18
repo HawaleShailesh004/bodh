@@ -121,7 +121,7 @@ export default function ResultsPage() {
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-95"
             >
               <Share2 size={15} />
-              {lang === "hi" ? "शेयर" : lang === "mr" ? "शेअर" : "Share on WhatsApp"}
+              {lang === "hi" ? "व्हॉट्सअ‍ॅप पर साझा करें" : lang === "mr" ? "व्हॉट्सअ‍ॅपवर सामायिक करा" : "Share on WhatsApp"}
             </button>
             <Link
               href="/print"
@@ -168,7 +168,7 @@ export default function ResultsPage() {
             className="flex items-center gap-2 rounded-xl bg-[#25D366] px-4 py-2 text-xs font-semibold text-white shadow-sm"
           >
             <Share2 size={13} />
-            {lang === "hi" ? "शेयर" : lang === "mr" ? "शेअर" : "Share"}
+            {lang === "hi" ? "व्हॉट्सअ‍ॅप पर भेजें" : lang === "mr" ? "व्हॉट्सअ‍ॅपवर पाठवा" : "Share"}
           </button>
 
           <Link

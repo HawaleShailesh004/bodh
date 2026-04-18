@@ -175,6 +175,7 @@ graph TD
 | Concern | Files |
 | :--- | :--- |
 | Tokens / severity | `frontend/lib/constants.ts` |
+| API base URL (env normalization) | `frontend/lib/apiBase.ts` (used by `constants.ts` for `API_BASE`) |
 | Types | `frontend/lib/types.ts` |
 | Global fonts | `frontend/app/globals.css` |
 | Shell / nav | `frontend/components/Navbar.tsx`, `AppShell.tsx` |

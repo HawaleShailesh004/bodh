@@ -154,8 +154,9 @@ Chat (`POST /api/chat`) is a separate short-lived call: system prompt includes s
 
 - **Text PDFs:** PyMuPDF text extraction.
 - **Scans / images / weak PDFs:** Azure Document Intelligence; responses may be cached under `backend/.cache/azure_di` in development.
-- **Groq:** converts PII-stripped text into structured rows (name, value, unit, lab ref, flags).
-- **`strip_pii`:** line-oriented regex filters before the extraction LLM call.
+- **`strip_pii`:** line-oriented regex filters **before** the extraction LLM call. Preserves leading **blood indices** (no blind skip of the first *N* lines) and keeps **six-digit lab counts** (e.g. platelets) when the line matches lab-result hints.
+- **Groq:** converts PII-stripped text into structured rows (name, value, unit, lab ref, flags). Prompt asks for **all numeric rows**; **`max_tokens`** is set high to reduce truncation on large panels.
+- **`_clean_unit`:** allowlists common Indian unit spellings so Groq output maps cleanly to **`ExtractedBiomarker`** rows.
 
 ### Stage B — Verification
 

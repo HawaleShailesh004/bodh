@@ -1378,11 +1378,11 @@ def _parse_flag(text: str | None) -> str | None:
 
 
 _VALID_UNIT_PATTERN = re.compile(
-    r"^(g/dl|g/l|mg/dl|mg/l|mmol/l|µmol/l|umol/l|"
+    r"^(g/dl|g%|g/l|mg/dl|mg/l|mmol/l|µmol/l|umol/l|"
     r"iu/l|u/l|miu/l|uiu/ml|ng/ml|pg/ml|pg|fl|"
     r"%|/µl|/ul|/cumm|/hpf|/lpf|lakhs/cumm|"
     r"mil/cumm|mill/cumm|thou/cumm|cells/cumm|cell/cumm|cumm\.?|"
-    r"million/cu\.mm|thou/µl|thou/ul|k/µl|k/ul|meq/l|mmhg|"
+    r"million/cu\.mm|million/cumm|thou/µl|thou/ul|k/µl|k/ul|meq/l|mmhg|"
     r"units|unit|cells/µl|cells/ul|10\^3/µl|10\^3/ul|10\^6/µl|10\^6/ul)$",
     re.IGNORECASE,
 )
@@ -1574,6 +1574,17 @@ def _get_azure() -> DocumentIntelligenceClient:
 
 
 # PII Stripper
+# Six-digit PIN-style redaction must not drop CBC lines (e.g. platelets 150000).
+_SIX_DIGIT_PIN_PATTERN = re.compile(r"\b\d{6}\b")
+
+_LAB_RESULT_LINE_HINT = re.compile(
+    r"\b(platelet|plt\b|wbc|rbc|hb\b|hemoglobin|hgb\b|neutrophil|lymphocyte|eosinophil|monocyte|basophil|"
+    r"mcv|mchc|\bmch\b|pcv|rdw|packed\s+cell|corpuscular|blood\s+indices|cbc\b|"
+    r"mill/cumm|mil/cumm|/cumm|cells/|count\b|"
+    r"reference|result|unit\b|investigation|g/dl|g%|mg/dl|mmol|iu/l|high|low|borderline)\b",
+    re.I,
+)
+
 _PII_PATTERNS = [
     re.compile(r"\b(patient\s*(name|id)|name\s*:)", re.I),
     re.compile(r"\b(age\s*[:/]|dob\s*[:/]|date\s+of\s+birth)", re.I),
@@ -1583,12 +1594,15 @@ _PII_PATTERNS = [
     re.compile(r"\b(address|add\s*:|flat|house|plot|sector|nagar|colony|road|street)\b", re.I),
     re.compile(r"\b(uhid|pid|mrn|reg\s*no|patient\s*id|accession|barcode)\s*[:/]?\s*\w+", re.I),
     re.compile(r"\b(ref\s*by|referred\s*by|consultant|doctor\s*name)\b", re.I),
-    re.compile(r"\b\d{6}\b"),
+    _SIX_DIGIT_PIN_PATTERN,
     re.compile(r"\b\d{10}\b"),
 ]
 
 _METADATA_LINE_PATTERNS = [
-    re.compile(r"(collected|reported|received|printed)\s*(on|at|by)\s*[:\-]?\s*[\d/\-:APM\s]+", re.I),
+    re.compile(
+        r"(collected|reported|received|printed|registered)\s*(on|at|by)\s*[:\-]?\s*[\d/\-:APM\s]+",
+        re.I,
+    ),
     re.compile(r"(processing\s+location|lab\s+address|branch)", re.I),
     re.compile(r"(page\s+\d+\s+of\s+\d+)", re.I),
     re.compile(r"\*{2,}"),
@@ -1601,13 +1615,18 @@ def strip_pii(text: str) -> str:
     Remove personally identifiable information from raw report text.
     """
     lines = text.split("\n")
-    total = len(lines)
 
-    skip_top = min(15, total // 6)
-    body_lines = lines[skip_top:]
+    def _line_has_pii(stripped: str) -> bool:
+        for p in _PII_PATTERNS:
+            if not p.search(stripped):
+                continue
+            if p is _SIX_DIGIT_PIN_PATTERN and _LAB_RESULT_LINE_HINT.search(stripped):
+                continue
+            return True
+        return False
 
     clean = []
-    for line in body_lines:
+    for line in lines:
         stripped = line.strip()
         if not stripped:
             continue
@@ -1616,8 +1635,7 @@ def strip_pii(text: str) -> str:
         if is_meta:
             continue
 
-        has_pii = any(p.search(stripped) for p in _PII_PATTERNS)
-        if has_pii:
+        if _line_has_pii(stripped):
             continue
 
         clean.append(stripped)

@@ -443,7 +443,7 @@ export default function LandingPage({ lang, onStart }: LandingPageProps) {
           {[
             { target: 278, suffix: "M+", en: "lab tests run in India annually", hi: "सालाना भारत में लैब टेस्ट", mr: "वार्षिक भारतात लॅब चाचण्या" },
             { target: 15, suffix: "+", en: "ICMR-verified biomarkers", hi: "ICMR-सत्यापित बायोमार्कर", mr: "ICMR-सत्यापित बायोमार्कर" },
-            { target: 3, suffix: "", en: "languages — EN, HI, MR", hi: "भाषाएं — EN, HI, MR", mr: "भाषा — EN, HI, MR" },
+            { target: 3, suffix: "", en: "languages — EN, HI, MR", hi: "तीन भाषाएँ — अंग्रेज़ी, हिंदी, मराठी", mr: "तीन भाषा — इंग्रजी, हिंदी, मराठी" },
             { target: 100, suffix: "%", en: "deterministic severity — no AI guessing", hi: "निर्धारक गंभीरता", mr: "निर्धारक तीव्रता" },
           ].map((s, i) => (
             <motion.div key={i} {...fadeUp} transition={{ delay: i * 0.08, duration: 0.55 }} style={{ textAlign: "center" }}>
@@ -520,9 +520,11 @@ export default function LandingPage({ lang, onStart }: LandingPageProps) {
         <Icon.Lock />
       </span>
       <p className="text-xs leading-relaxed text-zinc-600 md:text-sm">
-        {lang === "hi" ? 'AI को केवल यह मिलता है: {"age": 35, "gender": "M", "biomarkers": [...]} — कोई नाम, कोई फोन नंबर नहीं।' :
-         lang === "mr" ? 'AI ला फक्त हे मिळते: {"age": 35, "gender": "M", "biomarkers": [...]} — कोणतेही नाव, फोन नाही.' :
-         'The AI only ever receives: {"age": 35, "gender": "M", "biomarkers": [...]} — no name, no phone, no address. Ever.'}
+        {lang === "hi"
+          ? "AI को केवल यह सार्वजनिक डेटा मिलता है: आयु, लिंग, और बायोमार्करों की संख्यात्मक सूची — आपका नाम, फोन नंबर या पता कभी नहीं भेजा जाता।"
+          : lang === "mr"
+            ? "AI ला फक्त हे सार्वजनिक डेटा मिळतो: वय, लिंग आणि बायोमार्करची संख्यात्मक यादी — तुमचे नाव, फोन किंवा पत्ता कधीही पाठवला जात नाही."
+            : 'The AI only ever receives: {"age": 35, "gender": "M", "biomarkers": [...]} — no name, no phone, no address. Ever.'}
       </p>
     </motion.div>
   </div>

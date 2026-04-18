@@ -89,7 +89,7 @@ export default function SummaryCard({ result, lang, elderly = false }: SummaryCa
               className={`rounded-full px-2.5 py-1 text-xs font-semibold transition-all ${
                 activeLang === ll ? "bg-[#0D6B5E] text-white shadow-sm" : "text-slate-500 hover:text-slate-700"
               }`}>
-              {ll === "en" ? "EN" : ll === "hi" ? "हि" : "म"}
+              {ll === "en" ? "EN" : ll === "hi" ? "हिंदी" : "मराठी"}
             </button>
           ))}
         </div>

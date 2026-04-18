@@ -137,7 +137,7 @@ export default function BioCard({ bio, lang, expanded, onToggle, onJargon, elder
                   }}
                 >
                   <span className="font-semibold">
-                    {lang === "hi" ? "आहार सुझाव: " : lang === "mr" ? "आहार सुचना: " : "Diet tip: "}
+                    {lang === "hi" ? "आहार सुझाव: " : lang === "mr" ? "आहार सूचना: " : "Diet tip: "}
                   </span>
                   {dietTip}
                 </div>

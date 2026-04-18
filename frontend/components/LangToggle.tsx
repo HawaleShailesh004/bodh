@@ -9,7 +9,7 @@ export default function LangToggle({ lang, setLang }: { lang: Lang; setLang: (la
           onClick={() => setLang(l)}
           className={`rounded-full px-3 py-1 text-xs font-semibold ${lang === l ? "bg-[#0D6B5E] text-white" : "text-slate-600"}`}
         >
-          {l === "en" ? "EN" : l === "hi" ? "हि" : "म"}
+          {l === "en" ? "EN" : l === "hi" ? "हिंदी" : "मराठी"}
         </button>
       ))}
     </div>
