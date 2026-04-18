@@ -8,7 +8,7 @@ import { useApp } from "@/context/AppContext";
 import type { AnalysisResult } from "@/lib/types";
 import { normalizeAnalysisResult } from "@/lib/helpers";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+import { API_BASE } from "@/lib/constants";
 
 interface Row {
   id: number;
@@ -89,7 +89,7 @@ export default function ManualEntryPage() {
           ref_high:  r.ref_high ? parseFloat(r.ref_high) : null,
         })),
       };
-      const res = await fetch(`${API}/api/analyze/manual`, {
+      const res = await fetch(`${API_BASE}/api/analyze/manual`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

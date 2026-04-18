@@ -3,9 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { MessageSquare, Send, X, Minimize2, Bot, User, Loader2 } from "lucide-react";
 import type { AnalysisResult, Lang } from "@/lib/types";
+import { API_BASE } from "@/lib/constants";
 import { calcScore, chatQuestionsForLang, sevLabel } from "@/lib/helpers";
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 interface Message {
   role: "user" | "assistant";
@@ -143,7 +142,7 @@ export default function ReportChat({ result, lang, elderly = false }: ReportChat
         .filter(m => m.role !== "assistant" || messages.indexOf(m) > 0) // skip greeting
         .map(m => ({ role: m.role, content: m.content }));
 
-      const res = await fetch(`${API}/api/chat`, {
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: msg, history, report: reportPayload }),

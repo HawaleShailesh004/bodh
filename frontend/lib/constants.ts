@@ -1,7 +1,7 @@
 import type { Lang, Severity } from "./types";
+import { getPublicApiBase } from "./apiBase";
 
-export const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+export const API_BASE = getPublicApiBase();
 
 export const SEV: Record<Severity, {
   label: string; hi: string; mr: string;

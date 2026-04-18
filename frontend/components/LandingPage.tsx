@@ -516,8 +516,9 @@ export default function LandingPage({ lang, onStart }: LandingPageProps) {
       transition={{ delay: 0.4 }} 
       className="mt-12 flex items-center gap-3 rounded-2xl bg-zinc-100 p-4 md:mt-16 md:p-6"
     >
-      {/* Note: Ensure Icon.Lock is imported and sized correctly */}
-      <Icon.Lock className="shrink-0 text-zinc-500" size={20} />
+      <span className="inline-flex shrink-0 text-zinc-500 [&_svg]:h-5 [&_svg]:w-5">
+        <Icon.Lock />
+      </span>
       <p className="text-xs leading-relaxed text-zinc-600 md:text-sm">
         {lang === "hi" ? 'AI को केवल यह मिलता है: {"age": 35, "gender": "M", "biomarkers": [...]} — कोई नाम, कोई फोन नंबर नहीं।' :
          lang === "mr" ? 'AI ला फक्त हे मिळते: {"age": 35, "gender": "M", "biomarkers": [...]} — कोणतेही नाव, फोन नाही.' :
