@@ -1,0 +1,2476 @@
+{
+  "RBC": {
+    "loinc_code": "789-8",
+    "display_name": "Red Blood Cell Count",
+    "short_display": "RBC / Erythrocyte Count",
+    "unit": "million/µL",
+    "unit_alternatives": ["×10⁶/µL", "×10¹²/L", "cells/µL", "million/cumm"],
+    "aliases": [
+      "rbc",
+      "red blood cells",
+      "erythrocyte count",
+      "red cell count",
+      "rbc count",
+      "erythrocytes",
+      "red blood cell count",
+      "rcc"
+    ],
+    "ranges": {
+      "adult_male_normal": { "low": 4.6, "high": 6.2 },
+      "adult_female_normal": { "low": 4.2, "high": 5.4 }
+    },
+    "default_range": { "low": 4.2, "high": 6.2 },
+    "critical_low": 2.5,
+    "critical_high": 7.0,
+    "physiological_min": 0.5,
+    "physiological_max": 10.0,
+    "note_on_indian_range": "Apollo multicentric Indian study (PMC4062657) and PMC11246370 (Indian reproductive-age women) showed RBC range of 3.68–5.55 million/µL in Indian females, lower than Western references, attributable to nutritional deficiencies and higher prevalence of anaemia in the Indian population. Male values are broadly comparable: 4.3–5.8 million/µL.",
+    "specialist_if_critical_high": "Haematologist (polycythaemia vera, secondary polycythaemia)",
+    "specialist_if_critical_low": "Haematologist (severe anaemia, bone marrow failure)",
+    "urgency_if_critical_high": "within 24 hours",
+    "urgency_if_critical_low": "within 24 hours",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "High RBC may indicate dehydration or polycythaemia. Increase fluid intake — water, nimbu pani, coconut water. Avoid smoking. See a doctor.",
+    "indian_diet_tip_high_hi": "उच्च RBC निर्जलीकरण या पॉलीसायथीमिया का संकेत हो सकता है। खूब पानी, नींबू पानी, नारियल पानी पिएं। धूम्रपान बंद करें।",
+    "indian_diet_tip_low_en": "Low RBC usually means anaemia. Include iron-rich foods: spinach (palak), methi, rajma, chana, jaggery (gud), beetroot, pomegranate. Combine with Vitamin C foods (amla, lemon) to boost absorption.",
+    "indian_diet_tip_low_hi": "कम RBC का मतलब आमतौर पर एनीमिया होता है। पालक, मेथी, राजमा, चना, गुड़, चुकंदर और अनार खाएं। आंवला और नींबू के साथ खाने से आयरन का अवशोषण बेहतर होता है।",
+    "source": "StatPearls NBK604207: M 4.6–6.2, F 4.2–5.4 million/µL. Indian female range: PMC11246370 (3.68–5.55). Apollo India study PMC4062657. Critical thresholds: CLSI EP28-A3c."
+  },
+
+  "Hb": {
+    "loinc_code": "718-7",
+    "display_name": "Haemoglobin",
+    "short_display": "Hb / Hemoglobin",
+    "unit": "g/dL",
+    "unit_alternatives": ["g/L (×10)", "mmol/L"],
+    "aliases": [
+      "hb",
+      "haemoglobin",
+      "hemoglobin",
+      "hgb",
+      "blood haemoglobin",
+      "haemoglobin level",
+      "hb level",
+      "blood hb"
+    ],
+    "ranges": {
+      "adult_male_normal": { "low": 13.0, "high": 18.0 },
+      "adult_female_normal": { "low": 12.0, "high": 16.0 },
+      "pregnant_female_normal": { "low": 11.0, "high": 14.0 },
+      "children_6_12yr": { "low": 11.5, "high": 15.5 }
+    },
+    "default_range": { "low": 12.0, "high": 18.0 },
+    "critical_low": 7.0,
+    "critical_high": 20.0,
+    "physiological_min": 2.0,
+    "physiological_max": 25.0,
+    "note_on_indian_range": "Apollo multicentric India study (PMC4062657, n=10,665) found 95% reference intervals for Hb: Males 12.3–17.0 g/dL, Females 9.9–14.3 g/dL — notably lower upper limit in females compared to WHO standards (12–16 g/dL). WHO defines anaemia as Hb <13 g/dL (men), <12 g/dL (non-pregnant women), <11 g/dL (pregnant women). The lower Indian female range reflects the high prevalence of nutritional anaemia in India.",
+    "specialist_if_critical_high": "Haematologist (polycythaemia, secondary erythrocytosis)",
+    "specialist_if_critical_low": "Haematologist / Physician (severe anaemia, GI bleed, haemolysis, aplastic anaemia)",
+    "urgency_if_critical_high": "within 24 hours",
+    "urgency_if_critical_low": "within 24 hours (consider transfusion threshold <7 g/dL for symptomatic patients)",
+    "urgency_if_watch": "within 1–2 weeks",
+    "indian_diet_tip_low_en": "Most common cause of low Hb in India is iron-deficiency anaemia. Eat iron-rich foods: leafy greens (palak, methi), rajma, chana, lentils, jaggery, fortified cereals, liver (if non-vegetarian). Always combine with Vitamin C (amla, tomato, lemon) to enhance iron absorption. Avoid tea/coffee with meals as tannins inhibit iron absorption.",
+    "indian_diet_tip_low_hi": "कम Hb का सबसे सामान्य कारण भारत में आयरन की कमी है। पालक, मेथी, राजमा, दाल, गुड़, चना और फोर्टिफाइड अनाज खाएं। चाय/कॉफी खाने के साथ न लें।",
+    "source": "WHO Haemoglobin Concentrations for Diagnosis of Anaemia 2011. Apollo India multicentric study PMC4062657. StatPearls NBK604207. Critical low <7.0 g/dL: transfusion trigger for most guidelines (AABB 2012)."
+  },
+
+  "Hct": {
+    "loinc_code": "20570-8",
+    "display_name": "Haematocrit (Packed Cell Volume)",
+    "short_display": "Hct / PCV / HCT",
+    "unit": "%",
+    "unit_alternatives": ["L/L", "proportion"],
+    "aliases": [
+      "hct",
+      "haematocrit",
+      "hematocrit",
+      "pcv",
+      "packed cell volume",
+      "packed red cell volume",
+      "blood volume fraction red cells"
+    ],
+    "ranges": {
+      "adult_male_normal": { "low": 40.0, "high": 54.0 },
+      "adult_female_normal": { "low": 36.0, "high": 48.0 }
+    },
+    "default_range": { "low": 36.0, "high": 54.0 },
+    "critical_low": 20.0,
+    "critical_high": 60.0,
+    "physiological_min": 10.0,
+    "physiological_max": 70.0,
+    "note_on_indian_range": "Hct closely mirrors Hb trends. Apollo India (PMC4062657) shows Indian males 38–52%, females 34–46% as practical working ranges. Chennai study (PMC3552202) confirmed a downward shift in red cell parameters in Indian population vs. Western references, consistent with dietary iron status.",
+    "specialist_if_critical_high": "Haematologist (polycythaemia vera, dehydration, secondary erythrocytosis)",
+    "specialist_if_critical_low": "Haematologist / Physician (severe anaemia, haemorrhage)",
+    "urgency_if_critical_high": "within 24 hours",
+    "urgency_if_critical_low": "within 24 hours",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_low_en": "Low Hct (low PCV) reflects anaemia. Same dietary advice as low Hb: iron-rich foods with Vitamin C. Avoid excess tea/coffee with meals.",
+    "indian_diet_tip_low_hi": "कम PCV एनीमिया का संकेत है। आयरन युक्त आहार लें और खाने के साथ चाय-कॉफी से परहेज करें।",
+    "source": "LOINC 20570-8. StatPearls NBK604207 (M 40–54%, F 36–48%). Apollo India PMC4062657. Chennai Indian study PMC3552202."
+  },
+
+  "MCV": {
+    "loinc_code": "787-2",
+    "display_name": "Mean Corpuscular Volume",
+    "short_display": "MCV",
+    "unit": "fL",
+    "unit_alternatives": ["fl", "µm³", "femtoliters"],
+    "aliases": [
+      "mcv",
+      "mean cell volume",
+      "mean corpuscular volume",
+      "erythrocyte mean corpuscular volume",
+      "average red cell volume"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 80.0, "high": 100.0 }
+    },
+    "default_range": { "low": 80.0, "high": 100.0 },
+    "critical_low": 50.0,
+    "critical_high": 130.0,
+    "physiological_min": 40.0,
+    "physiological_max": 150.0,
+    "note_on_indian_range": "MCV reference range (80–100 fL) is consistent across Indian and Western populations; no significant ethnic shift was found in the Apollo India study. However, a low MCV (<80 fL = microcytosis) is extremely common in India due to the high prevalence of iron deficiency and beta-thalassaemia trait, making it a critically important index in the Indian context.",
+    "specialist_if_critical_high": "Haematologist (megaloblastic anaemia: B12/folate deficiency, liver disease, hypothyroidism, myelodysplasia)",
+    "specialist_if_critical_low": "Haematologist (severe iron deficiency, thalassaemia, sideroblastic anaemia)",
+    "urgency_if_critical_high": "within 48 hours",
+    "urgency_if_critical_low": "within 48 hours",
+    "urgency_if_watch": "within 1–2 weeks",
+    "indian_diet_tip_low_en": "Low MCV = microcytic red cells; most common cause in India is iron deficiency. Increase dietary iron (palak, dal, rajma, jaggery, sesame). Rule out thalassaemia trait with a HbA2 electrophoresis.",
+    "indian_diet_tip_high_en": "High MCV = macrocytic red cells; often due to B12 or folate deficiency. Increase foods rich in Vitamin B12 (milk, curd, paneer, eggs, fish) and folate (leafy greens, dal, sprouts). See a doctor for B12/folate testing.",
+    "source": "StatPearls NBK604207: 80–100 fL. NIH NBK260. Apollo India PMC4062657 showed no significant MCV gender difference. Critical thresholds: standard clinical practice (CLSI, labpedia.net)."
+  },
+
+  "MCH": {
+    "loinc_code": "785-6",
+    "display_name": "Mean Corpuscular Haemoglobin",
+    "short_display": "MCH",
+    "unit": "pg",
+    "unit_alternatives": ["pg/cell", "picograms"],
+    "aliases": [
+      "mch",
+      "mean corpuscular hemoglobin",
+      "mean cell hemoglobin",
+      "erythrocyte MCH",
+      "MCH per cell"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 27.0, "high": 33.0 }
+    },
+    "default_range": { "low": 27.0, "high": 33.0 },
+    "critical_low": 20.0,
+    "critical_high": 40.0,
+    "physiological_min": 10.0,
+    "physiological_max": 50.0,
+    "note_on_indian_range": "MCH parallels MCV closely. Low MCH is very common in Indian labs due to widespread iron deficiency. The reference range of 27–33 pg is consistent with Indian lab practice. However, labs in high-thalassaemia regions (Gujarat, Maharashtra) frequently see MCH 20–25 pg as a common incidental finding in thalassaemia trait carriers.",
+    "specialist_if_critical_low": "Haematologist (severe hypochromia: iron deficiency, thalassaemia)",
+    "specialist_if_critical_high": "Haematologist (macrocytic states)",
+    "urgency_if_critical_high": "within 48 hours",
+    "urgency_if_critical_low": "within 48 hours",
+    "urgency_if_watch": "within 1–2 weeks",
+    "indian_diet_tip_low_en": "Low MCH means red cells are pale (hypochromic) — classic iron deficiency. Eat iron-rich foods: palak, kaddu ke beej (pumpkin seeds), rajma, chana, jaggery. Take Vitamin C with meals.",
+    "indian_diet_tip_low_hi": "कम MCH का मतलब लाल रक्त कोशिकाओं में हीमोग्लोबिन कम है। पालक, राजमा, गुड़ और नींबू का सेवन बढ़ाएं।",
+    "source": "StatPearls NBK604207 (27–32 pg). Medscape 2054497 (27–33 pg). NIH NBK260. LOINC 785-6."
+  },
+
+  "MCHC": {
+    "loinc_code": "786-4",
+    "display_name": "Mean Corpuscular Haemoglobin Concentration",
+    "short_display": "MCHC",
+    "unit": "g/dL",
+    "unit_alternatives": ["%", "g/L (×10)"],
+    "aliases": [
+      "mchc",
+      "mean corpuscular hemoglobin concentration",
+      "mean cell hemoglobin concentration",
+      "erythrocyte MCHC"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 32.0, "high": 36.0 }
+    },
+    "default_range": { "low": 32.0, "high": 36.0 },
+    "critical_low": 28.0,
+    "critical_high": 38.0,
+    "physiological_min": 20.0,
+    "physiological_max": 42.0,
+    "note_on_indian_range": "The Chennai Indian study (PMC3552202) found 64.3% of Indian males and 44% of Indian females had MCHC values outside the existing Western reference ranges, suggesting Indian-specific MCHC ranges need further validation. The lower end of normal in Indian labs may be around 30–31 g/dL in some regions. MCHC >36 g/dL is clinically significant and suggests hereditary spherocytosis, dehydration, or haemoglobin C disease.",
+    "specialist_if_critical_high": "Haematologist (hereditary spherocytosis, intravascular haemolysis, cold agglutinin disease)",
+    "specialist_if_critical_low": "Haematologist (severe iron deficiency, thalassaemia major)",
+    "urgency_if_critical_high": "within 48 hours",
+    "urgency_if_critical_low": "within 48 hours",
+    "urgency_if_watch": "within 1–2 weeks",
+    "indian_diet_tip_low_en": "Low MCHC is often linked to iron deficiency or thalassaemia. Follow an iron-rich diet and consult a doctor for further workup.",
+    "source": "LOINC LP17695-5. StatPearls NBK604207. Medscape 2054497. Chennai Indian study PMC3552202."
+  },
+
+  "RDW": {
+    "loinc_code": "788-0",
+    "display_name": "Red Cell Distribution Width",
+    "short_display": "RDW",
+    "unit": "%",
+    "unit_alternatives": ["CV%", "coefficient of variation"],
+    "aliases": [
+      "rdw",
+      "red cell distribution width",
+      "red blood cell distribution width",
+      "rcdw",
+      "rdw-cv",
+      "anisocytosis index"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 11.5, "high": 14.5 }
+    },
+    "default_range": { "low": 11.5, "high": 14.5 },
+    "critical_low": null,
+    "critical_high": 20.0,
+    "physiological_min": 8.0,
+    "physiological_max": 30.0,
+    "note_on_indian_range": "RDW >14.5% (elevated) indicates anisocytosis. In India, high RDW is frequently seen with iron deficiency, mixed nutritional deficiencies (iron + B12/folate), haemoglobinopathies, and post-transfusion states. An elevated RDW combined with low MCV strongly suggests iron deficiency (vs. low MCV with normal RDW which suggests thalassaemia trait). Normal lower threshold (low RDW) is clinically less significant.",
+    "specialist_if_critical_high": "Haematologist (severe nutritional anaemia, MDS, haemolytic anaemia workup)",
+    "specialist_if_critical_low": null,
+    "urgency_if_critical_high": "within 1 week",
+    "urgency_if_watch": "within 2 weeks",
+    "indian_diet_tip_high_en": "High RDW often means multiple nutritional deficiencies. Increase iron (leafy greens, dal, jaggery), Vitamin B12 (milk, paneer, eggs), and folate (green vegetables, sprouts). Consult a doctor for targeted supplementation.",
+    "indian_diet_tip_high_hi": "उच्च RDW अक्सर कई पोषण की कमियों का संकेत है। पालक, दाल, गुड़, दूध, दही खाएं और डॉक्टर से सलाह लें।",
+    "source": "StatPearls NBK604207 (11.5–15%). NIH NBK260 (13 ± 1.5%). Indian context: iron deficiency RDW discrimination — Bessman et al. Am J Clin Pathol 1983;80:322. LOINC 788-0."
+  },
+
+  "Plt": {
+    "loinc_code": "777-3",
+    "display_name": "Platelet Count",
+    "short_display": "Platelets / PLT / Thrombocytes",
+    "unit": "/µL",
+    "unit_alternatives": ["×10³/µL", "Lakhs/µL", "thou/µL", "×10⁹/L"],
+    "aliases": [
+      "plt",
+      "platelet count",
+      "platelets",
+      "thrombocytes",
+      "thrombocyte count",
+      "blood platelets",
+      "platelet"
+    ],
+    "ranges": {
+      "adult_male_normal": { "low": 130000, "high": 380000 },
+      "adult_female_normal": { "low": 130000, "high": 420000 }
+    },
+    "default_range": { "low": 130000, "high": 400000 },
+    "critical_low": 50000,
+    "critical_high": 1000000,
+    "physiological_min": 5000,
+    "physiological_max": 2000000,
+    "note_on_indian_range": "Apollo multicentric India study (PMC4062657, n=10,665) established Indian-specific platelet reference intervals: Males 1.3–3.8 Lakhs/µL (130,000–380,000), Females 1.3–4.2 Lakhs/µL (130,000–420,000). The study noted low platelet counts in Chennai population. Goel et al. 2025 (Wiley IJLH, PMID 39365043) found Indian blood donor platelet range: 115,600–370,000/µL. Dengue, malaria, and typhoid — highly prevalent in India — are major causes of thrombocytopaenia.",
+    "specialist_if_critical_high": "Haematologist (essential thrombocythaemia, reactive thrombocytosis — malignancy, infection, iron deficiency)",
+    "specialist_if_critical_low": "Haematologist / Physician (dengue, ITP, DIC, aplastic anaemia — urgent if <20,000)",
+    "urgency_if_critical_high": "within 24 hours",
+    "urgency_if_critical_low": "immediate if <20,000 (bleeding risk); within 24 hours if 20,000–50,000",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_low_en": "Low platelets (thrombocytopaenia) in India is often from dengue, malaria, or typhoid — this is a medical emergency. Do NOT try to treat at home. Papaya leaf extract (Carica papaya) has some evidence for dengue-related thrombocytopaenia but is NOT a replacement for hospital care. See a doctor immediately if platelets are below 50,000.",
+    "indian_diet_tip_low_hi": "कम प्लेटलेट्स भारत में अक्सर डेंगू, मलेरिया या टाइफाइड से होती हैं — यह एक चिकित्सकीय आपातस्थिति है। तुरंत डॉक्टर से मिलें।",
+    "source": "Apollo India multicentric PMC4062657. Goel et al. IJLH 2025 PMID 39365043. CLSI critical low <50,000/µL. Thrombocytosis critical >1,000,000 (WHO definition of extreme thrombocytosis)."
+  },
+
+  "ESR": {
+    "loinc_code": "4537-7",
+    "display_name": "Erythrocyte Sedimentation Rate",
+    "short_display": "ESR",
+    "unit": "mm/hr",
+    "unit_alternatives": ["mm/1st hour", "mm/h"],
+    "aliases": [
+      "esr",
+      "erythrocyte sedimentation rate",
+      "sed rate",
+      "sedimentation rate",
+      "westergren esr",
+      "blood sedimentation rate"
+    ],
+    "ranges": {
+      "adult_male_normal": { "low": 2, "high": 22 },
+      "adult_female_normal": { "low": 4, "high": 55 },
+      "male_over_50": { "low": 0, "high": 30 },
+      "female_over_50": { "low": 0, "high": 40 }
+    },
+    "default_range": { "low": 0, "high": 30 },
+    "critical_low": null,
+    "critical_high": 100,
+    "physiological_min": 0,
+    "physiological_max": 150,
+    "note_on_indian_range": "Apollo India study (PMC4062657) derived ESR reference intervals: Males 2–22 mm/hr, Females 4–55 mm/hr, markedly wider than Western Westergren reference ranges (M: 0–20, F: 0–30). The study noted higher ESR in Chennai population, possibly related to diet, worm infestations, and higher background inflammation. An ESR >100 mm/hr in India warrants urgent investigation for temporal arteritis, multiple myeloma, severe infection, or collagen vascular disease.",
+    "specialist_if_critical_high": "Physician / Rheumatologist / Haematologist (PMR, temporal arteritis, myeloma, SLE, severe infection, TB)",
+    "urgency_if_critical_high": "within 48 hours",
+    "urgency_if_watch": "within 1–2 weeks",
+    "indian_diet_tip_high_en": "A very high ESR is not a diagnosis but a signal of inflammation. Maintain a balanced diet rich in anti-inflammatory foods: turmeric (haldi) milk, ginger (adrak), omega-3 rich flaxseeds (alsi). See a doctor for a complete workup.",
+    "indian_diet_tip_high_hi": "बहुत अधिक ESR सूजन का संकेत है। हल्दी वाला दूध, अदरक और अलसी का सेवन करें और डॉक्टर से जांच करवाएं।",
+    "source": "Apollo multicentric India study PMC4062657. Westergren ESR method LOINC 4537-7. Critical >100 mm/hr: standard clinical threshold (Harrison's Principles 21st ed)."
+  },
+
+  "HbA1C": {
+    "loinc_code": "4548-4",
+    "display_name": "Glycated Haemoglobin (HbA1c)",
+    "short_display": "HbA1c / Glyco-Hb",
+    "unit": "%",
+    "unit_alternatives": ["mmol/mol (IFCC)", "proportion"],
+    "aliases": [
+      "hba1c",
+      "hba1c",
+      "a1c",
+      "glycated hemoglobin",
+      "glycosylated hemoglobin",
+      "hemoglobin a1c",
+      "haemoglobin a1c",
+      "hbA1C",
+      "glyco haemoglobin",
+      "gly hb",
+      "hb a1c"
+    ],
+    "ranges": {
+      "normal_non_diabetic": { "low": 4.0, "high": 5.6 },
+      "prediabetes": { "low": 5.7, "high": 6.4 },
+      "diabetes_diagnosis": { "low": 6.5, "high": null },
+      "target_diabetic_control": { "low": null, "high": 7.0 }
+    },
+    "default_range": { "low": 4.0, "high": 5.6 },
+    "critical_low": null,
+    "critical_high": 13.0,
+    "physiological_min": 2.0,
+    "physiological_max": 20.0,
+    "note_on_indian_range": "ADA diagnostic criteria (2024) and Diabetes India guidelines use identical HbA1c cut-offs. However, Indian/South Asian populations are known to develop type 2 diabetes at lower BMI and younger age than Western populations. The Research Society for the Study of Diabetes in India (RSSDI) recommends an HbA1c target of ≤7.0% for most diabetic patients in India. HbA1c may be falsely low in haemolytic anaemias, iron deficiency (being treated), and haemoglobin variants (HbS, HbC, HbE) — all of which are common in India. In such cases, fructosamine or alternative glycaemia markers should be used.",
+    "specialist_if_critical_high": "Endocrinologist / Diabetologist (HbA1c >10% = poor glycaemic control; >13% = crisis level, high DKA or HHS risk)",
+    "urgency_if_critical_high": "within 24–48 hours",
+    "urgency_if_watch": "within 2–4 weeks",
+    "indian_diet_tip_high_en": "High HbA1c = poor blood sugar control over 3 months. Switch to a low-glycaemic Indian diet: prioritise whole grains (jowar, bajra, brown rice), dal, sabzi, curd. Avoid maida (refined flour), refined sugar, sweet drinks, and white rice in large portions. Walk at least 30 minutes daily.",
+    "indian_diet_tip_high_hi": "उच्च HbA1c = 3 महीनों में खराब ब्लड शुगर नियंत्रण। जोवार, बाजरा, ब्राउन राइस, दाल, सब्जी खाएं। मैदा, चीनी और मीठे पेय पदार्थों से परहेज करें। रोज 30 मिनट चलें।",
+    "source": "ADA Standards of Care 2024 (HbA1c thresholds). RSSDI guidelines India. LOINC 4548-4. CHOP reference ranges document: normal 3.8–5.9%. Haemoglobin variant interference: NGSP.org."
+  },
+
+  "BGL": {
+    "loinc_code": "1558-6",
+    "display_name": "Fasting Blood Glucose Level",
+    "short_display": "FBG / Fasting BGL / FPG",
+    "unit": "mg/dL",
+    "unit_alternatives": ["mmol/L (÷18)", "mg%"],
+    "aliases": [
+      "bgl",
+      "fbs",
+      "fasting blood glucose",
+      "fasting blood sugar",
+      "fpg",
+      "fasting plasma glucose",
+      "fasting sugar",
+      "blood glucose fasting",
+      "fasting glucose",
+      "fbg"
+    ],
+    "ranges": {
+      "normal": { "low": 70, "high": 99 },
+      "prediabetes": { "low": 100, "high": 125 },
+      "diabetes": { "low": 126, "high": null }
+    },
+    "default_range": { "low": 70, "high": 99 },
+    "critical_low": 50,
+    "critical_high": 500,
+    "physiological_min": 20,
+    "physiological_max": 1200,
+    "note_on_indian_range": "Apollo India multicentric study (PMC4062657) found fasting blood glucose 95% reference interval in males: 78–110 mg/dL — slightly wider than ADA standard (70–99 mg/dL). India has the world's second highest number of diabetic patients (>100 million). ICMR and RSSDI recommend fasting glucose ≥126 mg/dL (on 2 occasions) for diabetes diagnosis. 100–125 mg/dL = IFG (Impaired Fasting Glucose = prediabetes). Indian labs commonly use the term 'FBS' (fasting blood sugar).",
+    "specialist_if_critical_high": "Endocrinologist / Physician (hyperglycaemic crisis: DKA, HHS)",
+    "specialist_if_critical_low": "Physician / Emergency (severe hypoglycaemia: confusion, seizure, loss of consciousness)",
+    "urgency_if_critical_high": "immediate if >400 with symptoms (HHS/DKA); within 24 hrs if 300–400",
+    "urgency_if_critical_low": "immediate (hypoglycaemic emergency — give glucose or sugar water)",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "High fasting glucose: eat low-glycaemic foods — jowar roti, mixed dal, vegetables, curd. Avoid white rice in large portions, maida products, fruit juice, packaged sweets. Exercise daily. Monitor regularly.",
+    "indian_diet_tip_high_hi": "उच्च उपवास ग्लूकोज: ज्वार रोटी, मिश्रित दाल, सब्जियां, दही खाएं। सफेद चावल, मैदा, फलों का रस और मिठाइयों से परहेज करें।",
+    "source": "ADA Standards 2024. RSSDI India guidelines. Apollo India PMC4062657 (FBG 78–110 mg/dL in Indian males). Critical low <50 mg/dL (symptomatic neuroglycopaenia — Whipple's triad threshold). Critical high >500 mg/dL (HHS risk)."
+  },
+
+  "TSH": {
+    "loinc_code": "3016-3",
+    "display_name": "Thyroid Stimulating Hormone",
+    "short_display": "TSH / Thyrotropin",
+    "unit": "mIU/L",
+    "unit_alternatives": ["µIU/mL", "mU/L"],
+    "aliases": [
+      "tsh",
+      "thyroid stimulating hormone",
+      "thyrotropin",
+      "thyrotrophic hormone",
+      "tsh level",
+      "serum tsh",
+      "tsh screen"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 0.4, "high": 4.0 },
+      "pregnancy_T1": { "low": 0.1, "high": 2.5 },
+      "pregnancy_T2": { "low": 0.2, "high": 3.0 },
+      "pregnancy_T3": { "low": 0.3, "high": 3.5 },
+      "elderly_over_70": { "low": 0.4, "high": 6.0 }
+    },
+    "default_range": { "low": 0.4, "high": 4.0 },
+    "critical_low": 0.1,
+    "critical_high": 20.0,
+    "physiological_min": 0.005,
+    "physiological_max": 100.0,
+    "note_on_indian_range": "The Indian reference range for TSH is broadly consistent with international ranges (0.4–4.0 mIU/L). However, iodine intake variability across India (coastal vs. inland populations) can affect the background TSH distribution. The Thyroid Research Society of India (TRSI) and ATA recommend identical diagnostic thresholds. TSH >10 mIU/L in the absence of symptoms = subclinical hypothyroidism warranting treatment consideration. Overt hypothyroidism affects approximately 10.95% of Indian population (Unnikrishnan et al., Indian J Endocrinol Metab 2013). Pregnancy-specific lower thresholds are critical as untreated hypothyroidism in pregnancy causes foetal neurocognitive harm.",
+    "specialist_if_critical_high": "Endocrinologist (overt hypothyroidism, autoimmune thyroiditis, TSH >20 = urgent thyroid hormone replacement)",
+    "specialist_if_critical_low": "Endocrinologist (hyperthyroidism, Graves' disease, toxic nodular goitre; cardiac risk — atrial fibrillation)",
+    "urgency_if_critical_high": "within 48 hours (routine); immediate if myxoedema coma suspected",
+    "urgency_if_critical_low": "within 24 hours (thyroid storm risk if <0.01 with symptoms)",
+    "urgency_if_watch": "within 2–4 weeks",
+    "indian_diet_tip_high_en": "High TSH = hypothyroidism. Avoid cruciferous vegetables (cauliflower, cabbage, broccoli, radish) in large raw amounts as they contain goitrogens. Iodised salt is essential. Soy products in excess can interfere with thyroid hormone absorption. Take thyroid medication (if prescribed) on an empty stomach, 30–60 min before food.",
+    "indian_diet_tip_high_hi": "उच्च TSH = हाइपोथायरायडिज्म। आयोडाइज्ड नमक का उपयोग करें। अत्यधिक कच्ची पत्तागोभी, मूली से बचें। थायरॉइड दवा खाली पेट लें।",
+    "source": "LOINC 3016-3. ATA/AACE 2012 thyroid guidelines. Lewandowski 2015 PMC4480274 (TSH upper limit 4.2–4.5 mIU/L; elderly up to 6 mIU/L). Indian prevalence: Unnikrishnan et al. 2013. Pregnancy-specific thresholds: ATA 2017 guidelines."
+  },
+
+  "ALT": {
+    "loinc_code": "1742-6",
+    "display_name": "Alanine Aminotransferase",
+    "short_display": "ALT / SGPT",
+    "unit": "U/L",
+    "unit_alternatives": ["IU/L", "µkat/L (÷16.67)"],
+    "aliases": [
+      "alt",
+      "sgpt",
+      "alanine aminotransferase",
+      "alanine transaminase",
+      "serum glutamic pyruvic transaminase",
+      "gpth",
+      "alanine aminotransaminase"
+    ],
+    "ranges": {
+      "adult_male_normal": { "low": 7, "high": 56 },
+      "adult_female_normal": { "low": 7, "high": 45 }
+    },
+    "default_range": { "low": 7, "high": 56 },
+    "critical_low": null,
+    "critical_high": 300,
+    "physiological_min": 0,
+    "physiological_max": 10000,
+    "note_on_indian_range": "Apollo India multicentric study (PMC4062657) found higher ALT levels in Delhi and Hyderabad centres than national average. Indian labs commonly use 0–40 U/L (males) and 0–35 U/L (females) as their local references. Non-alcoholic fatty liver disease (NAFLD) is highly prevalent in India (~9–32%), making ALT one of the most commonly abnormal liver enzymes. A common clinical cut-off used in India: ALT >3× ULN = significant hepatocellular injury warranting workup. Hepatitis B, Hepatitis C, and NASH are the main causes of persistently elevated ALT in India.",
+    "specialist_if_critical_high": "Hepatologist / Gastroenterologist (acute hepatitis, NASH, drug-induced liver injury, Wilson's disease)",
+    "urgency_if_critical_high": "within 24–48 hours if ALT >500 U/L; immediate if ALT >1000 U/L (acute hepatic injury)",
+    "urgency_if_watch": "within 1–2 weeks",
+    "indian_diet_tip_high_en": "High ALT = liver stress. Avoid alcohol completely. Reduce oily, fried, processed foods. Eat a simple diet: khichdi, dal, sabzi, curd. Avoid paracetamol overuse. Maintain a healthy weight. Consult a gastroenterologist.",
+    "indian_diet_tip_high_hi": "उच्च ALT = लिवर पर दबाव। शराब पूरी तरह बंद करें। तला-भुना खाना कम खाएं। खिचड़ी, दाल, सब्जी खाएं। पेरासिटामोल का अत्यधिक सेवन न करें।",
+    "source": "LOINC 1742-6. Labcorp/ARUP reference M 7–56, F 7–45 U/L. Apollo India PMC4062657. NASH India prevalence: Duseja 2010 J Clin Exp Hepatol. AASLD ALT >3× ULN threshold."
+  },
+
+  "ALP": {
+    "loinc_code": "6768-6",
+    "display_name": "Alkaline Phosphatase",
+    "short_display": "ALP / ALKP",
+    "unit": "U/L",
+    "unit_alternatives": ["IU/L", "µkat/L"],
+    "aliases": [
+      "alp",
+      "alk phos",
+      "alkaline phosphatase",
+      "serum alkaline phosphatase",
+      "alp level",
+      "sap"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 44, "high": 147 },
+      "children_under_15": { "low": 50, "high": 350 },
+      "elderly_male_over_60": { "low": 50, "high": 180 }
+    },
+    "default_range": { "low": 44, "high": 147 },
+    "critical_low": null,
+    "critical_high": 500,
+    "physiological_min": 0,
+    "physiological_max": 5000,
+    "note_on_indian_range": "Indian standard adult range used by most labs: 40–150 U/L. ALP is elevated in growing children (bone growth), pregnancy (placental isoenzyme), and liver disease or biliary obstruction. In India, ALP elevation is commonly caused by biliary obstruction (choledocholithiasis — common in North India), hepatitis, and bone disease (vitamin D deficiency, Paget's disease). Vitamin D deficiency is highly prevalent in India (>70–80% in some studies), causing secondary hyperparathyroidism and mildly elevated ALP.",
+    "specialist_if_critical_high": "Gastroenterologist / Hepatologist for biliary disease (>3× ULN); Endocrinologist for bone disease",
+    "urgency_if_critical_high": "within 48 hours",
+    "urgency_if_watch": "within 1–2 weeks",
+    "indian_diet_tip_high_en": "High ALP in liver disease context: avoid alcohol, fatty foods. For bone-related high ALP, ensure adequate Vitamin D (sunlight 15–20 min/day) and calcium (milk, curd, ragi). Consult a doctor for specific cause.",
+    "indian_diet_tip_high_hi": "उच्च ALP: शराब बंद करें। विटामिन D के लिए धूप लें और रागी, दूध, दही खाएं। डॉक्टर से कारण जानें।",
+    "source": "LOINC 6768-6. ARUP Labs reference 44–147 U/L. Furruqh et al. Indian J Clin Biochem 2004 (urban South Indian ALP norms). Vitamin D deficiency India: Ritu & Gupta, Eur J Clin Nutr 2014."
+  },
+
+  "INR": {
+    "loinc_code": "34714-6",
+    "display_name": "International Normalised Ratio",
+    "short_display": "INR / PT-INR",
+    "unit": "ratio",
+    "unit_alternatives": ["dimensionless"],
+    "aliases": [
+      "inr",
+      "pt inr",
+      "international normalised ratio",
+      "prothrombin time inr",
+      "coagulation inr",
+      "pt/inr"
+    ],
+    "ranges": {
+      "normal": { "low": 0.8, "high": 1.2 },
+      "therapeutic_DVT_PE_AF": { "low": 2.0, "high": 3.0 },
+      "therapeutic_mechanical_valve": { "low": 2.5, "high": 3.5 }
+    },
+    "default_range": { "low": 0.8, "high": 1.2 },
+    "critical_low": 0.5,
+    "critical_high": 5.0,
+    "physiological_min": 0.1,
+    "physiological_max": 20.0,
+    "note_on_indian_range": "INR reference range of 0.8–1.2 is universally applicable. In India, warfarin and anticoagulation monitoring is common in patients with rheumatic heart disease (high prevalence in India), atrial fibrillation, and mechanical heart valves. Many Indian patients have subtherapeutic or supratherapeutic INR due to dietary inconsistency (variable Vitamin K intake from green vegetables) and self-medication. An INR >5.0 carries significant spontaneous bleeding risk; >8.0 is a haematological emergency.",
+    "specialist_if_critical_high": "Haematologist / Emergency Physician (INR >5.0 = high bleed risk; Vitamin K or FFP reversal may be needed)",
+    "specialist_if_critical_low": "Physician (INR <0.5 may indicate a hypercoagulable state, though rarely clinically critical alone)",
+    "urgency_if_critical_high": "immediate if INR >8.0 or active bleeding; within 24 hours if INR 5–8",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "If on warfarin and INR is too high: avoid sudden changes in green leafy vegetable intake (palak, methi, hara pyaz). Consistent daily intake is better than elimination. Avoid alcohol. Report to your doctor immediately if any unusual bleeding.",
+    "indian_diet_tip_high_hi": "वार्फरिन पर हों तो हरी पत्तेदार सब्जियों का सेवन अचानक न बदलें। शराब से बचें। असामान्य रक्तस्राव होने पर तुरंत डॉक्टर को बताएं।",
+    "source": "LOINC 34714-6. CLSI critical INR >5.0 (spontaneous bleed risk). ACCP anticoagulation guidelines 2012. Indian context: rheumatic heart disease prevalence India — RHD-India registry."
+  },
+
+  "APTT": {
+    "loinc_code": "3173-2",
+    "display_name": "Activated Partial Thromboplastin Time",
+    "short_display": "APTT / aPTT",
+    "unit": "seconds",
+    "unit_alternatives": ["sec", "s"],
+    "aliases": [
+      "aptt",
+      "aptt",
+      "activated partial thromboplastin time",
+      "partial thromboplastin time",
+      "ptt",
+      "kaolin clotting time"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 25.0, "high": 40.0 },
+      "therapeutic_heparin": { "low": 60.0, "high": 100.0 }
+    },
+    "default_range": { "low": 25.0, "high": 40.0 },
+    "critical_low": null,
+    "critical_high": 100.0,
+    "physiological_min": 10.0,
+    "physiological_max": 300.0,
+    "note_on_indian_range": "APTT reference range is reagent-dependent; Indian labs typically use 25–40 seconds for their local reference. The most common causes of prolonged APTT in India are: heparin therapy (monitored therapeutic anticoagulation), haemophilia A/B (factor VIII/IX deficiency — estimated 1 in 5,000–10,000 in India), lupus anticoagulant (antiphospholipid syndrome), and DIC (disseminated intravascular coagulation from sepsis, obstetric emergencies). APTT >2.5× normal without heparin suggests significant coagulopathy.",
+    "specialist_if_critical_high": "Haematologist (haemophilia, lupus anticoagulant, DIC); Emergency Physician (DIC, heparin overdose)",
+    "urgency_if_critical_high": "immediate if active bleeding with APTT >100 seconds",
+    "urgency_if_watch": "within 48 hours if isolated mild elevation without bleeding",
+    "indian_diet_tip_high_en": "Prolonged APTT needs medical workup — it is not manageable by diet alone. If on heparin, ensure your doses are monitored. Report any unusual bruising or bleeding immediately.",
+    "source": "LOINC 3173-2. Standard lab reference 25–40 sec. Heparin monitoring therapeutic range 60–100 sec (ACCP). Haemophilia India prevalence: Haemophilia Federation India 2019."
+  },
+
+  "Na": {
+    "loinc_code": "2951-2",
+    "display_name": "Serum Sodium",
+    "short_display": "Sodium / Na",
+    "unit": "mEq/L",
+    "unit_alternatives": ["mmol/L", "mEq/L (same numerically)"],
+    "aliases": [
+      "na",
+      "sodium",
+      "serum sodium",
+      "s. sodium",
+      "s-na",
+      "blood sodium",
+      "plasma sodium",
+      "sodium level"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 136, "high": 145 }
+    },
+    "default_range": { "low": 136, "high": 145 },
+    "critical_low": 120,
+    "critical_high": 160,
+    "physiological_min": 100,
+    "physiological_max": 200,
+    "note_on_indian_range": "The Indian sodium reference range is identical to international standards (136–145 mEq/L). However, India has specific clinical contexts: hyponatraemia is extremely common in Indian patients with diarrhoea/vomiting (especially in children), cirrhosis (very prevalent), SIADH from CNS infections (TB meningitis — endemic in India), and excessive IV saline administration. Hypernatraemia occurs in dehydration, common in elderly patients. The Apollo India study confirmed standard electrolyte ranges apply to the Indian population.",
+    "specialist_if_critical_high": "Physician / Intensivist (severe hypernatraemia — cerebral dehydration risk; neurological symptoms at >160 mEq/L)",
+    "specialist_if_critical_low": "Physician / Intensivist (severe hyponatraemia — cerebral oedema, seizure risk at <120 mEq/L; rapid correction risk of osmotic demyelination)",
+    "urgency_if_critical_high": "immediate (symptomatic hypernatraemia >160 mEq/L)",
+    "urgency_if_critical_low": "immediate (symptomatic hyponatraemia <120 mEq/L or acute onset)",
+    "urgency_if_watch": "within 24–48 hours",
+    "indian_diet_tip_high_en": "High sodium: reduce table salt, pickles (achar), papads, processed foods, canned foods. Switch to low-sodium salts if advised. Increase water intake unless restricted by a doctor.",
+    "indian_diet_tip_high_hi": "उच्च सोडियम: नमक, अचार, पापड़ और पैकेट बंद खाना कम खाएं। डॉक्टर की सलाह से पानी की मात्रा बढ़ाएं।",
+    "source": "LOINC 2951-2. Standard reference 136–145 mEq/L (Harrison's 21st ed). CLSI critical low <120, critical high >160 mEq/L. Apollo India PMC4062657. India-specific context: TB meningitis SIADH — Rizvi et al."
+  },
+
+  "K": {
+    "loinc_code": "2823-3",
+    "display_name": "Serum Potassium",
+    "short_display": "Potassium / K",
+    "unit": "mEq/L",
+    "unit_alternatives": ["mmol/L"],
+    "aliases": [
+      "k",
+      "potassium",
+      "serum potassium",
+      "s. potassium",
+      "s-k",
+      "blood potassium",
+      "plasma potassium",
+      "kalium"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 3.5, "high": 5.1 }
+    },
+    "default_range": { "low": 3.5, "high": 5.1 },
+    "critical_low": 2.5,
+    "critical_high": 6.5,
+    "physiological_min": 1.5,
+    "physiological_max": 9.0,
+    "note_on_indian_range": "Standard potassium range (3.5–5.1 mEq/L) is applicable across populations including India. BPPH (biorXiv / HCUP LOINC code 6298-4 maps to same analyte). Hypokalaemia is very common in India due to: diarrhoea/vomiting, diuretic use, amphotericin B therapy (antifungal — used for kala-azar/leishmaniasis in India), hypomagnesaemia. Hyperkalaemia is seen in acute kidney injury, CKD, ACE inhibitor/ARB use (common in Indian hypertensive patients), and adrenal insufficiency. Pseudohyperkalaemia (haemolysed sample) is a very frequent artefact in Indian labs — always repeat before acting.",
+    "specialist_if_critical_high": "Physician / Cardiologist / Intensivist (hyperkalaemia >6.5: cardiac arrhythmia — wide QRS, peaked T waves; >7.0 = cardiac arrest risk — treat with calcium gluconate immediately)",
+    "specialist_if_critical_low": "Physician (hypokalaemia <2.5: ventricular arrhythmia risk, muscle weakness, paralysis)",
+    "urgency_if_critical_high": "immediate (ECG monitoring required; >6.5 mEq/L)",
+    "urgency_if_critical_low": "immediate if symptomatic (<2.5 mEq/L or arrhythmia)",
+    "urgency_if_watch": "within 24–48 hours",
+    "indian_diet_tip_high_en": "High potassium (hyperkalaemia): reduce high-potassium foods: banana, coconut water, orange juice, potato, tomato, spinach, dal (excessive). Follow a renal diet if CKD is the cause.",
+    "indian_diet_tip_low_en": "Low potassium (hypokalaemia): eat potassium-rich foods: banana, coconut water, sweet potato, tomato, dal, green leafy vegetables. Ensure adequate hydration.",
+    "indian_diet_tip_low_hi": "कम पोटेशियम: केला, नारियल पानी, शकरकंद, दाल और हरी सब्जियां खाएं।",
+    "source": "LOINC 2823-3 (LOINC 6298-4 also used). Reference 3.5–5.1 mEq/L (Harrison's 21st ed). CLSI critical low <2.5, critical high >6.5 mEq/L. India kala-azar amphotericin B hypokalaemia: WHO KA treatment guidelines."
+  },
+
+  "LDL": {
+    "loinc_code": "2089-1",
+    "display_name": "Low-Density Lipoprotein Cholesterol",
+    "short_display": "LDL / LDL-C / Bad Cholesterol",
+    "unit": "mg/dL",
+    "unit_alternatives": ["mmol/L (÷38.67)"],
+    "aliases": [
+      "ldl",
+      "ldl-c",
+      "low density lipoprotein",
+      "ldl cholesterol",
+      "bad cholesterol",
+      "ldl-cholesterol",
+      "ldl chol"
+    ],
+    "ranges": {
+      "optimal": { "low": null, "high": 100 },
+      "near_optimal": { "low": 100, "high": 129 },
+      "borderline_high": { "low": 130, "high": 159 },
+      "high": { "low": 160, "high": 189 },
+      "very_high": { "low": 190, "high": null },
+      "target_high_CVD_risk": { "low": null, "high": 70 }
+    },
+    "default_range": { "low": null, "high": 130 },
+    "critical_low": null,
+    "critical_high": 190,
+    "physiological_min": 0,
+    "physiological_max": 600,
+    "note_on_indian_range": "Apollo India multicentric study (PMC4062657) found 95% reference interval for LDL in Indian males: 60–176 mg/dL, Indian females: 61–175 mg/dL — broadly consistent with ATP-III desirable levels but with wide upper limits due to population variance. South Indian lipid study (Malati & Mahesh, Indian J Clin Biochem 2009) confirmed similar ranges. Indian/South Asian patients have a specific lipid profile with small, dense LDL particles (atherogenic, even at lower total LDL levels) and low HDL, making cardiovascular risk higher at a given LDL level compared to Western populations. Many Indian cardiologists target LDL <70 mg/dL for secondary prevention.",
+    "specialist_if_critical_high": "Cardiologist / Lipidologist (LDL >190 = familial hypercholesterolaemia screen; statin therapy indicated)",
+    "urgency_if_critical_high": "within 1–2 weeks",
+    "urgency_if_watch": "within 4–6 weeks (after dietary modification trial)",
+    "indian_diet_tip_high_en": "High LDL: reduce saturated fats (ghee, dalda, full-fat dairy, processed foods, biscuits). Increase fibre: oats, isabgol (psyllium husk), whole pulses, fruits, vegetables. Replace palm oil/coconut oil with mustard oil or olive oil in moderation. Exercise regularly.",
+    "indian_diet_tip_high_hi": "उच्च LDL: घी, डालडा और तला हुआ खाना कम करें। ओट्स, इसबगोल, दालें और सब्जियां बढ़ाएं। व्यायाम करें।",
+    "source": "LOINC 2089-1. ATP-III (NCEP 2002) classification. ACC/AHA 2019 guidelines (LDL <70 mg/dL secondary prevention). Apollo India PMC4062657. South Indian lipid study: Malati & Mahesh IJCB 2009."
+  },
+
+  "HDL": {
+    "loinc_code": "2085-9",
+    "display_name": "High-Density Lipoprotein Cholesterol",
+    "short_display": "HDL / HDL-C / Good Cholesterol",
+    "unit": "mg/dL",
+    "unit_alternatives": ["mmol/L (÷38.67)"],
+    "aliases": [
+      "hdl",
+      "hdl-c",
+      "high density lipoprotein",
+      "hdl cholesterol",
+      "good cholesterol",
+      "alpha-lipoprotein cholesterol"
+    ],
+    "ranges": {
+      "low_risk_male": { "low": 40, "high": null },
+      "low_risk_female": { "low": 50, "high": null },
+      "optimal_both": { "low": 60, "high": null },
+      "high_risk_low": { "low": null, "high": 40 }
+    },
+    "default_range": { "low": 40, "high": null },
+    "critical_low": 20,
+    "critical_high": null,
+    "physiological_min": 5,
+    "physiological_max": 120,
+    "note_on_indian_range": "Indian population studies consistently show lower HDL levels than Western populations. Apollo India study (PMC4062657) 95% reference intervals: Males 31–69 mg/dL, Females 26–77 mg/dL. South Indian lipid study (Malati & Mahesh 2009): HDL Male 26–57, Female 26–59 mg/dL. Indian/South Asian patients are particularly prone to low HDL due to genetic predisposition, high refined carbohydrate intake, physical inactivity, and metabolic syndrome. HDL <40 mg/dL (men) or <50 mg/dL (women) is a component of metabolic syndrome — highly prevalent in urban India.",
+    "specialist_if_critical_low": "Cardiologist / Lipidologist (very low HDL <20 mg/dL = very high CVD risk; rule out hypertriglyceridaemia, genetic HDL deficiency)",
+    "urgency_if_critical_low": "within 1–2 weeks",
+    "urgency_if_watch": "within 4–6 weeks",
+    "indian_diet_tip_low_en": "Low HDL: increase physical activity (the most effective way to raise HDL). Include omega-3 fatty acids: flaxseeds (alsi), walnuts, fatty fish. Reduce refined carbohydrates and trans fats. Moderate alcohol (if socioculturally acceptable) can raise HDL, but this is not recommended as a therapeutic strategy.",
+    "indian_diet_tip_low_hi": "कम HDL: नियमित व्यायाम करें। अलसी, अखरोट, सरसों का तेल खाएं। रिफाइंड कार्बोहाइड्रेट कम करें।",
+    "source": "LOINC 2085-9. ATP-III HDL classification. Apollo India PMC4062657. South Indian lipid study Malati & Mahesh 2009. Indian metabolic syndrome prevalence: Gupta et al. J Assoc Physicians India 2004."
+  },
+
+  "eGFR": {
+    "loinc_code": "62238-1",
+    "display_name": "Estimated Glomerular Filtration Rate",
+    "short_display": "eGFR / Kidney Function Rate",
+    "unit": "mL/min/1.73m²",
+    "unit_alternatives": ["mL/min/BSA"],
+    "aliases": [
+      "egfr",
+      "estimated gfr",
+      "estimated glomerular filtration rate",
+      "gfr",
+      "creatinine clearance estimated",
+      "ckd-epi gfr",
+      "mdrd gfr",
+      "kidney function rate"
+    ],
+    "ranges": {
+      "G1_normal": { "low": 90, "high": null },
+      "G2_mildly_reduced": { "low": 60, "high": 89 },
+      "G3a_moderate_CKD": { "low": 45, "high": 59 },
+      "G3b_moderate_CKD": { "low": 30, "high": 44 },
+      "G4_severe_CKD": { "low": 15, "high": 29 },
+      "G5_kidney_failure": { "low": null, "high": 14 }
+    },
+    "default_range": { "low": 60, "high": null },
+    "critical_low": 15,
+    "critical_high": null,
+    "physiological_min": 1,
+    "physiological_max": 200,
+    "note_on_indian_range": "eGFR is calculated from serum creatinine using CKD-EPI 2021 (creatinine ± cystatin C) equation. India has >150 million patients with CKD (Jha et al. Lancet 2013), with diabetic nephropathy and hypertensive nephrosclerosis as the top causes. The MDRD equation (older) slightly underestimates GFR in South Asian populations at higher GFR levels; CKD-EPI 2021 is now preferred. eGFR should be interpreted alongside urine ACR (albumin:creatinine ratio). Kidney failure (G5, eGFR <15) requires nephrology referral for dialysis planning in India.",
+    "specialist_if_critical_low": "Nephrologist (eGFR <30 = specialist referral mandatory in most guidelines; <15 = prepare for dialysis/transplant)",
+    "urgency_if_critical_low": "within 24–48 hours if eGFR acutely drops to <30; within 1 week if chronic and stable",
+    "urgency_if_watch": "within 2–4 weeks (monitor trend over 3 months to confirm CKD staging)",
+    "indian_diet_tip_low_en": "Low eGFR (CKD): reduce dietary protein (avoid excessive meat, dal in advanced CKD), reduce salt (<5g/day), restrict potassium and phosphorus intake based on stage. Avoid NSAIDs (ibuprofen, diclofenac — commonly overused in India). Stay well hydrated unless restricted. Follow a renal dietitian's advice.",
+    "indian_diet_tip_low_hi": "कम eGFR (CKD): प्रोटीन, नमक, पोटेशियम और फास्फोरस सीमित करें। NSAID दवाएं न लें। नेफ्रोलॉजिस्ट से मिलें।",
+    "source": "LOINC 62238-1. KDIGO 2012 CKD classification (G1–G5). CKD-EPI 2021 equation (NEJM 2021;385:1737). India CKD burden: Jha et al. Lancet 2013;382:260–272."
+  },
+
+  "PSA": {
+    "loinc_code": "2857-1",
+    "display_name": "Prostate Specific Antigen",
+    "short_display": "PSA / Prostate Marker",
+    "unit": "ng/mL",
+    "unit_alternatives": ["µg/L"],
+    "aliases": [
+      "psa",
+      "prostate specific antigen",
+      "total psa",
+      "serum psa",
+      "psa level",
+      "psa total"
+    ],
+    "ranges": {
+      "general_upper_limit": { "low": null, "high": 4.0 },
+      "age_40_49": { "low": null, "high": 2.5 },
+      "age_50_59": { "low": null, "high": 3.5 },
+      "age_60_69": { "low": null, "high": 4.5 },
+      "age_70_plus": { "low": null, "high": 6.5 }
+    },
+    "default_range": { "low": null, "high": 4.0 },
+    "critical_low": null,
+    "critical_high": 10.0,
+    "physiological_min": 0,
+    "physiological_max": 10000,
+    "note_on_indian_range": "PSA cut-off of 4.0 ng/mL is standard in India and internationally. Levels 4.0–10 ng/mL = 'grey zone' (25% prostate cancer risk); >10 ng/mL = high suspicion (>50% prostate cancer risk). Free-to-total PSA ratio <15% in the grey zone increases cancer probability. Prostate cancer is the 3rd most common cancer in Indian males. PSA velocity (rate of rise >0.75 ng/mL/year) is also clinically significant. BPH (benign prostatic hyperplasia) and prostatitis also elevate PSA; a rectal examination and urine culture are required for full interpretation.",
+    "specialist_if_critical_high": "Urologist (PSA >10 ng/mL or rising PSA velocity — prostate biopsy evaluation)",
+    "urgency_if_critical_high": "within 2–4 weeks (non-emergency but urgent urology referral)",
+    "urgency_if_watch": "within 6–12 weeks (for grey zone 4–10 ng/mL)",
+    "indian_diet_tip_high_en": "Elevated PSA warrants medical workup — diet alone cannot treat it. For prostate health, a diet rich in tomatoes (lycopene — antioxidant), green tea, pomegranate, and low in red meat/dairy fat is often recommended, though evidence is observational. Consult a urologist.",
+    "indian_diet_tip_high_hi": "उच्च PSA: टमाटर, हरी चाय, अनार खाएं। लाल मांस और फुल-फैट डेयरी कम करें। यूरोलॉजिस्ट से मिलें।",
+    "source": "LOINC 2857-1. StatPearls NBK557495. Age-specific PSA cut-offs: Carter et al. JAMA 1992. Free PSA ratio: Catalona et al. NEJM 1998. India prostate cancer: ICMR 2021 cancer registry."
+  },
+
+  "AFP": {
+    "loinc_code": "1834-1",
+    "display_name": "Alpha-Fetoprotein",
+    "short_display": "AFP / Alpha-1-Fetoprotein",
+    "unit": "ng/mL",
+    "unit_alternatives": ["IU/mL (×0.83 for conversion)", "µg/L"],
+    "aliases": [
+      "afp",
+      "alpha fetoprotein",
+      "alpha-1-fetoprotein",
+      "maternal serum afp",
+      "afp tumour marker"
+    ],
+    "ranges": {
+      "adult_normal_non_pregnant": { "low": null, "high": 10.0 },
+      "pregnancy_screening_MoM": { "low": 0.5, "high": 2.5 }
+    },
+    "default_range": { "low": null, "high": 10.0 },
+    "critical_low": null,
+    "critical_high": 400.0,
+    "physiological_min": 0,
+    "physiological_max": 1000000,
+    "note_on_indian_range": "AFP reference cut-off for adults: <10 ng/mL (most Indian labs use this standard). AFP is the primary tumour marker for: (1) Hepatocellular carcinoma (HCC) — India has a significant HCC burden linked to HBV and HCV infections; AFP >400 ng/mL with liver mass on imaging is highly suggestive of HCC. (2) Non-seminomatous testicular germ cell tumours (NSGCTs). (3) Prenatal neural tube defect and trisomy 18/21 screening (maternal serum AFP). In India, HBV-related HCC is common; AFP surveillance every 6 months is recommended for cirrhotic patients. AFP can also be mildly elevated in acute viral hepatitis, cirrhosis, and inflammatory bowel disease — this does not necessarily indicate malignancy.",
+    "specialist_if_critical_high": "Hepatologist / Oncologist (AFP >400 ng/mL with liver lesion = HCC workup urgently; Oncologist if testicular tumour suspected)",
+    "urgency_if_critical_high": "within 48–72 hours (urgent imaging and specialist referral)",
+    "urgency_if_watch": "within 1–2 weeks (mild elevation 10–40 ng/mL in known hepatitis/cirrhosis — trend monitoring)",
+    "indian_diet_tip_high_en": "Elevated AFP requires immediate medical evaluation — it is a tumour marker. For liver health: avoid alcohol, limit fatty foods, get vaccinated for Hepatitis B (if not already done). Report to a gastroenterologist or oncologist.",
+    "source": "LOINC 1834-1. Regenstrief Institute (LOINC LP14331-0). AFP cut-off: AASLD HCC guidelines 2018. AFP >400 ng/mL sensitivity for HCC: Trevisani et al. J Hepatol 2001. India HCC and HBV: Anand et al. J Gastroenterol Hepatol 2008."
+  },
+
+  "BNP": {
+    "loinc_code": "33762-6",
+    "display_name": "NT-proBNP (N-Terminal Pro-B-Type Natriuretic Peptide)",
+    "short_display": "NT-proBNP / BNP",
+    "unit": "pg/mL",
+    "unit_alternatives": ["ng/L", "pmol/L"],
+    "aliases": [
+      "bnp",
+      "nt-probnp",
+      "brain natriuretic peptide",
+      "b-type natriuretic peptide",
+      "pro-bnp",
+      "n-terminal probnp",
+      "ntprobnp",
+      "nt probnp"
+    ],
+    "ranges": {
+      "HF_rule_out_outpatient_NT_proBNP": { "low": null, "high": 125 },
+      "HF_rule_out_acute_NT_proBNP": { "low": null, "high": 300 },
+      "age_based_NT_proBNP_under50": { "low": null, "high": 450 },
+      "age_based_NT_proBNP_50to75": { "low": null, "high": 900 },
+      "age_based_NT_proBNP_over75": { "low": null, "high": 1800 },
+      "BNP_HF_rule_out": { "low": null, "high": 100 }
+    },
+    "default_range": { "low": null, "high": 125 },
+    "critical_low": null,
+    "critical_high": 5000,
+    "physiological_min": 0,
+    "physiological_max": 100000,
+    "note_on_indian_range": "NT-proBNP reference cut-offs are internationally standardised and applicable to Indian patients. ESC (2021) guidelines recommend BNP <35 pg/mL or NT-proBNP <125 pg/mL to rule out HF in outpatients. Cardiac failure and RHD (rheumatic heart disease) are major contributors to elevated BNP in India. NT-proBNP levels are higher in women, the elderly, and patients with CKD (common in India). Very high NT-proBNP (>5,000 pg/mL) correlates with poor prognosis in acute decompensated heart failure. In India, it's important to note that NT-proBNP is also elevated in pulmonary hypertension and cor pulmonale (RV failure from lung disease), which are common in India.",
+    "specialist_if_critical_high": "Cardiologist (NT-proBNP >5,000 = severe heart failure; urgent echocardiogram and hospitalisation)",
+    "urgency_if_critical_high": "immediate if acute dyspnoea (possible acute decompensated HF)",
+    "urgency_if_watch": "within 1 week for stable patients in monitoring",
+    "indian_diet_tip_high_en": "High NT-proBNP = heart is under strain. Strictly restrict salt (<2g/day), limit fluid intake as advised, avoid alcohol, and take medications as prescribed. Do NOT stop medications without consulting your cardiologist. Report sudden weight gain (>2 kg in 2 days) or worsening breathlessness immediately.",
+    "indian_diet_tip_high_hi": "उच्च NT-proBNP = हृदय पर दबाव। नमक <2g/दिन रखें, तरल पदार्थ सीमित करें, शराब न पिएं। हृदय रोग विशेषज्ञ की सलाह के बिना दवाएं बंद न करें।",
+    "source": "LOINC 33762-6. ESC Heart Failure Guidelines 2021 (NT-proBNP <125 pg/mL rule-out). Medscape 2087425. Generation Scotland NT-proBNP study (Circulation HF 2022). Age-stratified cut-offs: ESC 2021."
+  },
+
+  "pO2": {
+    "loinc_code": "2703-7",
+    "display_name": "Partial Pressure of Oxygen (Arterial)",
+    "short_display": "PaO2 / pO2",
+    "unit": "mmHg",
+    "unit_alternatives": ["kPa (×0.133)", "Torr"],
+    "aliases": [
+      "po2",
+      "pao2",
+      "partial pressure oxygen",
+      "arterial pO2",
+      "arterial oxygen tension",
+      "oxygen partial pressure"
+    ],
+    "ranges": {
+      "adult_normal_room_air": { "low": 80, "high": 100 },
+      "mild_hypoxaemia": { "low": 60, "high": 79 },
+      "moderate_hypoxaemia": { "low": 40, "high": 59 },
+      "severe_hypoxaemia": { "low": null, "high": 40 }
+    },
+    "default_range": { "low": 80, "high": 100 },
+    "critical_low": 60,
+    "critical_high": 350,
+    "physiological_min": 10,
+    "physiological_max": 600,
+    "note_on_indian_range": "Arterial pO2 of 80–100 mmHg is the standard reference range on room air at sea level. In India, altitude effects are relevant: populations in high-altitude regions (Ladakh, Sikkim) have adapted with lower expected pO2 values (e.g., in Leh at 3,500m, normal pO2 may be 55–65 mmHg). pO2 <60 mmHg = Type 1 Respiratory Failure (hypoxaemic), requiring supplemental oxygen. Common causes in India: pneumonia, COVID-19, TB (major cause of respiratory failure in India), COPD exacerbation. The PaO2/FiO2 ratio <300 defines ALI, <200 defines ARDS.",
+    "specialist_if_critical_low": "Pulmonologist / Intensivist (pO2 <60 mmHg = immediate oxygen supplementation; <40 mmHg = ICU / mechanical ventilation consideration)",
+    "urgency_if_critical_low": "immediate",
+    "urgency_if_watch": "within 24 hours",
+    "indian_diet_tip_low_en": "Low pO2 is a medical emergency — it means insufficient oxygen reaching blood. This requires immediate supplemental oxygen and medical attention. Deep breathing exercises (pranayama — anulom vilom) help in mild chronic conditions under medical supervision.",
+    "source": "LOINC 2703-7. StatPearls NBK536919. ACLS Certification Association ABG reference. Critical pO2 <60: WHO respiratory failure definition. High-altitude India: Nair et al. JAPI 2008."
+  },
+
+  "pCO2": {
+    "loinc_code": "2019-8",
+    "display_name": "Partial Pressure of Carbon Dioxide (Arterial)",
+    "short_display": "PaCO2 / pCO2",
+    "unit": "mmHg",
+    "unit_alternatives": ["kPa (×0.133)", "Torr"],
+    "aliases": [
+      "pco2",
+      "paco2",
+      "partial pressure co2",
+      "arterial pCO2",
+      "carbon dioxide partial pressure",
+      "co2 tension"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 35, "high": 45 },
+      "COPD_acceptable_retention": { "low": 45, "high": 55 }
+    },
+    "default_range": { "low": 35, "high": 45 },
+    "critical_low": 20,
+    "critical_high": 70,
+    "physiological_min": 10,
+    "physiological_max": 120,
+    "note_on_indian_range": "pCO2 reference range 35–45 mmHg is universally applicable. A rising pCO2 (hypercapnia) indicates impaired ventilation. Type 2 respiratory failure (hypercapnic) = pCO2 >45 with pO2 <60. In India, the most common cause is COPD (from tobacco smoking and biomass fuel exposure — highly prevalent in rural India), severe asthma, neuromuscular disease (Guillain-Barré, common post-viral), and chest wall deformity. A pCO2 >55 mmHg in a non-COPD patient, or acutely worsening pCO2 in a known COPD patient, is an indication for NIV (BiPAP/CPAP) or intubation.",
+    "specialist_if_critical_high": "Pulmonologist / Intensivist (pCO2 >70 = severe ventilatory failure — immediate NIV or intubation)",
+    "specialist_if_critical_low": "Physician / Intensivist (pCO2 <20 = severe hyperventilation — anxiety, pulmonary embolism, metabolic acidosis compensation)",
+    "urgency_if_critical_high": "immediate",
+    "urgency_if_critical_low": "within 1–2 hours (assess underlying cause)",
+    "urgency_if_watch": "within 24 hours",
+    "indian_diet_tip_high_en": "Elevated pCO2 means the lungs are not removing CO2 properly — this is a medical emergency. If a COPD patient, ensure regular use of inhalers, avoid smoking completely, and avoid biomass cooking smoke exposure.",
+    "source": "LOINC 2019-8. StatPearls NBK551648. ABG normal ranges: Wikipedia/clinical standards. COPD India prevalence: Jindal et al. Indian J Chest Dis Allied Sci 2006."
+  },
+
+  "SPO2": {
+    "loinc_code": "59408-5",
+    "display_name": "Peripheral Oxygen Saturation (Pulse Oximetry)",
+    "short_display": "SpO2 / O2 Sat",
+    "unit": "%",
+    "unit_alternatives": ["fraction (÷100)"],
+    "aliases": [
+      "spo2",
+      "spO2",
+      "sp02",
+      "oxygen saturation",
+      "pulse ox",
+      "o2 saturation",
+      "peripheral sat",
+      "pulse oximetry",
+      "o2 sat",
+      "oxygen sat"
+    ],
+    "ranges": {
+      "normal": { "low": 95, "high": 100 },
+      "acceptable_COPD": { "low": 88, "high": 92 },
+      "mild_hypoxia": { "low": 91, "high": 94 },
+      "moderate_hypoxia": { "low": 86, "high": 90 },
+      "severe_hypoxia": { "low": null, "high": 85 }
+    },
+    "default_range": { "low": 95, "high": 100 },
+    "critical_low": 90,
+    "critical_high": null,
+    "physiological_min": 50,
+    "physiological_max": 100,
+    "note_on_indian_range": "SpO2 ≥95% on room air is normal for all populations including Indian. SpO2 became a critical vital sign during the COVID-19 pandemic in India (2020–2022) — 'happy hypoxaemia' (SpO2 dropping silently to <90% before symptoms) was a key feature of COVID-19 in Indian patients. Pulse oximeters may be less accurate in patients with dark skin pigmentation, nail polish, anaemia, hypothermia, or poor peripheral perfusion. A persistent SpO2 <94% requires supplemental oxygen; <90% = emergency oxygen (15 L/min non-rebreather mask while arranging hospital care). COPD patients may have a target SpO2 of 88–92% to avoid hypercapnic drive suppression.",
+    "specialist_if_critical_low": "Emergency / Pulmonologist (SpO2 <90% = immediate supplemental oxygen; ICU for <85%)",
+    "urgency_if_critical_low": "immediate",
+    "urgency_if_watch": "within 1–4 hours (SpO2 91–94%)",
+    "indian_diet_tip_low_en": "Low SpO2 is a medical emergency. Position the patient sitting upright, provide supplemental oxygen immediately if available (use of portable home oxygen concentrators is common in India). Call for emergency help. Do not delay transport to a hospital.",
+    "source": "LOINC 59408-5. ILD Collaborative (SpO2 normal ≥95%). COVID-19 India 'happy hypoxia': Dhont et al. Respir Res 2020. COPD target SpO2: BTS guidelines 2017. Pulse oximetry skin pigmentation bias: Sjoding et al. NEJM 2020."
+  },
+
+  "FEV1": {
+    "loinc_code": "20150-9",
+    "display_name": "Forced Expiratory Volume in 1 Second",
+    "short_display": "FEV1 / Spirometry",
+    "unit": "% predicted",
+    "unit_alternatives": ["L (absolute volume)"],
+    "aliases": [
+      "fev1",
+      "fev-1",
+      "forced expiratory volume 1 second",
+      "forced expiratory volume",
+      "one second forced expiratory volume"
+    ],
+    "ranges": {
+      "normal": { "low": 80, "high": null },
+      "mild_obstruction_GOLD1": { "low": 70, "high": 79 },
+      "moderate_obstruction_GOLD2": { "low": 50, "high": 69 },
+      "severe_obstruction_GOLD3": { "low": 30, "high": 49 },
+      "very_severe_GOLD4": { "low": null, "high": 30 }
+    },
+    "default_range": { "low": 80, "high": null },
+    "critical_low": 30,
+    "critical_high": null,
+    "physiological_min": 5,
+    "physiological_max": 150,
+    "note_on_indian_range": "FEV1 is expressed as a percentage of the predicted value based on age, sex, and height. Indian-specific spirometry prediction equations exist (Indian norms by Kamat et al. 1977, Udwadia et al., and more recently Bhatt et al. Chest 2011) and Indian values are 10–20% lower than NHANES III (Western) predicted values — using Western equations overestimates obstruction in Indian patients. GOLD guidelines recommend using local ethnic norms when available. FEV1/FVC <0.7 (post-bronchodilator) = obstructive pattern (COPD/asthma). COPD is the 4th leading cause of death in India.",
+    "specialist_if_critical_low": "Pulmonologist (FEV1 <50% predicted = moderate-severe COPD; <30% = very severe, specialist management required)",
+    "urgency_if_critical_low": "within 1–2 weeks (scheduled; immediate only if acute exacerbation)",
+    "urgency_if_watch": "within 4–6 weeks",
+    "indian_diet_tip_low_en": "Low FEV1 from COPD: stop smoking completely. Avoid biomass fuel smoke (chulha cooking). Use prescribed inhalers correctly. Pulmonary rehabilitation exercises (pursed-lip breathing, incentive spirometry) improve lung capacity. Maintain a healthy BMI — obesity worsens COPD.",
+    "source": "LOINC 20150-9. GOLD 2024 guidelines (FEV1 staging). Indian spirometry norms: Bhatt et al. Chest 2011. Kamat et al. 1977. COPD India burden: Salvi et al. Lancet 2011."
+  },
+
+  "FVC": {
+    "loinc_code": "19868-9",
+    "display_name": "Forced Vital Capacity",
+    "short_display": "FVC",
+    "unit": "% predicted",
+    "unit_alternatives": ["L (absolute)"],
+    "aliases": [
+      "fvc",
+      "forced vital capacity",
+      "vital capacity forced",
+      "total exhaled volume"
+    ],
+    "ranges": {
+      "normal": { "low": 80, "high": null },
+      "mild_restriction": { "low": 70, "high": 79 },
+      "moderate_restriction": { "low": 50, "high": 69 },
+      "severe_restriction": { "low": null, "high": 50 },
+      "FEV1_FVC_ratio_normal": { "low": 0.7, "high": null }
+    },
+    "default_range": { "low": 80, "high": null },
+    "critical_low": 50,
+    "critical_high": null,
+    "physiological_min": 5,
+    "physiological_max": 150,
+    "note_on_indian_range": "FVC values in Indian adults are typically 10–20% lower than Western predicted values (same Indian prediction equation caveat as FEV1). A low FVC with a normal FEV1/FVC ratio = restrictive pattern (interstitial lung disease, pleural effusion, neuromuscular disease, obesity). TB-related lung destruction is a major cause of restrictive lung disease in India. Silicosis (from stone quarrying — highly prevalent in states like Rajasthan, Jharkhand) is another important cause. FVC <50% = severe restriction requiring specialist evaluation and possible ventilatory support.",
+    "specialist_if_critical_low": "Pulmonologist (severe restrictive lung disease; rule out ILD, silicosis, pleural disease)",
+    "urgency_if_critical_low": "within 1–2 weeks",
+    "urgency_if_watch": "within 4–6 weeks",
+    "indian_diet_tip_low_en": "Low FVC indicates stiff or restricted lungs. Pulmonary exercises, respiratory physiotherapy, and treatment of the underlying cause are essential. Maintain adequate nutrition — malnutrition weakens respiratory muscles (common in India).",
+    "source": "LOINC 19868-9. ATS/ERS spirometry guidelines 2022. Indian spirometry norms: Bhatt et al. Chest 2011. TB restrictive lung disease India: WHO TB report 2022. Silicosis India: ICMR."
+  },
+
+  "CK": {
+    "loinc_code": "2157-6",
+    "display_name": "Creatine Kinase (Total)",
+    "short_display": "CK / CPK",
+    "unit": "U/L",
+    "unit_alternatives": ["IU/L", "µkat/L"],
+    "aliases": [
+      "ck",
+      "cpk",
+      "creatine kinase",
+      "creatine phosphokinase",
+      "total ck",
+      "ck total",
+      "cpk total"
+    ],
+    "ranges": {
+      "adult_male_normal": { "low": 39, "high": 308 },
+      "adult_female_normal": { "low": 26, "high": 192 }
+    },
+    "default_range": { "low": 26, "high": 308 },
+    "critical_low": null,
+    "critical_high": 1000,
+    "physiological_min": 0,
+    "physiological_max": 200000,
+    "note_on_indian_range": "Standard CK reference ranges (males 39–308, females 26–192 U/L) are applicable to South Asian/Indian populations. Asian males have upper reference limits of 227–440 U/L in systematic review data (Aleksovska et al. Eur J Neurol 2025). CK is elevated after muscle injury, intramuscular injections (very common in Indian clinical practice), strenuous exercise, hypothyroidism, myocardial infarction (CK-MB subfraction), and rhabdomyolysis. In India, rhabdomyolysis occurs from heat stroke (common in summer), statin myopathy (statin use is high in urban India), snake envenomation, trauma, and alcohol-related myopathy. CK >1,000 U/L with myoglobinuria = risk of acute kidney injury.",
+    "specialist_if_critical_high": "Physician / Neurologist (CK >1,000 U/L = rhabdomyolysis workup, myopathy investigation; Cardiologist if CK-MB elevated = AMI)",
+    "urgency_if_critical_high": "within 24 hours (check renal function; if CK >5,000 with symptoms = immediate IV fluids, hospital admission)",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "High CK from muscle injury: rest the affected muscles, stay well hydrated (IV fluids in hospital if very high). If on statins, report to your doctor immediately for statin-induced myopathy assessment. Avoid alcohol.",
+    "source": "LOINC 2157-6. Aleksovska et al. Eur J Neurol 2025 (PMC12163646) — Asian male upper limit 227–440 U/L. PMC5370787 (NHANES CK reference ranges). Critical >1,000 U/L: AKI rhabdomyolysis threshold (Harrison's 21st ed)."
+  },
+
+  "GCS": {
+    "loinc_code": "35088-4",
+    "display_name": "Glasgow Coma Scale (Total Score)",
+    "short_display": "GCS / Coma Scale",
+    "unit": "score",
+    "unit_alternatives": ["points (3–15)"],
+    "aliases": [
+      "gcs",
+      "glasgow coma scale",
+      "glasgow coma score",
+      "coma scale",
+      "level of consciousness gcs",
+      "gcs total"
+    ],
+    "ranges": {
+      "normal_conscious": { "low": 15, "high": 15 },
+      "mild_TBI": { "low": 13, "high": 15 },
+      "moderate_TBI": { "low": 9, "high": 12 },
+      "severe_TBI_coma": { "low": 3, "high": 8 }
+    },
+    "default_range": { "low": 15, "high": 15 },
+    "critical_low": 8,
+    "critical_high": null,
+    "physiological_min": 3,
+    "physiological_max": 15,
+    "note_on_indian_range": "GCS is a clinical scoring system, not a laboratory test — no Indian-specific adjustment needed. Minimum score = 3 (deep coma/death-like); maximum = 15 (fully alert). Components: Eye Opening (1–4) + Verbal Response (1–5) + Motor Response (1–6) = Total 3–15. GCS ≤8 = indication for airway protection (intubation in many protocols) — the '8 is great, intubate' rule. In India, road traffic accidents (RTAs) are a leading cause of head injury with GCS assessment; poisoning and cerebrovascular accidents (CVA) are also major contributors.",
+    "specialist_if_critical_low": "Neurosurgeon / Intensivist (GCS ≤8 = emergency; immediate CT head, airway management, ICU admission)",
+    "urgency_if_critical_low": "immediate",
+    "urgency_if_watch": "within 1–2 hours for GCS 9–12 with declining trend",
+    "indian_diet_tip_low_en": "A low GCS is a neurological emergency — nutrition and diet advice are irrelevant acutely. Emergency services (108 in India) should be called immediately for any unconscious patient.",
+    "source": "LOINC 35088-4. Teasdale & Jennett, Lancet 1974 (original GCS paper). TBI severity classification: Brain Trauma Foundation 2016. GCS ≤8 intubation guideline: Advanced Trauma Life Support (ATLS) 10th ed. India RTA burden: WHO Global Status Report Road Safety 2023."
+  },
+
+  "IOP": {
+    "loinc_code": "56844-4",
+    "display_name": "Intraocular Pressure",
+    "short_display": "IOP / Eye Pressure",
+    "unit": "mmHg",
+    "unit_alternatives": ["Torr"],
+    "aliases": [
+      "iop",
+      "intraocular pressure",
+      "eye pressure",
+      "ocular pressure",
+      "tonometry",
+      "ophthalmic pressure"
+    ],
+    "ranges": {
+      "normal": { "low": 10, "high": 21 },
+      "ocular_hypertension": { "low": 22, "high": 29 },
+      "high_risk_glaucoma": { "low": 30, "high": null }
+    },
+    "default_range": { "low": 10, "high": 21 },
+    "critical_low": 5,
+    "critical_high": 30,
+    "physiological_min": 2,
+    "physiological_max": 80,
+    "note_on_indian_range": "Normal IOP of 10–21 mmHg is universally applicable. India has a high prevalence of glaucoma — estimated 12 million with glaucoma and 1.5 million blind from it (India has the 2nd highest glaucoma burden globally). Most common is primary open-angle glaucoma (POAG) — often asymptomatic until advanced. Acute angle-closure glaucoma (IOP can suddenly spike to 40–70 mmHg) is a medical emergency with severe pain, red eye, and vomiting. IOP may be falsely low after LASIK surgery due to corneal thinning. A low IOP (<5 mmHg = ocular hypotony) can occur after penetrating eye injury or post-surgery.",
+    "specialist_if_critical_high": "Ophthalmologist (IOP ≥30 mmHg = urgent glaucoma assessment; acute angle-closure = ophthalmic emergency — IV acetazolamide + pilocarpine eye drops immediately)",
+    "specialist_if_critical_low": "Ophthalmologist (IOP <5 = ocular hypotony — risk of visual loss and globe collapse)",
+    "urgency_if_critical_high": "immediate for acute angle-closure (IOP >40 with pain, nausea); within 24 hours for chronic elevated IOP >30",
+    "urgency_if_watch": "within 2–4 weeks (IOP 22–29 — start regular monitoring)",
+    "indian_diet_tip_high_en": "Elevated IOP: use prescribed eye drops as directed (do not skip). Avoid caffeine excess. Regular moderate exercise is beneficial. Avoid inverted yoga poses (shirshasana — headstand) which acutely increase IOP. Annual eye pressure checks are recommended for all Indians over 40.",
+    "indian_diet_tip_high_hi": "उच्च IOP: निर्धारित आई ड्रॉप्स नियमित रूप से डालें। शीर्षासन जैसे उल्टे आसन से बचें। 40 वर्ष के बाद सालाना आंखों की जांच करवाएं।",
+    "source": "LOINC 56844-4. AAO (American Academy of Ophthalmology) IOP reference 10–21 mmHg. Indian glaucoma burden: ICARE foundation, India Glaucoma Society 2022. ICP normal and ocular hypotony: Friedman et al. Am J Ophthalmol 2009."
+  },
+
+  "BP": {
+    "loinc_code": "55284-4",
+    "display_name": "Blood Pressure (Systolic / Diastolic)",
+    "short_display": "BP / Blood Pressure",
+    "unit": "mmHg",
+    "unit_alternatives": ["Torr"],
+    "aliases": [
+      "bp",
+      "blood pressure",
+      "sbp",
+      "dbp",
+      "systolic bp",
+      "diastolic bp",
+      "systolic blood pressure",
+      "diastolic blood pressure",
+      "arterial blood pressure",
+      "sphygmomanometry"
+    ],
+    "ranges": {
+      "normal": {
+        "systolic_low": null,
+        "systolic_high": 120,
+        "diastolic_low": null,
+        "diastolic_high": 80
+      },
+      "elevated": {
+        "systolic_low": 120,
+        "systolic_high": 129,
+        "diastolic_low": null,
+        "diastolic_high": 80
+      },
+      "stage1_hypertension": {
+        "systolic_low": 130,
+        "systolic_high": 139,
+        "diastolic_low": 80,
+        "diastolic_high": 89
+      },
+      "stage2_hypertension": {
+        "systolic_low": 140,
+        "systolic_high": null,
+        "diastolic_low": 90,
+        "diastolic_high": null
+      },
+      "hypertensive_crisis": {
+        "systolic_low": 180,
+        "systolic_high": null,
+        "diastolic_low": 120,
+        "diastolic_high": null
+      }
+    },
+    "default_range": { "low": 90, "high": 120 },
+    "critical_low": 70,
+    "critical_high": 180,
+    "physiological_min": 40,
+    "physiological_max": 300,
+    "note_on_indian_range": "India has an estimated 220 million hypertensive patients (one of the highest burdens globally). The ACC/AHA 2017 guidelines (Stage 1 HTN ≥130/80) and JNC7 older cut-off (≥140/90) are both used in India depending on the institution. The ICMR recommends treating BP ≥140/90 mmHg as hypertension. Low BP (hypotension) is clinically significant if symptomatic: systolic <90 mmHg in adults = hypotension; septic shock < 90 mmHg systolic despite fluid resuscitation. Indian patients have a higher risk of stroke at any given BP level than Western populations (Stroke Federation India data).",
+    "specialist_if_critical_high": "Emergency Physician / Cardiologist (BP ≥180/120 = hypertensive crisis; check for end-organ damage: chest pain, headache, visual changes, confusion)",
+    "specialist_if_critical_low": "Emergency Physician (systolic <70 = cardiogenic or septic shock — immediate ICU)",
+    "urgency_if_critical_high": "immediate",
+    "urgency_if_critical_low": "immediate",
+    "urgency_if_watch": "within 1–2 weeks for stage 1–2 hypertension",
+    "indian_diet_tip_high_en": "High BP: adopt DASH-like Indian diet — reduce salt (<5g/day; avoid pickles/achar/papads), increase potassium-rich foods (banana, coconut water, tomato), eat more fruits and vegetables, reduce ghee and oil, exercise 30 min/day, lose weight if overweight, avoid alcohol and tobacco.",
+    "indian_diet_tip_high_hi": "उच्च BP: नमक <5g/दिन रखें। अचार, पापड़ से बचें। केला, नारियल पानी, टमाटर खाएं। रोज 30 मिनट व्यायाम करें। शराब और तंबाकू बंद करें।",
+    "source": "LOINC 55284-4 (systolic 8480-6, diastolic 8462-4). ACC/AHA 2017 BP guidelines. JNC-8 2014. India hypertension burden: Gupta et al. J Hum Hypertens 2019. Critical values: Harrison's 21st ed."
+  },
+
+  "HR": {
+    "loinc_code": "8867-4",
+    "display_name": "Heart Rate (Pulse Rate)",
+    "short_display": "HR / Pulse / Heart Rate",
+    "unit": "bpm",
+    "unit_alternatives": ["/min", "beats per minute"],
+    "aliases": [
+      "hr",
+      "pulse",
+      "heart rate",
+      "pulse rate",
+      "cardiac rate",
+      "ventricular rate",
+      "beats per minute"
+    ],
+    "ranges": {
+      "normal_adult": { "low": 60, "high": 100 },
+      "athlete_resting": { "low": 40, "high": 60 },
+      "sinus_bradycardia": { "low": null, "high": 60 },
+      "sinus_tachycardia": { "low": 100, "high": 150 }
+    },
+    "default_range": { "low": 60, "high": 100 },
+    "critical_low": 40,
+    "critical_high": 150,
+    "physiological_min": 20,
+    "physiological_max": 300,
+    "note_on_indian_range": "Heart rate reference range (60–100 bpm) is universally applicable. Physiological bradycardia (<60 bpm) is common in trained athletes — not pathological. Pathological bradycardia: complete heart block, sick sinus syndrome, hypothyroidism. Tachycardia (>100 bpm) in Indian patients commonly due to: fever/infection (very common), anaemia (high prevalence), dehydration, hyperthyroidism, anxiety, atrial fibrillation (AF). Rheumatic heart disease (endemic in India) is a major cause of AF and SVT. Very high HR (>150 bpm) with haemodynamic instability = emergency cardioversion/pharmacological management.",
+    "specialist_if_critical_high": "Cardiologist (HR >150: SVT, AF with rapid ventricular rate, VT — urgent ECG required)",
+    "specialist_if_critical_low": "Cardiologist (HR <40: complete heart block, sick sinus — may require pacemaker)",
+    "urgency_if_critical_high": "immediate if symptomatic (chest pain, syncope, hypotension)",
+    "urgency_if_critical_low": "immediate if symptomatic",
+    "urgency_if_watch": "within 24–48 hours for asymptomatic bradycardia/tachycardia",
+    "indian_diet_tip_high_en": "Elevated heart rate: identify and treat underlying cause (fever, anaemia, dehydration, thyroid disease). Stay hydrated. Avoid caffeine excess. Manage stress. If persistent >100 bpm at rest without obvious cause, see a cardiologist.",
+    "source": "LOINC 8867-4. AHA normal HR 60–100 bpm. RHD India: Bhaya et al. 2010. Critical HR thresholds: ACLS guidelines 2020."
+  },
+
+  "Ca": {
+    "loinc_code": "17861-6",
+    "display_name": "Serum Calcium (Total)",
+    "short_display": "Calcium / Ca / S. Ca",
+    "unit": "mg/dL",
+    "unit_alternatives": ["mmol/L (÷4)", "mEq/L (÷2)"],
+    "aliases": [
+      "ca",
+      "calcium",
+      "serum calcium",
+      "total calcium",
+      "s. calcium",
+      "blood calcium",
+      "calcium total"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 8.5, "high": 10.5 }
+    },
+    "default_range": { "low": 8.5, "high": 10.5 },
+    "critical_low": 7.0,
+    "critical_high": 13.0,
+    "physiological_min": 4.0,
+    "physiological_max": 18.0,
+    "note_on_indian_range": "Standard serum calcium range (8.5–10.5 mg/dL = 2.12–2.62 mmol/L) is internationally uniform. Calcium must always be corrected for albumin (corrected Ca = measured Ca + 0.8 × [4 – albumin g/dL]). Hypocalcaemia is extremely common in India due to: Vitamin D deficiency (>70–80% of Indians), poor dietary calcium intake (average Indian diet is calcium-deficient), and post-thyroidectomy/parathyroidectomy. Hypercalcaemia in India is commonly from primary hyperparathyroidism, malignancy (PTHrP-related), sarcoidosis, and vitamin D toxicity (widespread unregulated D3 supplementation in India). Severe hypocalcaemia causes tetany (Chvostek's/Trousseau's sign, carpopedal spasm).",
+    "specialist_if_critical_high": "Endocrinologist (hypercalcaemia >13 mg/dL — hyperparathyroidism, malignancy workup; >14 = medical emergency: IV fluids + calcitonin)",
+    "specialist_if_critical_low": "Endocrinologist / Physician (hypocalcaemia <7 mg/dL = tetany, seizure, QTc prolongation risk — IV calcium gluconate)",
+    "urgency_if_critical_high": "immediate if Ca >14 mg/dL (hypercalcaemic crisis)",
+    "urgency_if_critical_low": "immediate if symptomatic (tetany, seizures, ECG changes)",
+    "urgency_if_watch": "within 48 hours",
+    "indian_diet_tip_low_en": "Low calcium: increase calcium in diet — milk (1 glass = 300 mg Ca), curd, paneer, ragi (nachni, highest plant-based Ca), sesame seeds (til), drumstick leaves (moringa). Ensure adequate Vitamin D (sunlight 15–20 min/day or supplement) as D3 is essential for calcium absorption. Avoid excess oxalate-rich foods (spinach, beet) with calcium-rich foods.",
+    "indian_diet_tip_low_hi": "कम कैल्शियम: दूध, दही, पनीर, रागी, तिल और सहजन (मोरिंगा) खाएं। विटामिन D के लिए रोज 15-20 मिनट धूप लें।",
+    "source": "LOINC 17861-6. Standard reference 8.5–10.5 mg/dL (Harrison's 21st ed). Albumin-corrected calcium formula: Payne et al. Lancet 1973. India Vitamin D deficiency: Ritu & Gupta Eur J Clin Nutr 2014. Ragi calcium: NIN India Nutritive Value table."
+  },
+
+  "MMSE": {
+    "loinc_code": "72107-6",
+    "display_name": "Mini-Mental State Examination",
+    "short_display": "MMSE / Cognitive Screen",
+    "unit": "score",
+    "unit_alternatives": ["points (0–30)"],
+    "aliases": [
+      "mmse",
+      "mini mental state examination",
+      "folstein mmse",
+      "mini mental status",
+      "mmse score",
+      "cognitive assessment mmse"
+    ],
+    "ranges": {
+      "normal": { "low": 24, "high": 30 },
+      "mild_impairment": { "low": 18, "high": 23 },
+      "moderate_impairment": { "low": 12, "high": 17 },
+      "severe_impairment": { "low": 0, "high": 11 }
+    },
+    "default_range": { "low": 24, "high": 30 },
+    "critical_low": 18,
+    "critical_high": null,
+    "physiological_min": 0,
+    "physiological_max": 30,
+    "note_on_indian_range": "MMSE has well-documented ceiling and floor effects. A key limitation in India is educational bias — MMSE was validated in literate Western populations. Illiterate or less educated Indian patients may score lower on MMSE despite being cognitively intact. The Hindi Mental State Examination (HMSE) and ACE-III (Addenbrooke's Cognitive Examination) with regional language adaptations are preferred for Indian patients. India has 5.3 million people living with dementia (Alzheimer's Disease International 2015), projected to double by 2030. MMSE <24 in an educated adult Indian should trigger formal neuropsychological assessment.",
+    "specialist_if_critical_low": "Neurologist / Geriatrician / Psychiatrist (MMSE <18 = moderate cognitive impairment — dementia workup: MRI brain, B12, TSH, metabolic screen)",
+    "urgency_if_critical_low": "within 2–4 weeks",
+    "urgency_if_watch": "within 4–8 weeks",
+    "indian_diet_tip_low_en": "Low MMSE score: assess for treatable causes — B12 deficiency (very common in vegetarian Indians), thyroid disease, depression, medications. Diet: B12-rich foods (milk, curd, paneer, eggs), omega-3 (flaxseeds, walnuts), turmeric (neuroprotective emerging evidence), and cognitive stimulation activities.",
+    "indian_diet_tip_low_hi": "कम MMSE: B12 की कमी (शाकाहारियों में आम), थायरॉइड रोग और अवसाद की जांच करवाएं। दूध, दही, अखरोट, अलसी खाएं।",
+    "source": "LOINC 72107-6. Folstein et al. J Psychiatr Res 1975. India educational bias and Hindi MMSE: Ganguli et al. Neuroepidemiology 1995. India dementia prevalence: ADI World Alzheimer Report 2015. ACE-III Indian validation: Mukherjee et al. 2017."
+  },
+
+  "OGTT": {
+    "loinc_code": "14743-9",
+    "display_name": "Oral Glucose Tolerance Test (2-Hour Plasma Glucose)",
+    "short_display": "OGTT / GTT 2hr",
+    "unit": "mg/dL",
+    "unit_alternatives": ["mmol/L (÷18)"],
+    "aliases": [
+      "ogtt",
+      "gtt",
+      "oral glucose tolerance test",
+      "glucose tolerance test",
+      "2 hour glucose",
+      "2hr ogtt",
+      "75g ogtt",
+      "glucose challenge test"
+    ],
+    "ranges": {
+      "normal_2hr": { "low": null, "high": 140 },
+      "impaired_glucose_tolerance": { "low": 140, "high": 199 },
+      "diabetes_diagnosis": { "low": 200, "high": null }
+    },
+    "default_range": { "low": null, "high": 140 },
+    "critical_low": 40,
+    "critical_high": 500,
+    "physiological_min": 20,
+    "physiological_max": 1200,
+    "note_on_indian_range": "Standard 75g OGTT is used for diabetes diagnosis in India — identical thresholds to WHO/ADA (2-hour glucose <140 mg/dL = normal; 140–199 = IGT; ≥200 = diabetes). The OGTT is also used for GDM (gestational diabetes) screening in India using 75g OGTT (DIPSI method): 2-hour glucose ≥140 mg/dL = GDM. India has an immense GDM burden (~10–14% of all pregnancies). The Diabetes in Pregnancy Study Group India (DIPSI) simplified criteria are widely used. The ICMR-INDIAB study found India has 101 million diabetics — IGT screening by OGTT is critical for early intervention.",
+    "specialist_if_critical_high": "Endocrinologist / Diabetologist (OGTT ≥200 mg/dL = diabetes diagnosis; GDM specialist for pregnant women)",
+    "urgency_if_critical_high": "within 1–2 weeks for follow-up and management plan",
+    "urgency_if_critical_low": "immediate (hypoglycaemia during OGTT — give glucose, abort test)",
+    "urgency_if_watch": "within 2–4 weeks (IGT — lifestyle modification intensive programme)",
+    "indian_diet_tip_high_en": "Elevated OGTT: adopt a low-GI Indian diet, increase physical activity, achieve ideal body weight. Replace white rice with brown rice, millets (bajra, jowar, ragi), reduce sweets and fruit juices. Consult a diabetologist for a structured plan.",
+    "indian_diet_tip_high_hi": "उच्च OGTT: बाजरा, ज्वार, रागी को अपने आहार में शामिल करें। सफेद चावल और मिठाइयों से परहेज करें। नियमित व्यायाम करें।",
+    "source": "LOINC 14743-9. WHO/ADA 2023 OGTT diagnostic criteria. DIPSI GDM method: Seshiah et al. JAPI 2004. ICMR-INDIAB study Lancet Diabetes Endocrinol 2023."
+  },
+
+  "ABG_pH": {
+    "loinc_code": "2744-1",
+    "display_name": "Arterial Blood pH",
+    "short_display": "Blood pH / ABG pH",
+    "unit": "pH units",
+    "unit_alternatives": ["dimensionless"],
+    "aliases": [
+      "ph",
+      "abg ph",
+      "arterial ph",
+      "blood ph",
+      "acid base status",
+      "hydrogen ion concentration",
+      "h+ arterial"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 7.35, "high": 7.45 },
+      "acidosis": { "low": null, "high": 7.35 },
+      "alkalosis": { "low": 7.45, "high": null }
+    },
+    "default_range": { "low": 7.35, "high": 7.45 },
+    "critical_low": 7.2,
+    "critical_high": 7.6,
+    "physiological_min": 6.8,
+    "physiological_max": 7.8,
+    "note_on_indian_range": "Blood pH 7.35–7.45 is a universal constant across all populations including Indian. pH is tightly regulated — a deviation of ±0.1 pH units has major clinical consequences. Metabolic acidosis (pH <7.35 with low HCO3) is common in India from: sepsis (most common cause in ICU), DKA (India has highest diabetes burden), diarrhoea/cholera (high prevalence). Respiratory acidosis (pH <7.35 with high pCO2) from COPD exacerbations, pneumonia, TB. A pH <7.1 is associated with myocardial depression and cardiac arrhythmias. Critical pH >7.60 (alkalosis) is less common — from nasogastric suction, severe vomiting, over-ventilation.",
+    "specialist_if_critical_high": "Intensivist (pH >7.60 = severe alkalosis — hypoventilation treatment, electrolyte correction)",
+    "specialist_if_critical_low": "Intensivist / Emergency Physician (pH <7.20 = severe acidosis — immediate cause-directed treatment: bicarbonate, ventilatory support, or dialysis in AKI lactic acidosis)",
+    "urgency_if_critical_high": "immediate",
+    "urgency_if_critical_low": "immediate",
+    "urgency_if_watch": "within 1–2 hours",
+    "indian_diet_tip_low_en": "Blood pH abnormality is a critical medical emergency — diet has no role in acute management. Long-term: for metabolic acidosis from CKD, oral sodium bicarbonate supplementation is often prescribed. Maintain hydration and treat underlying infections promptly.",
+    "source": "LOINC 2744-1. ABG normal ranges: StatPearls NBK536919. Wikipedia Arterial Blood Gas article. Critical pH <7.20: ACLS 2020. India sepsis-related acidosis: AIIMS ICU protocols."
+  },
+
+  "BSL": {
+    "loinc_code": "2339-0",
+    "display_name": "Random Blood Glucose Level",
+    "short_display": "RBS / Random BGL / RBG",
+    "unit": "mg/dL",
+    "unit_alternatives": ["mmol/L (÷18)", "mg%"],
+    "aliases": [
+      "bsl",
+      "rbs",
+      "random blood sugar",
+      "random glucose",
+      "casual plasma glucose",
+      "random blood glucose",
+      "rbg",
+      "blood sugar random",
+      "glucometer reading"
+    ],
+    "ranges": {
+      "normal_non_fasting": { "low": 70, "high": 140 },
+      "impaired_non_fasting": { "low": 140, "high": 199 },
+      "diabetes_diagnostic": { "low": 200, "high": null }
+    },
+    "default_range": { "low": 70, "high": 140 },
+    "critical_low": 50,
+    "critical_high": 600,
+    "physiological_min": 20,
+    "physiological_max": 1200,
+    "note_on_indian_range": "Random (casual) blood glucose ≥200 mg/dL with classic diabetic symptoms (polyuria, polydipsia, weight loss) = diabetes diagnosis. In India, point-of-care glucometer readings (BSL by glucometer) are the most commonly performed test in outpatient and inpatient settings. Glucometers can vary in accuracy by ±15–20% from laboratory values; for diagnosis, a lab venous sample is recommended. Hyperosmolar Hyperglycaemic State (HHS) in type 2 DM can present with BSL >600 mg/dL. India-specific: frequent glucose checks during Ramzan/fasting for patients on insulin or sulphonylureas are critical to detect hypoglycaemia.",
+    "specialist_if_critical_high": "Endocrinologist / Emergency Physician (BSL >400 = acute hyperglycaemia; >600 with altered consciousness = HHS emergency — ICU, IV insulin, aggressive hydration)",
+    "specialist_if_critical_low": "Emergency Physician (BSL <50 = severe hypoglycaemia — give 15–20g glucose: 3–4 glucose tablets, or 4 teaspoons of sugar dissolved in water; if unconscious: IV dextrose 25–50 mL of D50W or IM glucagon 1 mg)",
+    "urgency_if_critical_high": "immediate if >400 with symptoms",
+    "urgency_if_critical_low": "immediate",
+    "urgency_if_watch": "within 24–48 hours",
+    "indian_diet_tip_low_en": "Low blood sugar emergency: immediately consume fast-acting carbohydrates — 4 teaspoons of sugar dissolved in water, glucose tablets, fruit juice (not diet), or biscuits. Follow with a complex carbohydrate snack (roti with sabzi). If unconscious, do NOT give anything by mouth — call 108 (emergency).",
+    "indian_diet_tip_low_hi": "कम ब्लड शुगर: तुरंत 4 चम्मच चीनी पानी में मिलाकर पिएं, या ग्लूकोज़ की गोली लें। अगर होश न हो तो 108 को कॉल करें।",
+    "source": "LOINC 2339-0. ADA Standards 2024 (random glucose ≥200 mg/dL = diabetes). HHS management: ADA 2023 consensus statement. Glucometer accuracy: ISO 15197:2013. India Ramzan fasting and diabetes: Hassanein et al. Diabetes Res Clin Pract 2016."
+  },
+
+  "FOBT": {
+    "loinc_code": "14563-1",
+    "display_name": "Fecal Occult Blood Test",
+    "short_display": "FOBT / Stool Occult Blood",
+    "unit": "qualitative",
+    "unit_alternatives": ["positive/negative", "present/absent"],
+    "aliases": [
+      "fobt",
+      "fecal occult blood",
+      "faecal occult blood",
+      "stool occult blood",
+      "occult blood stool",
+      "hob",
+      "guaiac fobt",
+      "fit",
+      "haemoccult"
+    ],
+    "ranges": {
+      "normal": { "result": "Negative" },
+      "abnormal": { "result": "Positive" }
+    },
+    "default_range": { "low": null, "high": null },
+    "critical_low": null,
+    "critical_high": null,
+    "physiological_min": null,
+    "physiological_max": null,
+    "interpretation": {
+      "negative": "Normal — no detectable blood in stool",
+      "positive": "Abnormal — blood detected; requires follow-up colonoscopy"
+    },
+    "note_on_indian_range": "FOBT is a qualitative (positive/negative) test, not a quantitative one. It is the primary colorectal cancer (CRC) screening test globally. Positive FOBT requires diagnostic colonoscopy. In India, CRC is the 8th most common cancer and rising due to dietary changes and urbanisation. Guaiac-based FOBT (gFOBT) can have false positives from red meat, raw broccoli, turnips, or NSAIDs (ibuprofen, aspirin). The Faecal Immunochemical Test (FIT) is more specific for human haemoglobin. Other causes of a positive FOBT in India: haemorrhoids (extremely prevalent), hookworm infestation (common in rural India), gastric ulcer (H. pylori prevalence ~52–82% in India), inflammatory bowel disease, and colorectal polyps. A positive FOBT with anaemia in India warrants urgent colonoscopy and upper GI endoscopy.",
+    "specialist_if_positive": "Gastroenterologist (positive FOBT → diagnostic colonoscopy and/or upper GI endoscopy; if positive with Hb drop — urgent referral within 2 weeks)",
+    "urgency_if_positive": "within 2–4 weeks for asymptomatic positive; immediate if active rectal bleeding or haematochezia",
+    "indian_diet_tip_positive_en": "Positive FOBT: avoid gFOBT confounders before repeat testing — stop red meat, raw broccoli, turnips for 3 days; avoid aspirin/NSAIDs for 7 days. Increase dietary fibre (whole grains, dal, fruits, vegetables) for long-term bowel health. Do NOT dismiss a positive result — arrange a colonoscopy.",
+    "indian_diet_tip_positive_hi": "पॉजिटिव FOBT: जांच दोबारा करने से पहले 3 दिन लाल मांस और कच्ची सब्जियां बंद करें। आंत के स्वास्थ्य के लिए फाइबर युक्त भोजन खाएं। कोलोनोस्कोपी ज़रूर करवाएं।",
+    "source": "LOINC 14563-1. USPSTF CRC screening guidelines 2021. India CRC epidemiology: ICMR 2021. H. pylori India prevalence: Malfertheiner et al. Gut 2022. FIT vs gFOBT: WHO CRC screening guidelines 2022. Hookworm India: ICMR parasitic disease burden."
+  },
+  "PCT": {
+    "loinc_code": "33959-8",
+    "display_name": "Procalcitonin",
+    "short_display": "PCT",
+    "unit": "ng/mL",
+    "unit_alternatives": ["µg/L", "mcg/L"],
+    "aliases": [
+      "pct",
+      "procalcitonin",
+      "pro-calcitonin",
+      "procalcitonin serum",
+      "pct level",
+      "serum procalcitonin",
+      "procalcitonin plasma"
+    ],
+    "ranges": {
+      "healthy_normal": { "low": 0, "high": 0.05 },
+      "bacterial_infection_unlikely": { "low": 0, "high": 0.1 },
+      "low_risk": { "low": 0.1, "high": 0.5 },
+      "moderate_risk_sepsis": { "low": 0.5, "high": 2.0 },
+      "high_risk_bacterial_sepsis": { "low": 2.0, "high": 10.0 },
+      "severe_sepsis_shock": { "low": 10.0, "high": null }
+    },
+    "default_range": { "low": 0, "high": 0.5 },
+    "critical_low": null,
+    "critical_high": 10.0,
+    "physiological_min": 0,
+    "physiological_max": 1000,
+    "note_on_indian_range": "No significant Indian ethnic variation documented. ISCCM (Indian Society of Critical Care Medicine) and AIIMS ICU protocols use the same international cutoffs. PCT has replaced CRP as the primary sepsis biomarker in Indian tertiary-care ICUs.",
+    "specialist_if_critical_high": "Intensivist / Infectious Disease Specialist (severe sepsis or septic shock workup)",
+    "specialist_if_critical_low": null,
+    "urgency_if_critical_high": "immediate / same day",
+    "urgency_if_watch": "within 24-48 hours",
+    "indian_diet_tip_high_en": "High PCT signals bacterial infection or sepsis — this is an emergency. Do NOT self-treat. Seek hospital care immediately. Stay hydrated with ORS or coconut water only if safe to drink.",
+    "indian_diet_tip_high_hi": "उच्च PCT जीवाणु संक्रमण या सेप्सिस का संकेत है — यह आपातकालीन स्थिति है। खुद दवा न लें। तुरंत अस्पताल जाएं। यदि पीना सुरक्षित हो तो ORS या नारियल पानी पिएं।",
+    "source": "Müller B et al. Critical Care 2010. Schuetz P et al. JAMA 2009. ISCCM Sepsis India guidelines. LOINC 33959-8 (Procalcitonin serum/plasma by immunoassay). No Indian ethnic variation identified."
+  },
+
+  "LH": {
+    "loinc_code": "10501-5",
+    "display_name": "Luteinizing Hormone",
+    "short_display": "LH",
+    "unit": "mIU/mL",
+    "unit_alternatives": ["IU/L", "U/L"],
+    "aliases": [
+      "lh",
+      "luteinizing hormone",
+      "lutenizing hormone",
+      "lh serum",
+      "lh level",
+      "lutropin",
+      "lh test",
+      "serum lh"
+    ],
+    "ranges": {
+      "adult_male": { "low": 1.7, "high": 8.6 },
+      "adult_female_follicular": { "low": 2.4, "high": 12.6 },
+      "adult_female_midcycle_peak": { "low": 14.0, "high": 95.6 },
+      "adult_female_luteal": { "low": 1.0, "high": 11.4 },
+      "post_menopausal_female": { "low": 7.7, "high": 58.5 }
+    },
+    "default_range": { "low": 1.7, "high": 8.6 },
+    "critical_low": 0.2,
+    "critical_high": 200.0,
+    "physiological_min": 0,
+    "physiological_max": 300,
+    "note_on_indian_range": "ICMR-PCOS Task Force study (Lancet Reg Health SE Asia 2023, PMID 37090159) established Indian reproductive-aged women's hormonal reference intervals. LH in Indian women follicular phase is consistent with international ranges. PCOS is highly prevalent in India (~9% per ICMR), causing elevated LH:FSH ratio. Indian labs (SRL, Thyrocare) report the same ranges.",
+    "specialist_if_critical_high": "Gynecologist / Reproductive Endocrinologist (PCOS, premature ovarian failure, pituitary tumour)",
+    "specialist_if_critical_low": "Endocrinologist (hypopituitarism, hypothalamic dysfunction, Kallmann syndrome)",
+    "urgency_if_critical_high": "within 1 week",
+    "urgency_if_critical_low": "within 1 week",
+    "urgency_if_watch": "within 2 weeks",
+    "indian_diet_tip_high_en": "High LH in women may indicate PCOS or early menopause. Maintain healthy weight — obesity worsens LH imbalance. Eat whole grains (bajra, jowar), dal, sabzi. Avoid excess sugar and refined carbs. Yoga and weight management help normalise hormones.",
+    "indian_diet_tip_high_hi": "महिलाओं में उच्च LH PCOS या रजोनिवृत्ति का संकेत हो सकता है। स्वस्थ वजन बनाए रखें। बाजरा, ज्वार, दाल, सब्जी खाएं। चीनी और मैदा कम करें। वजन नियंत्रण और योग से हार्मोन संतुलन होता है।",
+    "source": "Mayo Clinic Labs LH reference intervals. ICMR-PCOS Task Force 2023 (Lancet Reg Health SE Asia, PMID 37090159). LOINC 10501-5."
+  },
+
+  "FSH": {
+    "loinc_code": "15067-2",
+    "display_name": "Follicle-Stimulating Hormone",
+    "short_display": "FSH",
+    "unit": "mIU/mL",
+    "unit_alternatives": ["IU/L", "U/L"],
+    "aliases": [
+      "fsh",
+      "follicle stimulating hormone",
+      "fsh serum",
+      "follitropin",
+      "fsh level",
+      "fsh test",
+      "serum fsh"
+    ],
+    "ranges": {
+      "adult_male": { "low": 1.5, "high": 12.4 },
+      "adult_female_follicular": { "low": 3.5, "high": 12.5 },
+      "adult_female_midcycle": { "low": 4.7, "high": 21.5 },
+      "adult_female_luteal": { "low": 1.7, "high": 7.7 },
+      "post_menopausal_female": { "low": 25.8, "high": 134.8 }
+    },
+    "default_range": { "low": 1.5, "high": 12.4 },
+    "critical_low": 0.3,
+    "critical_high": 200.0,
+    "physiological_min": 0,
+    "physiological_max": 250,
+    "note_on_indian_range": "ICMR-PCOS Task Force study (2023) confirmed Indian women's FSH is consistent with international ranges. Day-3 FSH >10 mIU/mL is used by Indian IVF centres as diminished ovarian reserve threshold. Post-menopausal FSH is markedly elevated (>25 mIU/mL). Indian labs use manufacturer-supplied reference ranges.",
+    "specialist_if_critical_high": "Gynecologist / Reproductive Endocrinologist (premature ovarian failure, menopause evaluation, ovarian reserve workup)",
+    "specialist_if_critical_low": "Endocrinologist (hypopituitarism, Kallmann syndrome)",
+    "urgency_if_critical_high": "within 1 week",
+    "urgency_if_critical_low": "within 1 week",
+    "urgency_if_watch": "within 2 weeks",
+    "indian_diet_tip_high_en": "High FSH (day-3) suggests reduced ovarian reserve. Eat antioxidant-rich foods: amla, spinach, walnuts, flaxseeds, and sesame seeds (til). Avoid smoking and alcohol. Stress reduction through yoga may improve hormonal balance.",
+    "indian_diet_tip_high_hi": "उच्च FSH (तीसरे दिन) डिम्बग्रंथि भंडार में कमी का संकेत हो सकता है। आंवला, पालक, अखरोट, अलसी, तिल खाएं। धूम्रपान और शराब से बचें। योग से तनाव कम करें।",
+    "source": "Mayo Clinic Labs FSH reference intervals. ICMR-PCOS Task Force 2023 (PMID 37090159). LOINC 15067-2."
+  },
+
+  "TG": {
+    "loinc_code": "2571-8",
+    "display_name": "Serum Triglycerides",
+    "short_display": "TG / Triglycerides",
+    "unit": "mg/dL",
+    "unit_alternatives": ["mmol/L"],
+    "aliases": [
+      "tg",
+      "triglycerides",
+      "serum triglycerides",
+      "triglyceride",
+      "tgl",
+      "blood triglycerides",
+      "triacylglycerol",
+      "tag",
+      "fasting tg"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 0, "high": 149 },
+      "borderline_high": { "low": 150, "high": 199 },
+      "high": { "low": 200, "high": 499 },
+      "very_high": { "low": 500, "high": null }
+    },
+    "default_range": { "low": 0, "high": 150 },
+    "critical_low": null,
+    "critical_high": 500,
+    "physiological_min": 10,
+    "physiological_max": 10000,
+    "note_on_indian_range": "Apollo multicentric Indian study (PMC4062657, 10,665 subjects) showed higher upper TG reference limits in Indians vs Western populations due to higher carbohydrate dietary intake. ICMR-INDIAB-17 (Lancet Diab Endocrinol 2023, n=113,043): dyslipidemia prevalence 81.2% in India; high TG uniformly prevalent across all regions. Lipid Association of India (LAI) Expert Consensus 2020: Desirable TG <150 mg/dL; borderline 150-199 mg/dL; high ≥200 mg/dL.",
+    "specialist_if_critical_high": "Cardiologist / Endocrinologist (pancreatitis risk at ≥500 mg/dL; cardiovascular risk assessment)",
+    "specialist_if_critical_low": null,
+    "urgency_if_critical_high": "within 24-48 hours if ≥500 mg/dL (acute pancreatitis risk)",
+    "urgency_if_watch": "within 1-2 weeks",
+    "indian_diet_tip_high_en": "Reduce refined carbs, white rice, maida, sweets, and fried snacks. Replace with roti, jowar, bajra, and brown rice. Eat more dal and sabzi. Avoid alcohol completely. Exercise 30 min daily. Omega-3 from flaxseeds, walnuts, and fatty fish effectively lowers TG.",
+    "indian_diet_tip_high_hi": "मैदा, मिठाई, तली हुई चीजें और शराब कम करें। रोटी, बाजरा, ज्वार, दाल, सब्जी खाएं। अलसी, अखरोट और मछली से ओमेगा-3 लें। रोज 30 मिनट व्यायाम करें।",
+    "source": "NCEP ATP III guidelines. Lipid Association of India (LAI) Expert Consensus 2020. ICMR-INDIAB-17 (Lancet Diab Endocrinol 2023, PMID 37178745). Apollo Indian reference study PMC4062657. LOINC 2571-8."
+  },
+
+  "DBP": {
+    "loinc_code": "8462-4",
+    "display_name": "Diastolic Blood Pressure",
+    "short_display": "DBP",
+    "unit": "mmHg",
+    "unit_alternatives": [],
+    "aliases": [
+      "dbp",
+      "diastolic bp",
+      "diastolic blood pressure",
+      "diastolic pressure",
+      "lower bp reading",
+      "diastolic",
+      "diastolic reading"
+    ],
+    "ranges": {
+      "normal": { "low": 60, "high": 79 },
+      "elevated": { "low": 80, "high": 89 },
+      "stage_1_hypertension": { "low": 90, "high": 99 },
+      "stage_2_hypertension": { "low": 100, "high": 119 },
+      "hypertensive_emergency": { "low": 120, "high": null },
+      "hypotension": { "low": 0, "high": 59 }
+    },
+    "default_range": { "low": 60, "high": 80 },
+    "critical_low": 40,
+    "critical_high": 120,
+    "physiological_min": 20,
+    "physiological_max": 200,
+    "note_on_indian_range": "CSI (Cardiological Society of India) 2020 guidelines: Target DBP <80 mmHg for most adults; <70 mmHg may be acceptable in elderly. India has ~30% adult hypertension prevalence (ICMR-INDIAB). DBP >90 mmHg warrants antihypertensive treatment per Indian guidelines. Isolated diastolic hypertension is common in young Indian adults aged 20-40.",
+    "specialist_if_critical_high": "Cardiologist / Emergency Physician (hypertensive emergency — end-organ damage evaluation required)",
+    "specialist_if_critical_low": "Emergency Physician (haemodynamic shock — septic, cardiogenic, or haemorrhagic)",
+    "urgency_if_critical_high": "immediate if symptomatic; within 24h if asymptomatic",
+    "urgency_if_critical_low": "immediate",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "Reduce salt to <5g/day. Avoid pickles, papads, packaged namkeen, and excessive chai. Eat more vegetables, low-fat dairy (chaas, dahi), and fruits. Reduce ghee and saturated fat. Yoga and pranayama are proven to help control blood pressure in Indian studies.",
+    "indian_diet_tip_high_hi": "नमक 5 ग्राम/दिन से कम करें। अचार, पापड़, पैकेज्ड नमकीन से बचें। सब्जियां, दही, छाछ, फल खाएं। घी कम करें। योग और प्राणायाम से रक्तचाप नियंत्रण में मदद मिलती है।",
+    "source": "CSI Hypertension Guidelines 2020. JNC 8 (JAMA 2014;311:507). ICMR-INDIAB hypertension data. LOINC 8462-4."
+  },
+
+  "MPV": {
+    "loinc_code": "32623-4",
+    "display_name": "Mean Platelet Volume",
+    "short_display": "MPV",
+    "unit": "fL",
+    "unit_alternatives": ["femtoliters", "fl"],
+    "aliases": [
+      "mpv",
+      "mean platelet volume",
+      "mean platelet vol",
+      "platelet volume mean",
+      "average platelet size"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 7.5, "high": 12.5 }
+    },
+    "default_range": { "low": 7.5, "high": 12.5 },
+    "critical_low": 5.0,
+    "critical_high": 15.0,
+    "physiological_min": 2.0,
+    "physiological_max": 20.0,
+    "note_on_indian_range": "Indian labs (SRL Diagnostics, Dr Lal PathLabs) report MPV normal range as 7.0–12.0 fL or 7.5–12.5 fL. No significant Indian ethnic variation documented. High MPV (>12 fL) is associated with platelet activation and increased cardiovascular and metabolic risk — relevant given India's high CVD and diabetes burden. Low MPV (<7.5 fL) seen in aplastic anemia, Wiskott-Aldrich syndrome, and iron-deficiency states.",
+    "specialist_if_critical_high": "Hematologist / Cardiologist (platelet hyperactivation, thrombocytopathy evaluation)",
+    "specialist_if_critical_low": "Hematologist (aplastic anemia, bone marrow failure)",
+    "urgency_if_critical_high": "within 1 week",
+    "urgency_if_critical_low": "within 1 week",
+    "urgency_if_watch": "within 2 weeks",
+    "indian_diet_tip_high_en": "High MPV signals platelet activation linked to cardiovascular risk. Eat omega-3 rich foods: flaxseed (alsi), walnuts (akhrot), and fatty fish. Avoid high saturated fat and trans-fat foods. Stay physically active. Controlling diabetes and blood pressure also helps normalise MPV.",
+    "indian_diet_tip_high_hi": "उच्च MPV हृदय जोखिम से जुड़ा है। अलसी, अखरोट और मछली खाएं। संतृप्त वसा और ट्रांस फैट कम करें। शारीरिक रूप से सक्रिय रहें। मधुमेह और रक्तचाप को नियंत्रित करें।",
+    "source": "Maconi A et al. J Clin Lab Anal 2020. SRL Diagnostics India reference ranges. LOINC 32623-4."
+  },
+
+  "CD4": {
+    "loinc_code": "24467-3",
+    "display_name": "CD4+ T-Lymphocyte Count",
+    "short_display": "CD4 / T-Helper Count",
+    "unit": "cells/µL",
+    "unit_alternatives": ["/cumm", "cells/mm³", "×10⁶/L"],
+    "aliases": [
+      "cd4",
+      "cd4 count",
+      "cd4+ count",
+      "cd4 t cell count",
+      "t helper cell count",
+      "cd4 lymphocytes",
+      "t-helper cells",
+      "t4 cells",
+      "cd4+ t lymphocyte"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 500, "high": 1500 },
+      "hiv_stage_1_preserved": { "low": 500, "high": null },
+      "hiv_stage_2_moderate_immunosuppression": { "low": 200, "high": 499 },
+      "hiv_stage_3_aids": { "low": 0, "high": 199 }
+    },
+    "default_range": { "low": 500, "high": 1500 },
+    "critical_low": 200,
+    "critical_high": null,
+    "physiological_min": 0,
+    "physiological_max": 2500,
+    "note_on_indian_range": "India-specific data from NACO Annual Report 2022-23: median CD4 at ART initiation in India is ~250 cells/µL (late presentation common). Baseline CD4 in HIV-negative healthy Indians may average 600-900 cells/µL. NACO India ART Guidelines 2021: initiate ART for ALL HIV-positive individuals regardless of CD4 (universal test-and-treat). CD4 <200 = start PCP and Cryptococcal prophylaxis. CD4 <100 = start MAC prophylaxis per NACO.",
+    "specialist_if_critical_high": null,
+    "specialist_if_critical_low": "Infectious Disease Specialist / Government ART Centre (CD4 <200 = AIDS stage; immediate prophylaxis and ART review)",
+    "urgency_if_critical_low": "within 24-48 hours",
+    "urgency_if_watch": "every 6 months per NACO guidelines",
+    "indian_diet_tip_high_en": null,
+    "indian_diet_tip_low_en": "Low CD4 means weakened immunity. Eat protein-rich foods: eggs, dal, paneer, sprouts, soya. Avoid raw or undercooked meat, unfiltered water, and unpasteurized dairy. Take ALL prescribed ART medications at the same time daily — never miss a dose.",
+    "indian_diet_tip_low_hi": "कम CD4 कमजोर प्रतिरोधक क्षमता का संकेत है। अंडे, दाल, पनीर, अंकुरित अनाज, सोया खाएं। कच्चा मांस, असुरक्षित पानी और कच्चे दूध से बचें। ART दवाएं रोज एक ही समय पर नियमित लें।",
+    "source": "WHO HIV Staging Criteria. NACO ART Guidelines India 2021. NACO Annual Report 2022-23. LOINC 24467-3."
+  },
+
+  "CEA": {
+    "loinc_code": "2000-8",
+    "display_name": "Carcinoembryonic Antigen",
+    "short_display": "CEA",
+    "unit": "ng/mL",
+    "unit_alternatives": ["µg/L"],
+    "aliases": [
+      "cea",
+      "carcinoembryonic antigen",
+      "cea level",
+      "cea marker",
+      "carcino embryonic antigen",
+      "serum cea"
+    ],
+    "ranges": {
+      "adult_non_smoker": { "low": 0, "high": 2.5 },
+      "adult_smoker": { "low": 0, "high": 5.0 }
+    },
+    "default_range": { "low": 0, "high": 2.5 },
+    "critical_low": null,
+    "critical_high": 10.0,
+    "physiological_min": 0,
+    "physiological_max": 100000,
+    "note_on_indian_range": "Indian labs (SRL, Dr Lal, Thyrocare) use non-smoker cutoff <2.5 ng/mL and smoker cutoff <5.0 ng/mL, consistent with international standards. National Cancer Grid (NCG) India recommends CEA for colorectal cancer post-surgical monitoring and recurrence detection. Not used as a primary screening tool. CEA >20 ng/mL strongly suggests active malignancy; >100 ng/mL indicates widespread metastatic disease.",
+    "specialist_if_critical_high": "Oncologist / Gastroenterologist (colorectal cancer workup — colonoscopy and CT scan required)",
+    "specialist_if_critical_low": null,
+    "urgency_if_critical_high": "within 1 week",
+    "urgency_if_watch": "within 2 weeks",
+    "indian_diet_tip_high_en": "Elevated CEA warrants urgent cancer evaluation — diet alone cannot lower CEA if malignancy is present. Eat a cancer-protective diet: high-fiber vegetables, fruits, and whole grains. Minimize red and processed meat. Quit tobacco and alcohol immediately.",
+    "indian_diet_tip_high_hi": "बढ़ा हुआ CEA कैंसर जांच का संकेत है — तुरंत डॉक्टर से मिलें। उच्च फाइबर भोजन, फल, सब्जियां, साबुत अनाज खाएं। लाल मांस, तंबाकू और शराब से बचें।",
+    "source": "ASCO/NCCN Colorectal Cancer Guidelines. National Cancer Grid India. Fletcher RH. J Clin Oncol 1986;4(4):627. LOINC 2000-8."
+  },
+
+  "CA125": {
+    "loinc_code": "10334-1",
+    "display_name": "Cancer Antigen 125",
+    "short_display": "CA-125",
+    "unit": "U/mL",
+    "unit_alternatives": ["kU/L", "IU/mL"],
+    "aliases": [
+      "ca125",
+      "ca-125",
+      "cancer antigen 125",
+      "ovarian cancer marker",
+      "ca 125",
+      "mucin 16",
+      "muc16",
+      "serum ca125"
+    ],
+    "ranges": {
+      "adult_female_premenopausal": { "low": 0, "high": 35 },
+      "adult_female_postmenopausal": { "low": 0, "high": 35 },
+      "adult_male": { "low": 0, "high": 35 }
+    },
+    "default_range": { "low": 0, "high": 35 },
+    "critical_low": null,
+    "critical_high": 65,
+    "physiological_min": 0,
+    "physiological_max": 100000,
+    "note_on_indian_range": "All Indian labs use <35 U/mL as the universal cutoff (consistent with international standard). CA-125 is elevated in non-malignant conditions common in India: endometriosis, pelvic inflammatory disease (PID), and peritonitis — clinical context is essential. National Cancer Grid (NCG) India uses CA-125 for ovarian cancer monitoring, not primary screening. Post-menopausal women with CA-125 >35 U/mL have significantly higher malignancy risk.",
+    "specialist_if_critical_high": "Gynecologist / Oncologist (ovarian cancer workup — transvaginal ultrasound and CT scan required)",
+    "specialist_if_critical_low": null,
+    "urgency_if_critical_high": "within 1 week",
+    "urgency_if_watch": "within 2 weeks",
+    "indian_diet_tip_high_en": "Elevated CA-125 needs urgent gynaecological evaluation. Maintain a healthy weight — obesity raises CA-125. Eat omega-3 rich foods, fruits, and vegetables. Exercise regularly. Women above 40 should have annual gynaecological check-ups.",
+    "indian_diet_tip_high_hi": "बढ़ा हुआ CA-125 स्त्री रोग विशेषज्ञ से तत्काल जांच की आवश्यकता है। स्वस्थ वजन बनाए रखें। ओमेगा-3, फल और सब्जियां खाएं। 40 से अधिक आयु की महिलाएं सालाना स्त्री रोग जांच करवाएं।",
+    "source": "FIGO Ovarian Cancer Guidelines. National Cancer Grid India. ACOG Committee Opinion on Adnexal Mass. LOINC 10334-1."
+  },
+
+  "hCG": {
+    "loinc_code": "21198-7",
+    "display_name": "Beta Human Chorionic Gonadotropin",
+    "short_display": "β-hCG",
+    "unit": "mIU/mL",
+    "unit_alternatives": ["IU/L", "mU/mL"],
+    "aliases": [
+      "hcg",
+      "beta hcg",
+      "bhcg",
+      "b-hcg",
+      "human chorionic gonadotropin",
+      "pregnancy hormone",
+      "pregnancy test quantitative",
+      "serum hcg",
+      "beta-hcg",
+      "quantitative hcg",
+      "hcg quantitative"
+    ],
+    "ranges": {
+      "non_pregnant_female": { "low": 0, "high": 5 },
+      "male": { "low": 0, "high": 2.5 },
+      "pregnant_4_weeks": { "low": 5, "high": 426 },
+      "pregnant_5_weeks": { "low": 18, "high": 7340 },
+      "pregnant_6_weeks": { "low": 1080, "high": 56500 },
+      "pregnant_7_8_weeks": { "low": 7650, "high": 229000 },
+      "pregnant_9_12_weeks": { "low": 25700, "high": 288000 },
+      "pregnant_13_16_weeks": { "low": 13300, "high": 254000 },
+      "pregnant_17_24_weeks": { "low": 4060, "high": 165400 },
+      "pregnant_25_40_weeks": { "low": 3640, "high": 117000 }
+    },
+    "default_range": { "low": 0, "high": 5 },
+    "critical_low": null,
+    "critical_high": null,
+    "physiological_min": 0,
+    "physiological_max": 3000000,
+    "note_on_indian_range": "Same international reference ranges used in India. β-hCG is used for: early pregnancy confirmation, ectopic pregnancy diagnosis (non-rising hCG + pain), gestational trophoblastic disease (GTD) monitoring, and Down syndrome screening (combined with NT + PAPP-A). FOGSI (Federation of Obstetric and Gynaecological Societies of India) ANC guidelines use the same hCG reference tables. hCG >100,000 mIU/mL in a non-pregnant person is strongly suggestive of GTD or germ-cell tumour.",
+    "specialist_if_critical_high": "Gynaecologist (non-pregnant with elevated hCG: rule out gestational trophoblastic disease, germ cell tumour)",
+    "specialist_if_critical_low": null,
+    "urgency_if_critical_high": "within 24-48 hours if non-pregnant with elevated hCG",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "If unexpectedly high hCG in a non-pregnant person, seek urgent medical evaluation. During normal pregnancy, eat a balanced diet rich in iron (palak, rajma), folate (green vegetables, dal), calcium (dahi, milk), and protein. Take all prescribed prenatal supplements.",
+    "indian_diet_tip_high_hi": "यदि गर्भवती नहीं हैं और hCG अधिक है, तो तुरंत डॉक्टर से मिलें। गर्भावस्था में पालक, राजमा, हरी सब्जियां, दाल, दही, दूध खाएं और प्रसवपूर्व सप्लीमेंट लें।",
+    "source": "FOGSI ANC Guidelines. Braunstein GD. N Engl J Med 1987;316:444. LOINC 21198-7."
+  },
+
+  "SaO2": {
+    "loinc_code": "2708-6",
+    "display_name": "Oxygen Saturation (Arterial, ABG)",
+    "short_display": "SaO₂",
+    "unit": "%",
+    "unit_alternatives": [],
+    "aliases": [
+      "sao2",
+      "arterial oxygen saturation",
+      "arterial o2 saturation",
+      "oxygen saturation arterial",
+      "sao2 arterial",
+      "art o2 sat",
+      "abg oxygen saturation"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 95, "high": 100 },
+      "mild_hypoxia": { "low": 91, "high": 94 },
+      "moderate_hypoxia": { "low": 86, "high": 90 },
+      "severe_hypoxia": { "low": 0, "high": 85 }
+    },
+    "default_range": { "low": 95, "high": 100 },
+    "critical_low": 90,
+    "critical_high": null,
+    "physiological_min": 0,
+    "physiological_max": 100,
+    "note_on_indian_range": "Standard international reference ranges apply in India. SaO2 is measured via arterial blood gas (invasive), distinct from SpO2 (non-invasive pulse oximetry). In COPD patients — India has ~6.4% COPD prevalence (GOLD/ICMR) — chronic SaO2 of 88-92% may be acceptable baseline. Long-term oxygen therapy (LTOT) is indicated when resting SaO2 <88% on two measurements ≥3 weeks apart per Indian chest guidelines.",
+    "specialist_if_critical_low": "Pulmonologist / Intensivist (respiratory failure, ARDS, pulmonary embolism)",
+    "urgency_if_critical_low": "immediate",
+    "urgency_if_watch": "within 24 hours",
+    "indian_diet_tip_high_en": null,
+    "indian_diet_tip_low_en": "Low oxygen saturation is a medical emergency — seek immediate hospital care. If chronic respiratory disease, quit smoking immediately. Indoor air quality from biomass cooking affects ~60% of rural Indian women; switching to LPG/PNG significantly improves lung health.",
+    "indian_diet_tip_low_hi": "कम ऑक्सीजन संतृप्ति आपात स्थिति है — तुरंत अस्पताल जाएं। धूम्रपान तुरंत बंद करें। बायोमास खाना पकाने के धुएं से बचें — LPG/PNG पर स्विच करें।",
+    "source": "GOLD COPD Guidelines 2024. WHO oxygen therapy guidelines. Indian Chest Society COPD guidelines. LOINC 2708-6."
+  },
+
+  "PEFR": {
+    "loinc_code": "19935-1",
+    "display_name": "Peak Expiratory Flow Rate",
+    "short_display": "PEFR / Peak Flow",
+    "unit": "L/min",
+    "unit_alternatives": ["L/s"],
+    "aliases": [
+      "pefr",
+      "peak expiratory flow rate",
+      "peak flow",
+      "peak flow rate",
+      "peak flow measurement",
+      "pef",
+      "peak expiratory flow"
+    ],
+    "ranges": {
+      "adult_male_typical": { "low": 400, "high": 660 },
+      "adult_female_typical": { "low": 300, "high": 500 },
+      "asthma_green_zone": {
+        "low": null,
+        "high": null,
+        "note": ">80% personal best — well controlled"
+      },
+      "asthma_yellow_zone": {
+        "low": null,
+        "high": null,
+        "note": "50-80% personal best — caution"
+      },
+      "asthma_red_zone": {
+        "low": null,
+        "high": null,
+        "note": "<50% personal best — emergency"
+      }
+    },
+    "default_range": { "low": 350, "high": 660 },
+    "critical_low": 100,
+    "critical_high": null,
+    "physiological_min": 50,
+    "physiological_max": 900,
+    "note_on_indian_range": "Indian predicted PEFR values are 15-20% lower than Caucasian values due to smaller thoracic dimensions. Aggarwal AN et al. (Indian J Chest Dis Allied Sci 2017) established Indian-specific PEFR norms: Adult Indian male mean ~450-500 L/min; adult Indian female mean ~320-380 L/min (varies by height and age). GINA asthma guidelines are adapted for Indian practice by the Indian Chest Society and AAPAAACI. Always use Indian PEFR prediction equations — not Caucasian norms — when interpreting results in Indian patients.",
+    "specialist_if_critical_low": "Pulmonologist (severe asthma exacerbation or COPD; PEFR <150 L/min = life-threatening asthma)",
+    "urgency_if_critical_low": "immediate if <150 L/min; within 24h if 150-250 L/min",
+    "urgency_if_watch": "within 24-48 hours",
+    "indian_diet_tip_high_en": null,
+    "indian_diet_tip_low_en": "Low PEFR suggests airflow obstruction. Avoid smoke, dust, and indoor cooking smoke. Use prescribed inhalers regularly without skipping doses. Breathing exercises and pranayama (anulom vilom) improve lung function over time. Avoid cold drinks during asthma exacerbations.",
+    "indian_diet_tip_low_hi": "कम PEFR अस्थमा/COPD का संकेत है। धुएं, धूल और घर के प्रदूषण से बचें। निर्धारित इनहेलर नियमित उपयोग करें। अनुलोम-विलोम और प्राणायाम फेफड़ों को मजबूत करते हैं।",
+    "source": "Aggarwal AN et al. Indian PEFR norms, Indian J Chest Dis 2017. GINA 2024 asthma guidelines. LOINC 19935-1."
+  },
+
+  "PTH": {
+    "loinc_code": "2731-8",
+    "display_name": "Parathyroid Hormone (Intact)",
+    "short_display": "PTH / iPTH",
+    "unit": "pg/mL",
+    "unit_alternatives": ["pmol/L", "ng/L"],
+    "aliases": [
+      "pth",
+      "parathyroid hormone",
+      "intact pth",
+      "ipth",
+      "parathormone",
+      "pth intact",
+      "serum pth",
+      "pth level"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 15, "high": 65 },
+      "ckd_acceptable": {
+        "low": 30,
+        "high": 150,
+        "note": "CKD stages 3-5, per KDIGO 2017"
+      }
+    },
+    "default_range": { "low": 15, "high": 65 },
+    "critical_low": 5,
+    "critical_high": 300,
+    "physiological_min": 0,
+    "physiological_max": 3000,
+    "note_on_indian_range": "India has extremely high vitamin D deficiency prevalence (~70-90% of urban adults per AIIMS and ICMR data). This causes secondary hyperparathyroidism; healthy Indian adults with vitamin D deficiency may show PTH 65-88 pg/mL before treatment. AIIMS and PGIMER Chandigarh studies report reference range 18-88 pg/mL as contextually appropriate for Indians. Standard international range 15-65 pg/mL is the target. Supplementation with vitamin D3 typically normalises PTH within 3-6 months.",
+    "specialist_if_critical_high": "Endocrinologist / Nephrologist (hyperparathyroidism, CKD-related bone mineral disease evaluation)",
+    "specialist_if_critical_low": "Endocrinologist (hypoparathyroidism — check post-thyroid/parathyroid surgery; tetany risk)",
+    "urgency_if_critical_high": "within 1 week",
+    "urgency_if_critical_low": "within 24-48 hours (tetany and seizure risk if calcium also low)",
+    "urgency_if_watch": "within 2 weeks",
+    "indian_diet_tip_high_en": "High PTH often means low vitamin D or calcium. Get sunlight daily (15-20 min morning sun, before 10 AM). Eat calcium-rich foods: ragi (nachni), sesame seeds (til), dahi, milk, and green leafy vegetables. Vitamin D3 supplements are often needed in Indians — consult your doctor.",
+    "indian_diet_tip_high_hi": "उच्च PTH अक्सर विटामिन D या कैल्शियम की कमी का संकेत है। रोज सुबह 15-20 मिनट धूप लें। रागी, तिल, दही, दूध, हरी पत्तेदार सब्जियां खाएं। भारतीयों को अक्सर विटामिन D3 सप्लीमेंट की आवश्यकता होती है — डॉक्टर से पूछें।",
+    "source": "KDIGO CKD-MBD Guidelines 2017. Marwaha RK et al. AIIMS vitamin D study (J Assoc Physicians India). LOINC 2731-8."
+  },
+
+  "ACTH": {
+    "loinc_code": "2141-0",
+    "display_name": "Adrenocorticotropic Hormone",
+    "short_display": "ACTH",
+    "unit": "pg/mL",
+    "unit_alternatives": ["pmol/L", "ng/L"],
+    "aliases": [
+      "acth",
+      "adrenocorticotropic hormone",
+      "corticotropin",
+      "acth level",
+      "acth plasma",
+      "corticotropin plasma",
+      "corticotrophin"
+    ],
+    "ranges": {
+      "adult_8am_fasting": { "low": 7.2, "high": 63.3 },
+      "adult_4pm": { "low": 0, "high": 26.0 }
+    },
+    "default_range": { "low": 7.2, "high": 63.3 },
+    "critical_low": 5,
+    "critical_high": 500,
+    "physiological_min": 0,
+    "physiological_max": 2000,
+    "note_on_indian_range": "Same as international ranges. Diurnal variation is essential: always measure at 8 AM fasting for meaningful interpretation. In India, tuberculosis-related adrenal insufficiency (TB affecting adrenal glands) is more common than autoimmune Addison's disease (unlike Western countries). ACTH >200 pg/mL with low cortisol = Addison's disease until proven otherwise. ACTH stimulation test (Synacthen/cosyntropin test) is the gold standard for adrenal insufficiency in Indian clinical practice.",
+    "specialist_if_critical_high": "Endocrinologist (Addison's disease / ectopic ACTH syndrome — exclude TB adrenals and lung cancer)",
+    "specialist_if_critical_low": "Endocrinologist (secondary adrenal insufficiency from pituitary failure; Cushing's syndrome from exogenous steroids)",
+    "urgency_if_critical_high": "within 48-72 hours",
+    "urgency_if_critical_low": "within 48-72 hours",
+    "urgency_if_watch": "within 1-2 weeks",
+    "indian_diet_tip_high_en": "High ACTH needs specialist evaluation urgently. Reduce chronic stress — a major ACTH driver. Eat a balanced anti-inflammatory diet: vegetables, dal, whole grains. Get 7-8 hours of sleep daily. Avoid alcohol. Consider yoga and mindfulness.",
+    "indian_diet_tip_high_hi": "उच्च ACTH के लिए तुरंत विशेषज्ञ से मिलें। तनाव कम करें, 7-8 घंटे की नींद लें, शराब से बचें। सब्जियां, दाल, साबुत अनाज खाएं। योग और ध्यान से मदद मिलती है।",
+    "source": "Endocrine Society Clinical Practice Guidelines: Adrenal Insufficiency 2016. AIIMS endocrinology protocols. LOINC 2141-0."
+  },
+  "BA": {
+    "loinc_code": "704-7",
+    "loinc_code_percent": "706-2",
+    "display_name": "Basophil Count",
+    "short_display": "Baso / BA / BASO",
+    "unit": "/µL",
+    "unit_percent": "%",
+    "unit_alternatives": ["/cumm", "×10³/µL", "×10⁹/L", "cells/µL"],
+    "aliases": [
+      "ba", "baso", "basophils", "basophil count", "basophil%",
+      "basophil absolute", "absolute basophil count", "baso count",
+      "basophils %", "bas", "bas%", "bas#", "basophile count"
+    ],
+    "ranges": {
+      "adult_absolute": { "low": 0, "high": 200 },
+      "adult_percent": { "low": 0.0, "high": 1.0 },
+      "child_absolute": { "low": 0, "high": 150 },
+      "child_percent": { "low": 0.0, "high": 1.0 }
+    },
+    "default_range": { "low": 0, "high": 200 },
+    "default_range_percent": { "low": 0.0, "high": 1.0 },
+    "critical_low": null,
+    "critical_high": 1000,
+    "critical_high_percent": 3.0,
+    "physiological_min": 0,
+    "physiological_max": 5000,
+    "note_on_units": "Indian labs (SRL, Lal PathLabs, Thyrocare, Metropolis) report basophils in BOTH absolute count (/µL or /cumm) AND as percentage (%). Most commonly reported as percentage in Indian DLC (Differential Leucocyte Count) results — typically printed as 'Basophils: 0–1%'. Automated analyzers (Sysmex XN, ABX Micros) now report absolute count alongside. Basophil counting by automated hematology analyzer is notoriously inaccurate due to low cell numbers — flow cytometry is more precise but rarely done clinically. Never diagnose basophilia on a single automated count without peripheral smear review.",
+    "note_on_indian_range": "Indian labs universally use 0–1% and 0–200/µL as normal range for basophils. This is consistent with international reference ranges. Basophilia (>1% or >200/µL) is uncommon and clinically significant in India due to high prevalence of: (1) Chronic Myeloid Leukemia — incidence 1–2/100,000 in India, where basophilia >5% is a diagnostic criterion; (2) Tuberculosis — can cause mild basophilia; (3) Hypothyroidism — common in Indian women (6.6 million cases, India Thyroid Society estimate). Isolated basophilia on an automated count without confirmatory smear is common pre-analytical noise.",
+    "causes_of_high_ba": [
+      "Chronic Myeloid Leukemia (CML) — hallmark finding, >5% basophils",
+      "Myeloproliferative disorders (polycythemia vera, myelofibrosis)",
+      "Hypothyroidism",
+      "Allergic reactions / urticaria / food allergy",
+      "Chronic inflammatory disease (IBD, rheumatoid arthritis)",
+      "Viral infections (varicella, influenza)",
+      "Tuberculosis",
+      "Iron deficiency anemia (mild basophilia)",
+      "Radiation exposure",
+      "Drug reactions"
+    ],
+    "causes_of_low_ba": [
+      "Acute infection (basophils transiently suppressed)",
+      "Severe allergic reaction / anaphylaxis (degranulation)",
+      "Hyperthyroidism",
+      "Prolonged corticosteroid therapy",
+      "Post-stress state",
+      "Chemotherapy / bone marrow suppression"
+    ],
+    "specialist_if_critical_high": "Hematologist — CML and myeloproliferative disease workup urgent; order BCR-ABL1 molecular test, karyotype",
+    "specialist_if_watch_high": "Physician (rule out hypothyroidism with TSH, confirm with peripheral smear)",
+    "urgency_if_critical_high": "within 24–48 hours (basophilia >5% — rule out CML urgently)",
+    "urgency_if_watch": "within 1–2 weeks",
+    "indian_diet_tip_high_en": "A mildly high basophil count may indicate allergy or thyroid issues. Avoid known allergens. Eat an anti-inflammatory diet: haldi (turmeric) daal, amla, ginger. Do not self-medicate. See a doctor for further tests.",
+    "indian_diet_tip_high_hi": "बेसोफिल की हल्की वृद्धि एलर्जी या थायरॉइड की समस्या का संकेत हो सकती है। ज्ञात एलर्जेन से बचें। हल्दी वाली दाल, आंवला और अदरक खाएं। खुद दवा न लें — डॉक्टर से मिलें।",
+    "indian_diet_tip_high_mr": "बेसोफिल थोडे वाढलेले असल्यास ऍलर्जी किंवा थायरॉइड समस्या असू शकते. ज्ञात ऍलर्जेन टाळा. हळद घातलेली डाळ, आवळा आणि आले खा. स्वतः औषध घेऊ नका — डॉक्टरांना भेटा.",
+    "source": "LOINC 704-7 (absolute automated), 706-2 (% automated), 705-4 (absolute manual), 707-0 (% manual). Normal 0–200/µL, 0–1%: StatPearls NBK604207. Flow cytometry reference: PMID 16197480 (95% CI 0.22–1.28%). CML basophilia >5%: WHO Classification of Myeloid Neoplasms 2022. India CML incidence: Indian Journal of Medical Research 2013. Hypothyroidism India 6.6 million: India Thyroid Society. Critical high >1000/µL: CLSI / Mayo Clinic."
+  },
+
+  "PT": {
+    "loinc_code": "5902-2",
+    "loinc_code_inr": "6301-6",
+    "display_name": "Prothrombin Time",
+    "short_display": "PT / PT-INR / Pro-Time",
+    "unit": "seconds",
+    "unit_inr": "ratio (INR)",
+    "unit_alternatives": ["sec", "s", "INR"],
+    "aliases": [
+      "pt", "protime", "pro-time", "prothrombin time", "prothrombin time test",
+      "pt inr", "pt/inr", "inr", "international normalized ratio",
+      "coagulation pt", "clotting time pt", "extrinsic pathway",
+      "one stage prothrombin time"
+    ],
+    "ranges": {
+      "adult_pt_seconds": { "low": 11.0, "high": 13.5 },
+      "adult_inr_normal": { "low": 0.8, "high": 1.2 },
+      "warfarin_therapeutic_standard": { "low": 2.0, "high": 3.0 },
+      "warfarin_therapeutic_mechanical_valve": { "low": 2.5, "high": 3.5 },
+      "warfarin_therapeutic_low_intensity": { "low": 1.5, "high": 2.0 }
+    },
+    "default_range": { "low": 11.0, "high": 13.5 },
+    "default_inr_range": { "low": 0.8, "high": 1.2 },
+    "critical_low_inr": null,
+    "critical_high_inr": 5.0,
+    "critical_high_pt_seconds": 35.0,
+    "physiological_min_seconds": 5.0,
+    "physiological_max_seconds": 120.0,
+    "note_on_units": "PT is reported in seconds AND as INR in all Indian labs. INR (International Normalized Ratio) = (Patient PT / Mean Normal PT)^ISI, where ISI is the International Sensitivity Index of the thromboplastin reagent. INR standardizes results across labs — always use INR when interpreting anticoagulation therapy. PT in seconds alone is lab-specific and cannot be compared across different labs. In India, INR is the clinically actionable number. PT activity (%) is additionally reported in some older Indian labs — normal is 70–100%.",
+    "note_on_indian_range": "Indian labs (SRL, Lal PathLabs, Thyrocare, Metropolis, government hospital labs) report PT 11–13.5 seconds with INR 0.8–1.2 as normal. The most clinically common scenario in India: patients on warfarin (Acitrom/acenocoumarol) for atrial fibrillation or mechanical heart valves — target INR 2.0–3.0, checked monthly. Acenocoumarol (Acitrom) is more widely used than warfarin in India due to lower cost. INR monitoring of Acitrom patients is a high-volume test at Indian labs. Pre-operative PT/INR >1.5 is considered abnormal at most Indian surgical centers. Critical INR >5.0 = high bleeding risk requiring urgent management.",
+    "coagulation_factors_tested": [
+      "Factor I (Fibrinogen)",
+      "Factor II (Prothrombin)",
+      "Factor V (Proaccelerin)",
+      "Factor VII (Proconvertin)",
+      "Factor X (Stuart-Prower factor)"
+    ],
+    "pathway": "Extrinsic pathway + Common pathway of coagulation",
+    "causes_of_prolonged_pt": [
+      "Warfarin / Acenocoumarol (Acitrom) therapy",
+      "Vitamin K deficiency",
+      "Liver disease / cirrhosis (reduced clotting factor synthesis)",
+      "Disseminated Intravascular Coagulation (DIC)",
+      "Congenital factor deficiency (II, V, VII, X, fibrinogen)",
+      "Malabsorption (Crohn's, celiac) causing Vitamin K malabsorption",
+      "Cholestasis (impaired Vitamin K absorption)",
+      "Massive transfusion",
+      "Supratherapeutic anticoagulant dosing"
+    ],
+    "causes_of_short_pt": [
+      "Acute phase reaction (mild shortening)",
+      "Vitamin K excess (supplementation)",
+      "Thrombosis / hypercoagulable state (rarely causes short PT)"
+    ],
+    "drug_interferences": [
+      "Warfarin, Acenocoumarol — prolongs PT significantly; therapeutic goal",
+      "Direct Oral Anticoagulants (DOACs: rivaroxaban, apixaban) — variable effect, PT NOT reliable for monitoring DOACs",
+      "Heparin (unfractionated) — minimally prolongs PT at low doses",
+      "Antibiotics (prolonged use) — reduce gut Vitamin K synthesis, prolongs PT",
+      "Vitamin K supplementation — shortens PT",
+      "Aspirin / NSAIDs — no direct effect on PT but synergistic bleeding risk"
+    ],
+    "specimen_requirements": "Light blue top (sodium citrate 3.2%) tube. Must be filled to exact line — under-fill alters citrate:blood ratio and falsely prolongs PT. Test within 4 hours at room temperature or freeze at -70°C.",
+    "specialist_if_critical_high_inr": "Emergency Physician / Hematologist — INR >5.0 with no bleeding: omit anticoagulant dose, monitor. INR >8.0 or active bleeding: IV Vitamin K + Prothrombin Complex Concentrate (PCC) or Fresh Frozen Plasma (FFP)",
+    "specialist_if_watch": "Physician / Cardiologist if on anticoagulation therapy. Hepatologist if liver disease suspected.",
+    "urgency_if_critical_high": "within 24 hours if asymptomatic; IMMEDIATE if active bleeding",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "A high PT/INR means your blood takes longer to clot — often from blood-thinning medication or liver disease. If you are on blood thinners, do not change your dose yourself. Eat consistent amounts of green leafy vegetables (not suddenly more or less) — spinach and methi affect Vitamin K which interacts with blood thinners.",
+    "indian_diet_tip_high_hi": "उच्च PT/INR का मतलब है खून जमने में अधिक समय लग रहा है। यह खून पतला करने वाली दवाओं या लिवर की बीमारी से हो सकता है। खुद दवा की मात्रा न बदलें। हरी पत्तेदार सब्जियां (पालक, मेथी) की मात्रा में अचानक बड़ा बदलाव न करें — ये Vitamin K से भरपूर हैं जो दवा पर असर डालती हैं।",
+    "indian_diet_tip_high_mr": "उच्च PT/INR म्हणजे रक्त गोठण्यास जास्त वेळ लागतो. रक्त पातळ करण्याची औषधे किंवा यकृत रोगामुळे होऊ शकते. स्वतःहून औषधाचा डोस बदलू नका. पालक, मेथी यांसारख्या हिरव्या पालेभाज्या अचानक जास्त किंवा कमी खाऊ नका — त्या Vitamin K ने समृद्ध असतात.",
+    "source": "LOINC 5902-2 (PT seconds), 6301-6 (INR). INR formula: WHO ISI calibration system. Normal 11–13.5 sec, INR 0.8–1.2: ARUP, MLabs (9.8–12.7 sec), Wikipedia Prothrombin time. Warfarin therapeutic ranges: American College of Chest Physicians (ACCP) guidelines. Critical INR >5.0: MLabs, ARUP critical value policy. Acitrom (acenocoumarol) India prevalence: Indian Heart Journal. Factors tested: Labcorp 005199. INR NOT appropriate for DOACs: LOINC LP17102-2 definition. Specimen handling: CLSI H21-A5."
+  },
+
+  "BE": {
+    "loinc_code": "1925-7",
+    "loinc_code_venous": "1926-5",
+    "loinc_code_standard": "1927-3",
+    "display_name": "Base Excess",
+    "short_display": "BE / Base Excess / BD (Base Deficit)",
+    "unit": "mmol/L",
+    "unit_alternatives": ["mEq/L", "mEq/L blood"],
+    "aliases": [
+      "be", "base excess", "base deficit", "bd", "base excess/deficit",
+      "actual base excess", "abe", "standard base excess", "sbe",
+      "be(b)", "be ecf", "buffer base excess", "excess base"
+    ],
+    "ranges": {
+      "adult_normal": { "low": -2.0, "high": 2.0 },
+      "neonate_first_48h": { "low": -10.0, "high": -2.0 },
+      "child_normal": { "low": -2.0, "high": 2.0 }
+    },
+    "default_range": { "low": -2.0, "high": 2.0 },
+    "critical_low": -10.0,
+    "critical_high": 10.0,
+    "physiological_min": -30.0,
+    "physiological_max": 30.0,
+    "note_on_units": "BE is reported in mmol/L (SI) or mEq/L (conventional) — numerically equivalent: 1 mmol/L = 1 mEq/L. BE is a CALCULATED parameter derived from measured pH and pCO2 using the Siggaard-Andersen nomogram; it is not directly measured. Two variants: Actual BE (ABE) = whole blood; Standard BE (SBE) = corrected to Hb of 5 g/dL representing extracellular fluid compartment. SBE is preferred in most clinical settings. Most ABG analyzers (Radiometer, Abbott i-STAT, GEM series) in Indian ICUs report SBE automatically. Negative BE = Base Deficit = metabolic acidosis. Positive BE = metabolic alkalosis.",
+    "note_on_indian_range": "All Indian ICUs, emergency departments, and NICUs use BE as part of ABG (Arterial Blood Gas) analysis. -2 to +2 mmol/L is the universally accepted normal range in India. Key clinical scenarios in Indian ICU practice: (1) DKA (Diabetic Ketoacidosis) — extremely common in India's 77 million diabetics, BE typically -10 to -25 mmol/L; (2) Septic shock — BE <-6 mmol/L indicates poor perfusion (lactate proxy); (3) Severe diarrheal dehydration — common in pediatric and adult Indian patients, BE -5 to -15 mmol/L due to HCO3 loss; (4) NICU — neonatal hypoxic-ischemic encephalopathy, BE <-12 mmol/L is Sarnat criteria threshold. Neonatal normal BE is more negative (-10 to -2) in first 48h.",
+    "clinical_interpretation": {
+      "negative_be_base_deficit": {
+        "mild": { "range": "-2 to -5", "meaning": "Mild metabolic acidosis" },
+        "moderate": { "range": "-5 to -10", "meaning": "Moderate metabolic acidosis — investigate cause" },
+        "severe": { "range": "<-10", "meaning": "Severe metabolic acidosis — CRITICAL, urgent intervention" }
+      },
+      "positive_be_base_excess": {
+        "mild": { "range": "+2 to +5", "meaning": "Mild metabolic alkalosis" },
+        "moderate": { "range": "+5 to +10", "meaning": "Moderate metabolic alkalosis" },
+        "severe": { "range": ">+10", "meaning": "Severe metabolic alkalosis — investigate vomiting, diuretic use, Cushing's" }
+      }
+    },
+    "causes_of_base_deficit_negative_be": [
+      "Diabetic Ketoacidosis (DKA) — most common in India",
+      "Lactic acidosis / septic shock",
+      "Severe diarrhea (bicarbonate loss — very common in India)",
+      "Acute Kidney Injury / Renal tubular acidosis",
+      "Toxic ingestion (methanol, ethylene glycol, salicylates)",
+      "Starvation ketoacidosis",
+      "Respiratory alkalosis with renal compensation (secondary)",
+      "Neonatal asphyxia / hypoxic-ischemic encephalopathy (HIE)"
+    ],
+    "causes_of_base_excess_positive_be": [
+      "Vomiting (loss of HCl — metabolic alkalosis)",
+      "Excessive diuretic use (furosemide, thiazides — hypokalemic alkalosis)",
+      "Cushing's syndrome / hyperaldosteronism",
+      "Excessive oral alkali ingestion (antacids, sodium bicarbonate)",
+      "Severe hypokalemia",
+      "Respiratory acidosis with renal compensation (secondary)"
+    ],
+    "companion_parameters": ["pH", "pCO2", "pO2", "HCO3", "SaO2", "Lactate", "Na", "K", "Cl", "Glucose"],
+    "not_standalone": true,
+    "not_standalone_note": "BE is ALWAYS interpreted as part of the complete ABG. It cannot be assessed in isolation. Always correlate with pH, pCO2, and HCO3. BE quantifies the metabolic component of acid-base disturbance, independent of respiratory contribution.",
+    "specialist_if_critical_low": "ICU Physician / Emergency Medicine — treat underlying cause; severe BE deficit may require IV sodium bicarbonate or fluid resuscitation",
+    "specialist_if_critical_high": "ICU Physician — treat underlying cause (replace potassium, stop diuretics, treat vomiting)",
+    "urgency_if_critical": "IMMEDIATE — ABG is performed in acute/ICU setting; critical BE values are managed in real time",
+    "urgency_if_watch": "within hours (ABG is point-of-care)",
+    "indian_diet_tip_general_en": "Base excess is measured in ICU or emergency settings. It is not a routine blood test. If you are admitted to hospital with breathing difficulty, diabetic crisis, or severe dehydration, doctors use this value to guide treatment. Focus on staying hydrated with ORS (Oral Rehydration Salts) if you have diarrhea — this directly helps correct base deficit.",
+    "indian_diet_tip_general_hi": "बेस एक्सेस ICU या आपातकाल में मापा जाता है — यह नियमित रक्त परीक्षण नहीं है। यदि आपको गंभीर उल्टी-दस्त हो तो ORS (ओरल रिहाइड्रेशन साल्ट) पिएं — यह सीधे बेस की कमी को ठीक करने में मदद करता है।",
+    "indian_diet_tip_general_mr": "बेस एक्सेस ICU किंवा आपत्कालीन परिस्थितीत मोजले जाते — हे नियमित रक्त परीक्षण नाही. गंभीर जुलाब झाल्यास ORS प्या — हे थेट बेसची कमतरता दूर करण्यास मदत करते.",
+    "source": "LOINC 1925-7 (arterial), 1926-5 (venous), 1927-3 (standard/SBE). Definition: Astrup & Siggaard-Andersen 1958, Scand J Clin Lab Invest 9:122-132. Normal -2 to +2 mmol/L: Wikipedia Base Excess, Pulsenotes, StatPearls NBK536919, PMC9304040. DKA India: 77 million diabetics — IDF Diabetes Atlas 2021. Neonatal BE Sarnat criteria HIE: threshold <-12 mmol/L. Pediatric diarrhea acidosis India: ICMR national burden study. Formula: BE = 0.93 × ([HCO3] - 24.4 + 14.8 × (pH - 7.4))."
+  },
+  "HbF": {
+    "loinc_code": "4551-5",
+    "display_name": "Hemoglobin F (Fetal Hemoglobin)",
+    "short_display": "Hb F",
+    "unit": "%",
+    "unit_alternatives": ["proportion of total hemoglobin"],
+    "aliases": [
+      "fetal hemoglobin",
+      "hbf",
+      "hemoglobin f",
+      "alkali-resistant hemoglobin",
+      "hb f percentage"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 0.0, "high": 1.0 },
+      "newborn": { "low": 50.0, "high": 95.0 },
+      "infant_6_months": { "low": 0.0, "high": 8.0 }
+    },
+    "default_range": { "low": 0.0, "high": 1.0 },
+    "critical_low": null,
+    "critical_high": 15.0,
+    "physiological_min": 0.0,
+    "physiological_max": 100.0,
+    "note_on_indian_range": "In the Indian context, HbF levels are critical for screening Beta-Thalassemia and Sickle Cell Disease (SCD), which are prevalent in certain tribal and ethnic clusters (e.g., Central India, Odisha, Maharashtra). In many Indian lab panels, an adult HbF > 2.0% is flagged for further HPLC or electrophoresis testing to rule out Thalassemia minor or HPFH (Hereditary Persistence of Fetal Hemoglobin).",
+    "specialist_if_critical_high": "Hematologist / Genetic Counselor (suspected Hemoglobinopathy or HPFH)",
+    "specialist_if_critical_low": "N/A (Normal for adults)",
+    "urgency_if_critical_high": "within 1 week (unless symptomatic of anemia)",
+    "urgency_if_critical_low": "N/A",
+    "urgency_if_watch": "within 2-4 weeks",
+    "indian_diet_tip_high_en": "High HbF is usually a genetic trait or a response to blood disorders. Diet does not reduce it. If linked to Thalassemia, avoid iron-rich foods like excess red meat unless advised by a doctor. Focus on a balanced diet with plenty of folic acid from leafy greens.",
+    "indian_diet_tip_high_hi": "उच्च HbF आमतौर पर एक आनुवंशिक गुण है। यदि यह थैलेसीमिया से जुड़ा है, तो डॉक्टर की सलाह के बिना आयरन युक्त भोजन (जैसे लाल मांस) से बचें। हरी पत्तेदार सब्जियों से फोलिक एसिड प्राप्त करें।",
+    "source": "Standard reference ranges via Mayo Clinic Laboratories and ICMR (Indian Council of Medical Research) guidelines for Hemoglobinopathies. Critical values based on diagnostic thresholds for HPFH and Beta-Thalassemia intermedia. HbF is often therapeutically increased in Sickle Cell patients using Hydroxyurea."
+  },
+  "HbS": {
+    "loinc_code": "4555-6",
+    "display_name": "Hemoglobin S (Sickle Hemoglobin)",
+    "short_display": "Hb S",
+    "unit": "%",
+    "unit_alternatives": ["proportion of total hemoglobin"],
+    "aliases": [
+      "sickle cell hemoglobin",
+      "hbs",
+      "hemoglobin s percentage",
+      "sickle hemoglobin",
+      "hb s screen"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 0, "high": 0 },
+      "sickle_cell_trait": { "low": 20, "high": 45 },
+      "sickle_cell_disease": { "low": 75, "high": 95 }
+    },
+    "default_range": { "low": 0, "high": 0 },
+    "critical_low": null,
+    "critical_high": 10.0,
+    "physiological_min": 0.0,
+    "physiological_max": 100.0,
+    "note_on_indian_range": "HbS is a major public health concern in India, particularly in the 'Sickle Cell Belt' (Central, Western, and Southern tribal regions). According to the National Sickle Cell Anemia Elimination Mission 2023, prevalence of the sickle cell trait in tribal populations can range from 1% to as high as 35% in specific communities in Odisha, Madhya Pradesh, and Chhattisgarh. Adult normal should be 0%; any presence of HbS is considered abnormal and requires HPLC confirmation.",
+    "specialist_if_critical_high": "Hematologist / Genetic Counselor (management of Sickle Cell Crisis or SCD diagnosis)",
+    "specialist_if_critical_low": "N/A",
+    "urgency_if_critical_high": "within 24 hours (if symptomatic/crisis), otherwise 1 week",
+    "urgency_if_critical_low": "N/A",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "Presence of HbS requires high hydration (3-4 liters of water daily) to prevent cell sickling. Increase intake of folic acid-rich foods like spinach, lentils (dal), and beans. Avoid extreme cold and high altitudes. Consult a hematologist immediately if you experience severe bone pain.",
+    "indian_diet_tip_high_hi": "HbS की उपस्थिति में सेल को सिकुड़ने से रोकने के लिए खूब पानी (रोजाना 3-4 लीटर) पिएं। पालक, दाल और बीन्स जैसे फोलिक एसिड युक्त खाद्य पदार्थ खाएं। तेज दर्द होने पर तुरंत डॉक्टर से संपर्क करें।",
+    "source": "National Health Mission (NHM) India, Sickle Cell Disease Guidelines. Normal adult HbS is 0%. Values >0 indicate either Sickle Cell Trait (HbAS) or Disease (HbSS). Critical high (>10% in a previously negative patient) or high percentages in neonates found via HPLC/Electrophoresis warrant urgent hematological follow-up (ICMR/IAP guidelines)."
+  },
+  "HbC": {
+    "loinc_code": "4535-8",
+    "display_name": "Hemoglobin C",
+    "short_display": "Hb C",
+    "unit": "%",
+    "unit_alternatives": ["proportion of total hemoglobin"],
+    "aliases": [
+      "hbc",
+      "hemoglobin c percentage",
+      "hb c variant",
+      "target cell hemoglobin"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 0, "high": 0 },
+      "hemoglobin_c_trait": { "low": 30, "high": 40 },
+      "hemoglobin_c_disease": { "low": 90, "high": 100 }
+    },
+    "default_range": { "low": 0, "high": 0 },
+    "critical_low": null,
+    "critical_high": 1.0,
+    "physiological_min": 0.0,
+    "physiological_max": 100.0,
+    "note_on_indian_range": "HbC is rare in the native Indian population compared to HbS, HbE, or HbD. However, it is occasionally detected in urban clinical screenings due to global migration or in compound heterozygous forms (like HbSC disease) in Western and Central India. Standard Indian lab reference for a healthy adult is 0%. Any detected amount via HPLC should be clinically correlated with a peripheral blood smear for 'target cells' and 'HbC crystals'.",
+    "specialist_if_critical_high": "Hematologist (to differentiate between Trait, Disease, or SC Compound Heterozygosity)",
+    "specialist_if_critical_low": "N/A",
+    "urgency_if_critical_high": "within 1–2 weeks (usually asymptomatic unless compound with HbS)",
+    "urgency_if_critical_low": "N/A",
+    "urgency_if_watch": "within 1 month",
+    "indian_diet_tip_high_en": "HbC disease can cause mild chronic hemolysis (breakdown of red cells). Ensure adequate intake of folic acid (Dal, leafy greens like Palak/Methi) to support new red cell production. If the spleen is enlarged, avoid heavy contact sports. Unlike iron-deficiency anemia, do not take iron supplements unless a deficiency is proven by a Ferritin test.",
+    "indian_diet_tip_high_hi": "HbC की उपस्थिति में शरीर को नई लाल रक्त कोशिकाएं बनाने के लिए फोलिक एसिड (दाल, पालक, मेथी) की आवश्यकता होती है। जब तक डॉक्टर न कहें, आयरन की गोलियां न लें।",
+    "source": "Orphanet clinical database for Hemoglobinopathies; Mayo Clinic Laboratories Reference Catalog. Prevalence data in India noted as rare/incidental (IJMPR 2026/ICMR). Diagnosis primarily via HPLC or Hemoglobin Electrophoresis at alkaline pH."
+  },
+  "PCOS": {
+    "loinc_code": "505550-6 (Panel)",
+    "display_name": "Polycystic Ovary Syndrome Diagnostic Profile",
+    "short_display": "PCOS Screen",
+    "unit": "Multiple (ng/dL, mIU/mL, ng/mL)",
+    "unit_alternatives": ["Variable by marker"],
+    "aliases": [
+      "pcos",
+      "pcod",
+      "polycystic ovarian disease",
+      "stein-leventhal syndrome",
+      "hyperandrogenic anovulation"
+    ],
+    "ranges": {
+      "total_testosterone_adult_female": { "low": 15, "high": 70 },
+      "amh_high_probability": { "low": 5.0, "high": 10.0 },
+      "lh_fsh_ratio_normal": { "low": 1.0, "high": 1.0 },
+      "lh_fsh_ratio_pcos_suggestive": { "low": 2.0, "high": 3.0 }
+    },
+    "default_range": { "note": "Diagnosis based on Rotterdam Criteria (2 of 3): Irregular periods, Hyperandrogenism, or Polycystic ovaries on USG." },
+    "critical_low": null,
+    "critical_high": null,
+    "physiological_min": null,
+    "physiological_max": null,
+    "note_on_indian_range": "Prevalence in India is high, affecting 10% to 22.5% of women depending on the region. Indian women often present with PCOS at a lower BMI compared to Western counterparts, exhibiting 'Lean PCOS' but with significant insulin resistance. South Indian studies show a higher prevalence of metabolic syndrome comorbidities. Indian labs typically flag Total Testosterone > 60-70 ng/dL and AMH > 5-7 ng/mL as high indicators for PCOS in reproductive-aged women.",
+    "specialist_if_critical_high": "Endocrinologist / Gynecologist (Reproductive Endocrinologist)",
+    "specialist_if_critical_low": "N/A",
+    "urgency_if_critical_high": "Within 2-4 weeks (Long-term metabolic management)",
+    "urgency_if_critical_low": "N/A",
+    "urgency_if_watch": "Within 1 month",
+    "indian_diet_tip_high_en": "Focus on a Low-Glycemic Index (GI) diet to manage insulin. Replace white rice with brown rice, ragi, or oats. Include lean protein like Moong Dal and Chana. Avoid sugary sweets, maida-based snacks, and carbonated drinks. Daily physical activity (30-60 mins) is essential to improve insulin sensitivity.",
+    "indian_diet_tip_high_hi": "इंसुलिन को नियंत्रित करने के लिए लो-ग्लाइसेमिक इंडेक्स (GI) आहार लें। सफेद चावल की जगह ब्राउन राइस, रागी या ओट्स का उपयोग करें। मूंग दाल और चना जैसे प्रोटीन शामिल करें। मीठा, मैदा और कोल्ड ड्रिंक्स से बचें। रोज़ाना 30-60 मिनट व्यायाम बहुत ज़रूरी है।",
+    "source": "Rotterdam Criteria (2003/2023 update); National Health Mission (NHM) India PCOS Guidelines. Prevalence stats: Indian Journal of Endocrinology and Metabolism (approx. 1 in 5 women in India). Lab markers based on standard ICMR reference intervals for Indian women."
+  },
+  "CAH": {
+    "loinc_code": "1668-3",
+    "display_name": "17-Hydroxyprogesterone (17-OHP)",
+    "short_display": "17-OHP",
+    "unit": "ng/dL",
+    "unit_alternatives": ["ng/mL", "nmol/L"],
+    "aliases": [
+      "17-alpha-hydroxyprogesterone",
+      "17-ohp",
+      "hydroxyprogesterone",
+      "cah screening",
+      "21-hydroxylase deficiency marker"
+    ],
+    "ranges": {
+      "adult_male": { "low": 27, "high": 220 },
+      "adult_female_follicular": { "low": 15, "high": 70 },
+      "adult_female_luteal": { "low": 35, "high": 290 },
+      "newborn_term_day_3": { "low": 0, "high": 630 }
+    },
+    "default_range": { "low": 20, "high": 200 },
+    "critical_low": null,
+    "critical_high": 1000,
+    "physiological_min": 0,
+    "physiological_max": 50000,
+    "note_on_indian_range": "In India, CAH is one of the most common inherited metabolic disorders. While Western incidence is 1 in 15,000, some Indian multicentric studies suggest a higher regional prevalence of approximately 1 in 5,762 births. Indian labs (e.g., Metropolis, Lal PathLabs) typically use 17-OHP as the first-tier screen. Elevated levels in adult Indian women are frequently investigated alongside PCOS to rule out Non-Classic CAH (NC-CAH).",
+    "specialist_if_critical_high": "Pediatric Endocrinologist / Geneticist (risk of salt-wasting crisis in infants)",
+    "specialist_if_critical_low": "N/A",
+    "urgency_if_critical_high": "within 24 hours (for newborns/infants); within 1 week (for adults)",
+    "urgency_if_critical_low": "N/A",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "Classic CAH often involves 'salt-wasting.' Patients may need extra salt in their diet (e.g., adding salt to curd or lassi). Long-term steroid treatment can affect bone density, so ensure adequate calcium from milk, paneer, and ragi. Do not restrict salt unless specifically told by an endocrinologist.",
+    "indian_diet_tip_high_hi": "क्लासिक CAH में शरीर से नमक कम हो सकता है। मरीज को आहार में अतिरिक्त नमक की आवश्यकता हो सकती है (जैसे दही या लस्सी में नमक डालना)। हड्डियों की मजबूती के लिए दूध, पनीर और रागी से कैल्शियम लें। डॉक्टर की सलाह के बिना नमक कम न करें।",
+    "source": "LOINC Standards (1668-3); Indian Society for Pediatric and Adolescent Endocrinology (ISPAE) guidelines; Newborn Screening India statistics; Labcorp/Metropolis reference intervals. Critical high (>1000 ng/dL) is highly suggestive of 21-hydroxylase deficiency."
+  },
+  "T3": {
+    "loinc_code": "3053-6",
+    "display_name": "Total Triiodothyronine (T3)",
+    "short_display": "T3 Total",
+    "unit": "ng/dL",
+    "unit_alternatives": ["nmol/L", "ng/mL"],
+    "aliases": [
+      "t3", "total t3", "triiodothyronine", "total triiodothyronine", 
+      "t3 total serum", "serum t3"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 80, "high": 200 },
+      "pediatric_1_10y": { "low": 90, "high": 240 },
+      "pediatric_11_19y": { "low": 80, "high": 210 }
+    },
+    "default_range": { "low": 80, "high": 200 },
+    "critical_low": 50,
+    "critical_high": 400,
+    "physiological_min": 10,
+    "physiological_max": 1200,
+    "note_on_indian_range": "Indian reference ranges generally align with international standards (80–200 ng/dL). However, a 2025 multicenter Indian study (N=5,812) highlighted that T3 levels in the Indian population tend to decline modestly with age, especially after 60. Many Indian labs (Metropolis, Dr. Lal PathLabs) emphasize age-specific interpretation. Iodine nutritional status in specific Indian regions (like the sub-Himalayan belt) can also influence baseline T3 levels.",
+    "specialist_if_critical_high": "Endocrinologist (risk of Thyrotoxicosis or Thyroid Storm)",
+    "specialist_if_critical_low": "Endocrinologist / Physician (potential Hypothyroidism or Euthyroid Sick Syndrome)",
+    "urgency_if_critical_high": "within 24 hours (if symptoms of rapid heart rate/fever exist)",
+    "urgency_if_critical_low": "within 48 hours",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "High T3 often indicates hyperthyroidism. Avoid excessive iodine; limit iodized salt, seafood, and kelp. Focus on 'cooling' Indian foods like coconut water (nariyal pani), cucumber, and curd. Consult a specialist for medication rather than self-treating.",
+    "indian_diet_tip_high_hi": "T3 का उच्च स्तर ओवरएक्टिव थायराइड का संकेत है। ज्यादा आयोडीन से बचें; आयोडीन नमक और समुद्री भोजन कम करें। नारियल पानी, खीरा और दही जैसी ठंडी चीजों का सेवन करें।",
+    "indian_diet_tip_low_en": "Low T3 can signal hypothyroidism or recovery from illness. Ensure use of iodized salt (namak). Include selenium-rich sunflower seeds (surajmukhi), zinc-rich pulses (dal/chana), and dairy (dahi/paneer). Avoid eating raw cruciferous vegetables like cabbage (patta gobhi) in large amounts.",
+    "indian_diet_tip_low_hi": "T3 का कम स्तर थायराइड की सुस्ती का संकेत हो सकता है। आयोडीन युक्त नमक का प्रयोग करें। सूरजमुखी के बीज, दालें (चना/दाल) और डेयरी उत्पाद (दही/पनीर) लें। कच्ची पत्ता गोभी ज्यादा न खाएं।",
+    "source": "Mayo Clinic Laboratories (T3 Total Reference); Labcorp Order Code 002188; ResearchGate Indian Multicentre Study (2025/2026); ISPAE Pediatric Thyroid Guidelines. Conversion: ng/dL to nmol/L = x 0.01536."
+  },
+  "T4": {
+    "loinc_code": "3026-2",
+    "display_name": "Total Thyroxine (T4)",
+    "short_display": "T4 Total / Thyroxine",
+    "unit": "mcg/dL",
+    "unit_alternatives": ["µg/dL", "nmol/L", "µg%"],
+    "aliases": [
+      "t4", "total t4", "thyroxine", "tetraiodothyronine", "serum t4", "t4 total level"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 4.5, "high": 11.7 },
+      "pediatric_1_5y": { "low": 6.0, "high": 14.7 },
+      "pediatric_11_19y": { "low": 5.9, "high": 13.2 },
+      "newborn_0_5_days": { "low": 5.0, "high": 18.5 }
+    },
+    "default_range": { "low": 4.5, "high": 11.7 },
+    "critical_low": 2.0,
+    "critical_high": 20.0,
+    "physiological_min": 0.5,
+    "physiological_max": 30.0,
+    "note_on_indian_range": "In India, the reference range for T4 is generally aligned with international standards (approx. 4.5–12.0 mcg/dL). A landmark study by Marwaha et al. (PMID: 23041244) established age-specific thyroid norms for the Indian population, noting that median values can vary slightly due to regional iodine intake. Major Indian diagnostic chains like Dr. Lal PathLabs and Metropolis typically use 4.5–11.5 mcg/dL as the standard adult reference interval.",
+    "specialist_if_critical_high": "Endocrinologist (urgent risk of Thyroid Storm/Thyrotoxicosis)",
+    "specialist_if_critical_low": "Endocrinologist (risk of Myxedema Coma or severe Hypothyroidism)",
+    "urgency_if_critical_high": "within 24 hours (if fever, racing heart, or confusion is present)",
+    "urgency_if_critical_low": "within 24 hours (if extreme lethargy or low body temperature is present)",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "High T4 suggests hyperthyroidism. Limit iodine-rich foods like iodized salt and seafood. Incorporate 'cooling' foods such as nariyal pani (coconut water), cucumber (kheera), and seasonal fruits like pineapple or amla. Avoid self-medicating with seaweed or kelp supplements.",
+    "indian_diet_tip_high_hi": "T4 का उच्च स्तर ओवरएक्टिव थायराइड का संकेत है। ज्यादा आयोडीन वाले भोजन जैसे आयोडीन नमक और समुद्री भोजन सीमित करें। नारियल पानी, खीरा, और ताजे फल (जैसे अनानास) का सेवन करें। बिना डॉक्टर की सलाह के सप्लीमेंट्स न लें।",
+    "indian_diet_tip_low_en": "Low T4 indicates hypothyroidism. Ensure the use of iodized salt (namak). Include selenium and zinc-rich Indian foods like whole pulses (dal/chana), sunflower seeds (surajmukhi), and milk products (paneer/dahi). Cook cruciferous vegetables like cabbage (patta gobhi) or cauliflower (phool gobhi) thoroughly rather than eating them raw.",
+    "indian_diet_tip_low_hi": "T4 का कम स्तर थायराइड की सुस्ती का संकेत है। आयोडीन युक्त नमक का प्रयोग करें। दालें, चना, सूरजमुखी के बीज और डेयरी उत्पाद (पनीर/दही) लें। पत्ता गोभी या फूल गोभी को हमेशा पकाकर खाएं, कच्चा न लें।",
+    "source": "LOINC Standard 3026-2; Mayo Clinic Laboratories (T4 Total Reference); Indian Journal of Endocrinology and Metabolism; PMID: 23041244 (Marwaha et al. Indian Adult Thyroid Study). Unit conversion: mcg/dL to nmol/L = x 12.87."
+  },
+  "FT3": {
+    "loinc_code": "3051-0",
+    "display_name": "Free Triiodothyronine (FT3)",
+    "short_display": "FT3",
+    "unit": "pg/mL",
+    "unit_alternatives": ["pmol/L", "pg/dL"],
+    "aliases": [
+      "free t3", "triiodothyronine free", "f-t3", "unbound t3", "active t3"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 2.0, "high": 4.4 },
+      "pediatric_11_19y": { "low": 2.3, "high": 5.0 },
+      "pregnancy_1st_trim": { "low": 2.5, "high": 3.9 }
+    },
+    "default_range": { "low": 2.0, "high": 4.4 },
+    "critical_low": 1.0,
+    "critical_high": 6.5,
+    "physiological_min": 0.5,
+    "physiological_max": 20.0,
+    "note_on_indian_range": "Indian reference norms established by the Marwaha study (PMID 23041244) involving 1,916 reference adults in Delhi suggest a mean FT3 of 4.6 ± 0.9 pmol/L (approx. 3.0 pg/mL). Indian labs like Metropolis and Dr. Lal PathLabs commonly use 2.0–4.4 pg/mL as the standard adult range. FT3 is notably higher in Indian men compared to women, and levels tend to decline more sharply with age in the Indian population than in Western cohorts.",
+    "specialist_if_critical_high": "Endocrinologist (urgent evaluation for T3 Toxicosis or Graves' Disease)",
+    "specialist_if_critical_low": "Endocrinologist (investigation for Euthyroid Sick Syndrome or Central Hypothyroidism)",
+    "urgency_if_critical_high": "within 24 hours",
+    "urgency_if_critical_low": "within 48 hours",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_high_en": "High FT3 often signals hyperthyroidism. Avoid iodine-rich foods like iodized salt, seafood, and kelp. Focus on 'cooling' foods such as nariyal pani (coconut water) and curd. Avoid high-dose Biotin supplements for 72 hours before the test as they can cause falsely high results.",
+    "indian_diet_tip_high_hi": "FT3 का उच्च स्तर हाइपरथायरायडिज्म का संकेत है। आयोडीन युक्त नमक और समुद्री भोजन से बचें। नारियल पानी और दही जैसे ठंडे खाद्य पदार्थों का सेवन करें। परीक्षण से 72 घंटे पहले बायोटिन (Biotin) सप्लीमेंट न लें।",
+    "source": "LOINC Standard 3051-0; Marwaha et al. (2013) Indian Adult Thyroid Study; Metropolis Healthcare Reference Intervals (2025/2026); Quest Diagnostics Methodology (ECLIA)."
+  },
+  "FT4": {
+    "loinc_code": "8478-0",
+    "display_name": "Free Thyroxine (FT4)",
+    "short_display": "FT4",
+    "unit": "ng/dL",
+    "unit_alternatives": ["pmol/L", "ng/L"],
+    "aliases": [
+      "free t4", "thyroxine free", "f-t4", "unbound t4", "active t4"
+    ],
+    "ranges": {
+      "adult_normal": { "low": 0.8, "high": 1.8 },
+      "pediatric_1_5y": { "low": 0.8, "high": 1.5 },
+      "pregnancy_1st_trim": { "low": 0.9, "high": 1.7 }
+    },
+    "default_range": { "low": 0.8, "high": 1.8 },
+    "critical_low": 0.5,
+    "critical_high": 5.0,
+    "physiological_min": 0.1,
+    "physiological_max": 15.0,
+    "note_on_indian_range": "The Marwaha Indian adult study (PMID 23041244) reported FT4 ranges of 10.1–24.8 pmol/L (approx. 0.78–1.93 ng/dL). Indian diagnostic standards (e.g., Redcliffe Labs, Apollo Diagnostics) generally use 0.8–1.8 ng/dL. In the Indian context, monitoring FT4 is considered more reliable than Total T4 because it is not affected by protein-binding variations common in Indian dietary profiles or pregnancy.",
+    "specialist_if_critical_high": "Endocrinologist (risk of Thyroid Storm)",
+    "specialist_if_critical_low": "Endocrinologist (risk of Myxedema Coma)",
+    "urgency_if_critical_high": "within 24 hours (emergency if palpitations or fever present)",
+    "urgency_if_critical_low": "within 24 hours",
+    "urgency_if_watch": "within 1 week",
+    "indian_diet_tip_low_en": "Low FT4 suggests hypothyroidism. Ensure use of iodized salt (namak). Include selenium-rich foods like sunflower seeds (surajmukhi) and zinc-rich pulses (dal). Always cook goitrogenic vegetables like cabbage (patta gobhi) and cauliflower (phool gobhi) thoroughly.",
+    "indian_diet_tip_low_hi": "FT4 का कम स्तर हाइपोथायरायडिज्म का संकेत है। आयोडीन युक्त नमक का प्रयोग करें। सूरजमुखी के बीज और दालें लें। पत्ता गोभी और फूल गोभी को हमेशा अच्छी तरह पकाकर खाएं।",
+    "source": "LOINC Standard 8478-0; Mayo Clinic Laboratories Reference Values; Indian Journal of Endocrinology and Metabolism; Marwaha et al. (PMID 23041244). Unit conversion: pmol/L to ng/dL = x 0.0777."
+  },
+  "Anti-TPO": {
+    "loinc_code": "8099-4",
+    "display_name": "Anti-Thyroid Peroxidase Antibodies",
+    "short_display": "Anti-TPO / TPOAb",
+    "unit": "IU/mL",
+    "unit_alternatives": ["kIU/L", "U/mL"],
+    "aliases": [
+      "tpoab", "thyroid peroxidase antibody", "anti-tpo", 
+      "anti-thyroid microsomal antibody", "microsomal antibody", 
+      "tpo antibodies"
+    ],
+    "ranges": {
+      "adult_normal_conservative": { "low": 0, "high": 34 },
+      "adult_normal_strict": { "low": 0, "high": 9 },
+      "pregnancy_1st_trim": { "low": 0, "high": 30 }
+    },
+    "default_range": { "low": 0, "high": 34 },
+    "critical_low": null,
+    "critical_high": 1000,
+    "physiological_min": 0,
+    "physiological_max": 5000,
+    "note_on_indian_range": "In India, the reference cutoff is typically <34 or <35 IU/mL. Studies in the Indian population (e.g., Central Kerala study and Marwaha et al.) show a high prevalence of TPO positivity, ranging from 23% to 27% in reproductive-age women. Indian clinical guidelines emphasize that while Western labs often use a stricter <9 IU/mL cutoff, levels between 35–100 IU/mL in the Indian context are often considered 'mildly elevated' and may not require immediate treatment if TSH is normal.",
+    "specialist_if_critical_high": "Endocrinologist (investigation for Hashimoto’s Thyroiditis or Graves’ Disease)",
+    "specialist_if_critical_low": "N/A",
+    "urgency_if_critical_high": "within 1 week (if accompanied by TSH/T4 abnormalities)",
+    "urgency_if_critical_low": "N/A",
+    "urgency_if_watch": "within 2–4 weeks",
+    "indian_diet_tip_high_en": "High Anti-TPO indicates an immune attack on the thyroid. Focus on anti-inflammatory Indian foods like turmeric (Haldi), ginger, and garlic. Ensure adequate Selenium from sunflower seeds (Surajmukhi) and Zinc from dals. Many patients find relief by reducing gluten (Wheat/Maida) and dairy, as these can sometimes trigger inflammation in Hashimoto's.",
+    "indian_diet_tip_high_hi": "Anti-TPO का बढ़ा हुआ स्तर थायराइड पर इम्यून सिस्टम के हमले का संकेत है। सूजन कम करने के लिए हल्दी, अदरक और लहसुन का सेवन करें। सेलेनियम के लिए सूरजमुखी के बीज और जिंक के लिए दालें लें। गेहूं (ग्लूटेन) और मैदा कम करने से कई मरीजों को फायदा होता है।",
+    "source": "Apollo 247 Reference Range (<35 IU/mL); Marwaha et al. (PMID 23041244) Indian Thyroid Study; Cleveland Clinic Clinical Guidance (<5.6 IU/mL variation); Jebmh India Research on TPO Prevalence. Note: Levels >1000 IU/mL strongly suggest active autoimmune thyroiditis."
+  }
+}
