@@ -4,7 +4,7 @@ import asyncio
 import json
 import os
 
-from anthropic import AsyncAnthropic
+from groq import Groq
 from openai import AsyncOpenAI
 
 from models.schemas import ExplainedBiomarker, ScoredBiomarker, SeverityLevel
@@ -13,13 +13,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-if not ANTHROPIC_API_KEY or not OPENAI_API_KEY:
-    raise ValueError("ANTHROPIC_API_KEY and OPENAI_API_KEY must be set")
+if not GROQ_API_KEY or not OPENAI_API_KEY:
+    raise ValueError("GROQ_API_KEY and OPENAI_API_KEY must be set")
 
 # Clients.
-claude = AsyncAnthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+groq_client = Groq(api_key=GROQ_API_KEY)
 openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Timeout (seconds) per model call.
@@ -91,32 +92,31 @@ Respond with ONLY this JSON structure:
 
 
 async def _call_claude(bio: ScoredBiomarker) -> dict | None:
-    if claude is None:
-        print("    [claude] ERROR: Missing ANTHROPIC_API_KEY")
-        return None
     try:
-        print(f"    [claude] calling for {bio.normalized_name}...")
-        msg = await asyncio.wait_for(
-            claude.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=600,
-                system=SYSTEM_PROMPT,
-                messages=[{"role": "user", "content": _build_prompt(bio)}],
+        print(f"    [groq-llama] calling for {bio.normalized_name}...")
+        resp = await asyncio.wait_for(
+            asyncio.to_thread(
+                lambda: groq_client.chat.completions.create(
+                    model="llama-3.3-70b-versatile",
+                    temperature=0.0,
+                    max_tokens=600,
+                    response_format={"type": "json_object"},
+                    messages=[
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": _build_prompt(bio)},
+                    ],
+                )
             ),
             timeout=MODEL_TIMEOUT,
         )
-        print("    [claude] success")
-        raw = msg.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("```")[1]
-            if raw.startswith("json"):
-                raw = raw[4:]
-        return json.loads(raw)
+        print("    [groq-llama] success")
+        content = resp.choices[0].message.content or "{}"
+        return json.loads(content)
     except asyncio.TimeoutError:
-        print(f"    [claude] TIMEOUT after {MODEL_TIMEOUT}s")
+        print(f"    [groq-llama] TIMEOUT after {MODEL_TIMEOUT}s")
         return None
     except Exception as e:
-        print(f"    [claude] ERROR: {type(e).__name__}: {e}")
+        print(f"    [groq-llama] ERROR: {type(e).__name__}: {e}")
         return None
 
 

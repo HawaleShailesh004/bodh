@@ -61,12 +61,24 @@ async def analyze_report(
     from services.extractor import extract
 
     try:
-        raw_biomarkers = await extract(content, file.content_type)
+        extraction_out = await extract(content, file.content_type)
     except Exception as e:
         raise HTTPException(
             status_code=422,
             detail=f"Could not extract data from this file. Try a clearer scan or use manual entry. Detail: {str(e)}"
         )
+
+    detected_ctx = {"age": age, "gender": gender}
+    if isinstance(extraction_out, tuple) and len(extraction_out) == 2:
+        raw_biomarkers, detected_ctx = extraction_out
+    else:
+        raw_biomarkers = extraction_out
+
+    # Prefer extracted patient context from report header for uploaded files.
+    try:
+        ctx = PatientContext(age=detected_ctx.get("age", age), gender=detected_ctx.get("gender", gender))
+    except Exception:
+        ctx = PatientContext(age=age, gender=gender)
 
     if not raw_biomarkers:
         raise HTTPException(

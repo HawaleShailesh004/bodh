@@ -1,3 +1,4 @@
+PLACEHOLDER = 1
 import hashlib
 import json
 import os
@@ -68,7 +69,7 @@ def strip_pii(text: str) -> str:
     skip_top = min(15, total // 6)
     body_lines = lines[skip_top:]
 
-    clean = []
+    clean_lines: list[str] = []
     for line in body_lines:
         stripped = line.strip()
         if not stripped:
@@ -77,14 +78,22 @@ def strip_pii(text: str) -> str:
             continue
         if any(p.search(stripped) for p in _PII_PATTERNS):
             continue
-        clean.append(stripped)
-    return "\n".join(clean)
+        clean_lines.append(stripped)
+    return "\n".join(clean_lines)
 
 
 _EXTRACTION_SYSTEM = """You are a medical lab report parser. You extract biomarker test results from Indian lab report text.
-Extract ONLY true biomarker results with numeric values.
-Ignore metadata, patient info, and section titles.
-Return JSON only."""
+
+RULES:
+1. Extract ONLY actual test results — biomarker name, numeric value, unit, reference range, flag.
+2. IGNORE all patient personal information, dates, addresses, lab locations, page numbers.
+3. IGNORE section headers like "HAEMATOLOGY", "BIOCHEMISTRY", "URINE EXAMINATION".
+4. IGNORE rows where the value is not a number (e.g. "Positive", "Negative", "NIL" — skip those).
+5. For reference range: extract exactly as printed. If printed as "13.0-17.0" keep it. If printed as "< 200" keep it.
+6. Flag: extract only if explicitly printed — H, L, HH, LL, HIGH, LOW, ABNORMAL, C, CRIT.
+7. Return ONLY valid JSON. No explanation. No markdown. No preamble.
+8. ALWAYS extract the reference range even if the value is normal. Never leave ref_range empty when a range is present in the report.
+"""
 
 _EXTRACTION_USER = """Extract all biomarker test results from this lab report text. Return JSON only.
 
@@ -104,6 +113,7 @@ def _call_groq(clean_text: str) -> list[dict]:
         ],
         response_format={"type": "json_object"},
     )
+
     raw = response.choices[0].message.content.strip()
     parsed = json.loads(raw)
     if isinstance(parsed, list):
@@ -119,17 +129,17 @@ def _call_groq(clean_text: str) -> list[dict]:
 def _parse_ref_range(text: str) -> tuple[float | None, float | None]:
     if not text:
         return None, None
-    text = text.strip()
-    m = re.search(r"([\d.]+)\s*[-–to]+\s*([\d.]+)", text, re.IGNORECASE)
+    normalized = text.strip()
+    m = re.search(r"([\d.]+)\s*[-–to]+\s*([\d.]+)", normalized, re.IGNORECASE)
     if m:
         try:
             return float(m.group(1)), float(m.group(2))
         except ValueError:
             pass
-    m = re.search(r"(?:<|upto|up\s+to)\s*([\d.]+)", text, re.IGNORECASE)
+    m = re.search(r"(?:<|upto|up\s+to)\s*([\d.]+)", normalized, re.IGNORECASE)
     if m:
         return 0.0, float(m.group(1))
-    m = re.search(r">\s*([\d.]+)", text)
+    m = re.search(r">\s*([\d.]+)", normalized)
     if m:
         return float(m.group(1)), 99999.0
     return None, None
@@ -138,8 +148,8 @@ def _parse_ref_range(text: str) -> tuple[float | None, float | None]:
 def _parse_flag(text: str | None) -> str | None:
     if not text:
         return None
-    clean = text.strip().upper()
     known = {"H", "L", "HH", "LL", "C", "CRIT", "CRITICAL", "HIGH", "LOW", "ABNORMAL", "A", "E", "PANIC", "H*", "L*"}
+    clean = text.strip().upper()
     return clean if clean in known else None
 
 
@@ -167,8 +177,8 @@ def _clean_unit(unit: str) -> str:
     return ""
 
 
-def _groq_items_to_biomarkers(items: list[dict]) -> list[ExtractedBiomarker]:
-    biomarkers = []
+def _groq_items_to_biomarkers(items: list[dict], source: ExtractionSource) -> list[ExtractedBiomarker]:
+    biomarkers: list[ExtractedBiomarker] = []
     for item in items:
         try:
             name = str(item.get("name", "")).strip()
@@ -176,21 +186,27 @@ def _groq_items_to_biomarkers(items: list[dict]) -> list[ExtractedBiomarker]:
             unit = _clean_unit(str(item.get("unit", "")).strip())
             ref_str = str(item.get("ref_range", "")).strip()
             flag_raw = item.get("flag")
+
             if not name or value_raw is None:
                 continue
+
             try:
                 value = float(str(value_raw).replace(",", "").strip())
             except (ValueError, TypeError):
                 continue
+
             if value <= 0 and ref_str == "":
                 continue
+
             ref_low, ref_high = _parse_ref_range(ref_str)
             flag = _parse_flag(flag_raw)
+
             confidence = 0.80
             if ref_low is not None:
                 confidence += 0.12
             if unit:
                 confidence += 0.08
+
             biomarkers.append(
                 ExtractedBiomarker(
                     raw_name=name,
@@ -201,7 +217,7 @@ def _groq_items_to_biomarkers(items: list[dict]) -> list[ExtractedBiomarker]:
                     lab_ref_low=ref_low,
                     lab_ref_high=ref_high,
                     lab_flag=flag,
-                    extraction_source=ExtractionSource.PYMUPDF,
+                    extraction_source=source,
                     extraction_confidence=round(confidence, 2),
                 )
             )
@@ -244,7 +260,8 @@ def _extract_azure_di(file_bytes: bytes, content_type: str) -> str:
         content_type=content_type,
     )
     result = poller.result()
-    lines = []
+
+    lines: list[str] = []
     for table in result.tables:
         grid: dict[int, dict[int, str]] = {}
         for cell in table.cells:
@@ -255,8 +272,10 @@ def _extract_azure_di(file_bytes: bytes, content_type: str) -> str:
             row = grid[row_idx]
             row_text = "\t".join(row.get(c, "") for c in sorted(row.keys()))
             lines.append(row_text)
+
     if not lines and result.paragraphs:
         lines = [p.content for p in result.paragraphs if p.content]
+
     text = "\n".join(lines)
     cache_file.write_text(text, encoding="utf-8")
     print(f"[extractor] azure cached: {cache_file.name}")
@@ -267,10 +286,13 @@ async def extract(file_bytes: bytes, content_type: str) -> list[ExtractedBiomark
     if content_type == "application/pdf":
         if _is_text_pdf(file_bytes):
             raw_text = _get_pdf_text(file_bytes)
+            source = ExtractionSource.PYMUPDF
         else:
             raw_text = _extract_azure_di(file_bytes, content_type)
+            source = ExtractionSource.AZURE_DI
     else:
         raw_text = _extract_azure_di(file_bytes, content_type)
+        source = ExtractionSource.AZURE_DI
 
     if not raw_text.strip():
         return []
@@ -281,7 +303,317 @@ async def extract(file_bytes: bytes, content_type: str) -> list[ExtractedBiomark
 
     try:
         items = _call_groq(clean_text)
-        biomarkers = _groq_items_to_biomarkers(items)
+        biomarkers = _groq_items_to_biomarkers(items, source)
+    except Exception as e:
+        print(f"[extractor] Groq failed: {e}")
+        return []
+
+    return biomarkers
+import hashlib
+import json
+import os
+import re
+from pathlib import Path
+
+import pymupdf
+from azure.ai.documentintelligence import DocumentIntelligenceClient
+from azure.core.credentials import AzureKeyCredential
+from groq import Groq
+
+from models.schemas import ExtractedBiomarker, ExtractionSource
+
+_groq_client: Groq | None = None
+_azure_client: DocumentIntelligenceClient | None = None
+_AZURE_CACHE_DIR = Path(__file__).parent.parent / ".cache" / "azure_di"
+
+
+def _get_groq() -> Groq:
+    global _groq_client
+    if _groq_client is None:
+        key = os.getenv("GROQ_API_KEY")
+        if not key:
+            raise RuntimeError("GROQ_API_KEY not set in .env")
+        _groq_client = Groq(api_key=key)
+    return _groq_client
+
+
+def _get_azure() -> DocumentIntelligenceClient:
+    global _azure_client
+    if _azure_client is None:
+        endpoint = os.getenv("AZURE_DI_ENDPOINT")
+        key = os.getenv("AZURE_DI_KEY")
+        if not endpoint or not key:
+            raise RuntimeError("AZURE_DI_ENDPOINT and AZURE_DI_KEY not set")
+        _azure_client = DocumentIntelligenceClient(
+            endpoint=endpoint,
+            credential=AzureKeyCredential(key),
+        )
+    return _azure_client
+
+
+_PII_PATTERNS = [
+    re.compile(r"\b(patient\s*(name|id)|name\s*:)", re.I),
+    re.compile(r"\b(age\s*[:/]|dob\s*[:/]|date\s+of\s+birth)", re.I),
+    re.compile(r"\b(mobile|phone|contact|tel|fax)\s*[:/]?\s*[\d\-+\s]{8,}", re.I),
+    re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b", re.I),
+    re.compile(r"\b(mr\.?|mrs\.?|ms\.?|dr\.?)\s+[A-Z][a-z]+\s+[A-Z][a-z]+"),
+    re.compile(r"\b(address|add\s*:|flat|house|plot|sector|nagar|colony|road|street)\b", re.I),
+    re.compile(r"\b(uhid|pid|mrn|reg\s*no|patient\s*id|accession|barcode)\s*[:/]?\s*\w+", re.I),
+    re.compile(r"\b(ref\s*by|referred\s*by|consultant|doctor\s*name)\b", re.I),
+    re.compile(r"\b\d{6}\b"),
+    re.compile(r"\b\d{10}\b"),
+]
+
+_METADATA_LINE_PATTERNS = [
+    re.compile(r"(collected|reported|received|printed)\s*(on|at|by)\s*[:\-]?\s*[\d/\-:APM\s]+", re.I),
+    re.compile(r"(processing\s+location|lab\s+address|branch)", re.I),
+    re.compile(r"(page\s+\d+\s+of\s+\d+)", re.I),
+    re.compile(r"\*{2,}"),
+    re.compile(r"^[-=_]{3,}$"),
+]
+
+
+def strip_pii(text: str) -> str:
+    lines = text.split("\n")
+    total = len(lines)
+    skip_top = min(15, total // 6)
+    body_lines = lines[skip_top:]
+
+    clean_lines: list[str] = []
+    for line in body_lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if any(p.search(stripped) for p in _METADATA_LINE_PATTERNS):
+            continue
+        if any(p.search(stripped) for p in _PII_PATTERNS):
+            continue
+        clean_lines.append(stripped)
+    return "\n".join(clean_lines)
+
+
+_EXTRACTION_SYSTEM = """You are a medical lab report parser. You extract biomarker test results from Indian lab report text.
+
+RULES:
+1. Extract ONLY actual test results — biomarker name, numeric value, unit, reference range, flag.
+2. IGNORE all patient personal information, dates, addresses, lab locations, page numbers.
+3. IGNORE section headers like "HAEMATOLOGY", "BIOCHEMISTRY", "URINE EXAMINATION".
+4. IGNORE rows where the value is not a number (e.g. "Positive", "Negative", "NIL" — skip those).
+5. For reference range: extract exactly as printed. If printed as "13.0-17.0" keep it. If printed as "< 200" keep it.
+6. Flag: extract only if explicitly printed — H, L, HH, LL, HIGH, LOW, ABNORMAL, C, CRIT.
+7. Return ONLY valid JSON. No explanation. No markdown. No preamble.
+8. ALWAYS extract the reference range even if the value is normal. Never leave ref_range empty when a range is present in the report.
+"""
+
+_EXTRACTION_USER = """Extract all biomarker test results from this lab report text. Return JSON only.
+
+REPORT TEXT:
+{text}"""
+
+
+def _call_groq(clean_text: str) -> list[dict]:
+    client = _get_groq()
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        temperature=0.0,
+        max_tokens=2048,
+        messages=[
+            {"role": "system", "content": _EXTRACTION_SYSTEM},
+            {"role": "user", "content": _EXTRACTION_USER.format(text=clean_text)},
+        ],
+        response_format={"type": "json_object"},
+    )
+
+    raw = response.choices[0].message.content.strip()
+    parsed = json.loads(raw)
+    if isinstance(parsed, list):
+        return parsed
+    for key in ["results", "biomarkers", "tests", "data", "items"]:
+        if key in parsed and isinstance(parsed[key], list):
+            return parsed[key]
+    if isinstance(parsed, dict) and "name" in parsed:
+        return [parsed]
+    return []
+
+
+def _parse_ref_range(text: str) -> tuple[float | None, float | None]:
+    if not text:
+        return None, None
+    normalized = text.strip()
+    m = re.search(r"([\d.]+)\s*[-–to]+\s*([\d.]+)", normalized, re.IGNORECASE)
+    if m:
+        try:
+            return float(m.group(1)), float(m.group(2))
+        except ValueError:
+            pass
+    m = re.search(r"(?:<|upto|up\s+to)\s*([\d.]+)", normalized, re.IGNORECASE)
+    if m:
+        return 0.0, float(m.group(1))
+    m = re.search(r">\s*([\d.]+)", normalized)
+    if m:
+        return float(m.group(1)), 99999.0
+    return None, None
+
+
+def _parse_flag(text: str | None) -> str | None:
+    if not text:
+        return None
+    known = {"H", "L", "HH", "LL", "C", "CRIT", "CRITICAL", "HIGH", "LOW", "ABNORMAL", "A", "E", "PANIC", "H*", "L*"}
+    clean = text.strip().upper()
+    return clean if clean in known else None
+
+
+_VALID_UNIT_PATTERN = re.compile(
+    r"^(g/dl|g/l|mg/dl|mg/l|mmol/l|µmol/l|umol/l|"
+    r"iu/l|u/l|miu/l|uiu/ml|ng/ml|pg/ml|pg|fl|"
+    r"%|/µl|/ul|/cumm|/hpf|/lpf|lakhs/cumm|"
+    r"million/cu\.mm|thou/µl|k/µl|meq/l|mmhg|"
+    r"units|unit|cells/µl|10\^3/µl|10\^6/µl)$",
+    re.IGNORECASE,
+)
+
+
+def _clean_unit(unit: str) -> str:
+    if not unit:
+        return ""
+    cleaned = unit.strip()
+    if re.match(r"^\d+\.?\d*\s*%$", cleaned):
+        return ""
+    if re.match(r"^\d+\.?\d*$", cleaned):
+        return ""
+    lower = cleaned.lower().replace(" ", "")
+    if _VALID_UNIT_PATTERN.match(lower):
+        return cleaned
+    return ""
+
+
+def _groq_items_to_biomarkers(items: list[dict], source: ExtractionSource) -> list[ExtractedBiomarker]:
+    biomarkers: list[ExtractedBiomarker] = []
+    for item in items:
+        try:
+            name = str(item.get("name", "")).strip()
+            value_raw = item.get("value")
+            unit = _clean_unit(str(item.get("unit", "")).strip())
+            ref_str = str(item.get("ref_range", "")).strip()
+            flag_raw = item.get("flag")
+
+            if not name or value_raw is None:
+                continue
+
+            try:
+                value = float(str(value_raw).replace(",", "").strip())
+            except (ValueError, TypeError):
+                continue
+
+            if value <= 0 and ref_str == "":
+                continue
+
+            ref_low, ref_high = _parse_ref_range(ref_str)
+            flag = _parse_flag(flag_raw)
+
+            confidence = 0.80
+            if ref_low is not None:
+                confidence += 0.12
+            if unit:
+                confidence += 0.08
+
+            biomarkers.append(
+                ExtractedBiomarker(
+                    raw_name=name,
+                    normalized_name=None,
+                    loinc_code=None,
+                    value=value,
+                    unit=unit or "units",
+                    lab_ref_low=ref_low,
+                    lab_ref_high=ref_high,
+                    lab_flag=flag,
+                    extraction_source=source,
+                    extraction_confidence=round(confidence, 2),
+                )
+            )
+        except Exception:
+            continue
+    return biomarkers
+
+
+def _get_pdf_text(pdf_bytes: bytes) -> str:
+    doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+    text = "\n".join(page.get_text() for page in doc)
+    doc.close()
+    return text
+
+
+def _is_text_pdf(pdf_bytes: bytes) -> bool:
+    doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+    chars = sum(len(page.get_text()) for page in doc)
+    doc.close()
+    return chars > 200
+
+
+def _cache_key(file_bytes: bytes, content_type: str) -> str:
+    digest = hashlib.sha256(file_bytes + b"::" + content_type.encode("utf-8")).hexdigest()
+    return f"{digest}.txt"
+
+
+def _extract_azure_di(file_bytes: bytes, content_type: str) -> str:
+    _AZURE_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache_file = _AZURE_CACHE_DIR / _cache_key(file_bytes, content_type)
+    if cache_file.exists():
+        print(f"[extractor] azure cache hit: {cache_file.name}")
+        return cache_file.read_text(encoding="utf-8")
+
+    print("[extractor] azure cache miss -> calling Azure DI")
+    client = _get_azure()
+    poller = client.begin_analyze_document(
+        "prebuilt-layout",
+        body=file_bytes,
+        content_type=content_type,
+    )
+    result = poller.result()
+
+    lines: list[str] = []
+    for table in result.tables:
+        grid: dict[int, dict[int, str]] = {}
+        for cell in table.cells:
+            grid.setdefault(cell.row_index, {})[cell.column_index] = (
+                cell.content.strip() if cell.content else ""
+            )
+        for row_idx in sorted(grid.keys()):
+            row = grid[row_idx]
+            row_text = "\t".join(row.get(c, "") for c in sorted(row.keys()))
+            lines.append(row_text)
+
+    if not lines and result.paragraphs:
+        lines = [p.content for p in result.paragraphs if p.content]
+
+    text = "\n".join(lines)
+    cache_file.write_text(text, encoding="utf-8")
+    print(f"[extractor] azure cached: {cache_file.name}")
+    return text
+
+
+async def extract(file_bytes: bytes, content_type: str) -> list[ExtractedBiomarker]:
+    if content_type == "application/pdf":
+        if _is_text_pdf(file_bytes):
+            raw_text = _get_pdf_text(file_bytes)
+            source = ExtractionSource.PYMUPDF
+        else:
+            raw_text = _extract_azure_di(file_bytes, content_type)
+            source = ExtractionSource.AZURE_DI
+    else:
+        raw_text = _extract_azure_di(file_bytes, content_type)
+        source = ExtractionSource.AZURE_DI
+
+    if not raw_text.strip():
+        return []
+
+    clean_text = strip_pii(raw_text)
+    if not clean_text.strip():
+        return []
+
+    try:
+        items = _call_groq(clean_text)
+        biomarkers = _groq_items_to_biomarkers(items, source)
     except Exception as e:
         print(f"[extractor] Groq failed: {e}")
         return []
@@ -381,6 +713,7 @@ RULES:
 5. For reference range: extract exactly as printed. If printed as "13.0-17.0" keep it. If printed as "< 200" keep it.
 6. Flag: extract only if explicitly printed — H, L, HH, LL, HIGH, LOW, ABNORMAL, C, CRIT.
 7. Return ONLY valid JSON. No explanation. No markdown. No preamble.
+8. ALWAYS extract the reference range even if the value is normal. Never leave ref_range empty when a range is present in the report.
 """
 
 _EXTRACTION_USER = """Extract all biomarker test results from this lab report text. Return JSON only.
@@ -2227,3 +2560,141 @@ async def extract(
             object.__setattr__(bio, "needs_manual_review", True)
 
     return biomarkers
+
+
+def extract_patient_context(raw_text: str) -> dict:
+    """Extract age and gender from report header before PII strip."""
+    gender = "male"
+    age = 35
+
+    header = (raw_text or "")[:500]
+
+    if re.search(r"\b(female|f)\b", header, re.I):
+        gender = "female"
+    elif re.search(r"\b(male|m)\b", header, re.I):
+        gender = "male"
+
+    match = re.search(
+        r"(?:age\s*[:/]?\s*|sex\s*/\s*age\s*[:/]?\s*[mf]+\s*/\s*)(\d{1,3})",
+        header,
+        re.I,
+    )
+    if not match:
+        match = re.search(r"\b(\d{1,3})\s*(?:yrs?|years?)\b", header, re.I)
+
+    if match:
+        detected_age = int(match.group(1))
+        if 1 < detected_age < 120:
+            age = detected_age
+
+    return {"age": age, "gender": gender}
+
+
+def _extract_azure_text(file_bytes: bytes, content_type: str) -> str:
+    endpoint = os.getenv("AZURE_DI_ENDPOINT")
+    key = os.getenv("AZURE_DI_KEY")
+    if not endpoint or not key:
+        raise RuntimeError("AZURE_DI_ENDPOINT and AZURE_DI_KEY not set")
+
+    client = DocumentIntelligenceClient(
+        endpoint=endpoint,
+        credential=AzureKeyCredential(key),
+    )
+    poller = client.begin_analyze_document(
+        "prebuilt-layout",
+        body=file_bytes,
+        content_type=content_type,
+    )
+    result = poller.result()
+
+    lines: list[str] = []
+    for table in result.tables:
+        grid: dict[int, dict[int, str]] = {}
+        for cell in table.cells:
+            grid.setdefault(cell.row_index, {})[cell.column_index] = (
+                cell.content.strip() if cell.content else ""
+            )
+        for row_idx in sorted(grid.keys()):
+            row = grid[row_idx]
+            row_text = "\t".join(row.get(c, "") for c in sorted(row.keys()))
+            lines.append(row_text)
+
+    if not lines and result.paragraphs:
+        lines = [p.content for p in result.paragraphs if p.content]
+
+    return "\n".join(lines)
+
+
+def _items_to_biomarkers(items: list[dict], source: ExtractionSource) -> list[ExtractedBiomarker]:
+    biomarkers: list[ExtractedBiomarker] = []
+    for item in items:
+        try:
+            name = str(item.get("name", "")).strip()
+            value_raw = item.get("value")
+            unit = _clean_unit(str(item.get("unit", "")).strip()) if "_clean_unit" in globals() else str(item.get("unit", "")).strip()
+            ref_str = str(item.get("ref_range", "")).strip()
+            flag_raw = item.get("flag")
+            if not name or value_raw is None:
+                continue
+
+            value = float(str(value_raw).replace(",", "").strip())
+            ref_low, ref_high = _parse_ref_range(ref_str)
+            flag = _parse_flag(flag_raw)
+
+            confidence = 0.80
+            if ref_low is not None:
+                confidence += 0.12
+            if unit:
+                confidence += 0.08
+
+            biomarkers.append(
+                ExtractedBiomarker(
+                    raw_name=name,
+                    normalized_name=None,
+                    loinc_code=None,
+                    value=value,
+                    unit=unit or "units",
+                    lab_ref_low=ref_low,
+                    lab_ref_high=ref_high,
+                    lab_flag=flag,
+                    extraction_source=source,
+                    extraction_confidence=round(confidence, 2),
+                )
+            )
+        except Exception:
+            continue
+    return biomarkers
+
+
+async def extract(file_bytes: bytes, content_type: str) -> tuple[list[ExtractedBiomarker], dict]:
+    """
+    Canonical extractor (latest definition):
+    returns (biomarkers, patient_context)
+    """
+    if content_type == "application/pdf":
+        if _is_text_pdf(file_bytes):
+            raw_text = _get_pdf_text(file_bytes)
+            source = ExtractionSource.PYMUPDF
+        else:
+            raw_text = _extract_azure_text(file_bytes, content_type)
+            source = ExtractionSource.AZURE_DI
+    else:
+        raw_text = _extract_azure_text(file_bytes, content_type)
+        source = ExtractionSource.AZURE_DI
+
+    if not raw_text.strip():
+        return [], {"age": 35, "gender": "male"}
+
+    patient_ctx = extract_patient_context(raw_text)
+    clean_text = strip_pii(raw_text)
+    if not clean_text.strip():
+        return [], patient_ctx
+
+    try:
+        items = _call_groq(clean_text)
+        biomarkers = _items_to_biomarkers(items, source)
+    except Exception as e:
+        print(f"[extractor] Groq failed: {e}")
+        return [], patient_ctx
+
+    return biomarkers, patient_ctx
