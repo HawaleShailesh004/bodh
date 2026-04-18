@@ -6,9 +6,31 @@ from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from models.schemas import AnalysisResult, PatientContext, SeverityLevel
 from services.verifier  import verify_all, get_coverage_stats
 from services.severity  import score_all, overall_severity, get_emergency_message, recommend_specialist
-from services.explainer import explain_all
+from services.explainer import explain_all, generate_report_summary
 
 router = APIRouter()
+
+
+def _from_report_meta(report_meta: dict) -> tuple[str, str, str, list[str], list[str], list[str]]:
+    """Coerce Groq JSON into AnalysisResult summary / question fields."""
+
+    def _s(key: str) -> str:
+        v = report_meta.get(key)
+        return v if isinstance(v, str) else ""
+
+    def _ql(key: str) -> list[str]:
+        v = report_meta.get(key)
+        return [str(x) for x in v] if isinstance(v, list) else []
+
+    return (
+        _s("summary_en"),
+        _s("summary_hi"),
+        _s("summary_mr"),
+        _ql("questions_en"),
+        _ql("questions_hi"),
+        _ql("questions_mr"),
+    )
+
 
 ALLOWED_TYPES = {
     "application/pdf",
@@ -92,14 +114,26 @@ async def analyze_report(
     # ── Layer 3: Score ───────────────────────────────────────────
     scored = score_all(verified)
 
-    # ── Layer 4: Explain ─────────────────────────────────────────
+    # ── Aggregate severity / specialist (needed for report summary inside explain) ──
+    worst = overall_severity(scored)
+    emergency_msg = get_emergency_message(scored)
+    specialist, urgency = recommend_specialist(scored)
+
+    # ── Layer 4: Per-biomarker explanations ──────────────────────
     explained, ai_diverged = await explain_all(scored)
 
-    # ── Aggregate ────────────────────────────────────────────────
-    worst              = overall_severity(scored)
-    emergency_msg      = get_emergency_message(scored)
-    specialist, urgency = recommend_specialist(scored)
-    stats              = get_coverage_stats(verified)
+    # ── Report-level summary + AI doctor questions ───────────────
+    report_meta = await generate_report_summary(
+        biomarkers=explained,
+        overall_severity=worst,
+        age=ctx.age,
+        gender=ctx.gender,
+        specialist=specialist,
+        processing_time_ms=int((time.time() - start_ms) * 1000),
+    )
+
+    stats = get_coverage_stats(verified)
+    rs_en, rs_hi, rs_mr, dq_en, dq_hi, dq_mr = _from_report_meta(report_meta)
 
     return AnalysisResult(
         report_id              = str(uuid.uuid4()),
@@ -114,6 +148,12 @@ async def analyze_report(
         total_biomarkers       = stats["total"],
         recognized_biomarkers  = stats["recognized_icmr"],
         unknown_biomarkers     = stats["unknown"],
+        report_summary_en      = rs_en,
+        report_summary_hi      = rs_hi,
+        report_summary_mr      = rs_mr,
+        doctor_questions_en    = dq_en,
+        doctor_questions_hi    = dq_hi,
+        doctor_questions_mr    = dq_mr,
     )
 
 
@@ -164,13 +204,22 @@ async def analyze_manual(req: ManualEntryRequest):
         for b in req.biomarkers
     ]
 
-    verified           = verify_all(raw_biomarkers, ctx.age, ctx.gender)
-    scored             = score_all(verified)
-    explained, diverged = await explain_all(scored)
-    worst              = overall_severity(scored)
-    emergency_msg      = get_emergency_message(scored)
+    verified = verify_all(raw_biomarkers, ctx.age, ctx.gender)
+    scored = score_all(verified)
+    worst = overall_severity(scored)
+    emergency_msg = get_emergency_message(scored)
     specialist, urgency = recommend_specialist(scored)
-    stats              = get_coverage_stats(verified)
+    explained, diverged = await explain_all(scored)
+    report_meta = await generate_report_summary(
+        biomarkers=explained,
+        overall_severity=worst,
+        age=ctx.age,
+        gender=ctx.gender,
+        specialist=specialist,
+        processing_time_ms=int((time.time() - start_ms) * 1000),
+    )
+    stats = get_coverage_stats(verified)
+    rs_en, rs_hi, rs_mr, dq_en, dq_hi, dq_mr = _from_report_meta(report_meta)
 
     return AnalysisResult(
         report_id              = str(uuid.uuid4()),
@@ -185,4 +234,10 @@ async def analyze_manual(req: ManualEntryRequest):
         total_biomarkers       = stats["total"],
         recognized_biomarkers  = stats["recognized_icmr"],
         unknown_biomarkers     = stats["unknown"],
+        report_summary_en      = rs_en,
+        report_summary_hi      = rs_hi,
+        report_summary_mr      = rs_mr,
+        doctor_questions_en    = dq_en,
+        doctor_questions_hi    = dq_hi,
+        doctor_questions_mr    = dq_mr,
     )
