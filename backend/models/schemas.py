@@ -3,7 +3,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class SeverityLevel(str, Enum):
@@ -73,6 +73,13 @@ class AnalysisResult(BaseModel):
     total_biomarkers: int
     recognized_biomarkers: int
     unknown_biomarkers: int
+    # Groq-generated after per-biomarker explanations (fallbacks if generation fails)
+    report_summary_en: str = ""
+    report_summary_hi: str = ""
+    report_summary_mr: str = ""
+    doctor_questions_en: List[str] = Field(default_factory=list)
+    doctor_questions_hi: List[str] = Field(default_factory=list)
+    doctor_questions_mr: List[str] = Field(default_factory=list)
 
 
 class PatientContext(BaseModel):
