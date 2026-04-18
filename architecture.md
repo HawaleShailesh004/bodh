@@ -259,4 +259,5 @@ The frontend stores this in **`sessionStorage`** (`bodh_result`). **`/print`** r
 
 - [README.md](./README.md) — product pitch and quick start
 - [design.md](./design.md) — design system, severity palette, UX patterns (verified against `frontend/`)
+- [prototype.md](./prototype.md) — how to run, demo script, prototype boundaries
 - [PROJECT_IMPLEMENTATION.md](./PROJECT_IMPLEMENTATION.md) — full handbook (files, deployment, edge cases)

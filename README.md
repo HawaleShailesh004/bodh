@@ -15,7 +15,8 @@ Bodh does **not** use AI to diagnose or to compute severity. It uses determinist
 **Not a medical device:** outputs are for health literacy only; users must consult a clinician for decisions.
 
 **Canonical architecture (diagrams, APIs, module map):** [architecture.md](./architecture.md).  
-**Design system and UX (typography, severity tokens, components):** [design.md](./design.md).
+**Design system and UX (typography, severity tokens, components):** [design.md](./design.md).  
+**Prototype scope and demo script:** [prototype.md](./prototype.md).
 
 ---
 
