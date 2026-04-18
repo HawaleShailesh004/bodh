@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="Bodh app icon">
+  <rect width="80" height="80" rx="20" fill="#0D6B5E"/>
+  <rect x="2" y="2" width="76" height="76" rx="18" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <polyline points="8,40 18,40 23,26 29,54 35,20 41,46 48,40 58,40"
+    fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="52" y="70" font-family="Georgia, serif" font-size="10" fill="rgba(255,255,255,0.65)">b</text>
+</svg>

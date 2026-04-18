@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 260" role="img" aria-label="Bodh monochrome logo">
+  <rect width="960" height="260" fill="#FFFFFF"/>
+  <rect x="36" y="64" width="132" height="132" rx="34" fill="#0D6B5E"/>
+  <polyline points="56,130 76,130 87,104 99,164 112,88 126,144 142,130 155,130"
+    fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="208" y="144" font-family="Georgia, 'Times New Roman', serif" font-size="90" font-weight="700" fill="#0D6B5E">Bodh</text>
+  <text x="212" y="196" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="40" letter-spacing="4" fill="#0D6B5E">HEALTH LITERACY</text>
+</svg>

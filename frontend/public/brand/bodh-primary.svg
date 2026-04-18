@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 260" role="img" aria-label="Bodh primary logo">
+  <rect width="960" height="260" fill="#0A0F11"/>
+  <rect x="36" y="48" width="132" height="132" rx="34" fill="#0D6B5E"/>
+  <polyline points="56,114 76,114 87,88 99,148 112,72 126,128 142,114 155,114"
+    fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="208" y="130" font-family="Georgia, 'Times New Roman', serif" font-size="90" font-weight="700" fill="#0E8D80">Bodh</text>
+  <text x="208" y="176" font-family="'Noto Sans Devanagari', 'Mangal', sans-serif" font-size="42" fill="#0E8D80">??? · ??? · awareness</text>
+  <text x="208" y="222" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="40" letter-spacing="3" fill="#8EA1AF">YOUR REPORT. YOUR LANGUAGE.</text>
+</svg>
